@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "questions": [
+    {"question_id":"q01","question":"\u8fd9\u4e2a\u89c6\u9891\u8bb2\u4e86\u4ec0\u4e48\uff1f","mode":"video_only","order":1,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q02","question":"\u5e73\u53f0\u4e3a\u4ec0\u4e48\u80fd\u591f\u5fae\u8c03\uff1f","mode":"video_only","order":2,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q03","question":"\u600e\u4e48\u901a\u8fc7\u5e73\u53f0\u5fae\u8c03\uff1f\u7ed9\u51fa\u5177\u4f53\u6d41\u7a0b","mode":"video_only","order":3,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q04","question":"\u5fae\u8c03\u662f\u4ec0\u4e48\uff1f","mode":"video_only","order":4,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q05","question":"\u8bb2\u8bb2\u6570\u636e\u96c6\u7684\u683c\u5f0f\uff1f\u4e3a\u4ec0\u4e48\u662fjsonl\uff1f\u4ec0\u4e48\u662fjsonl\u548cjson","mode":"video_plus_context","order":5,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q06","question":"\u9a8c\u8bc1\u6570\u636e\u96c6\u662f\u4ec0\u4e48\uff1f\u600e\u4e48\u770b\u5b83\u7684\u9a8c\u6536\u6807\u51c6","mode":"video_only","order":6,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q07","question":"\u5173\u952e\u7684\u8d85\u53c2\u6709\uff1f\u600e\u4e48\u770b\uff1f\u8be6\u7ec6\u4ecb\u7ecd\u5b83\u4eec\uff0c\u90fd\u6709\u4ec0\u4e48\u7528\uff0c\u53ea\u4ecb\u7ecd\u6700\u91cd\u8981\u7684\u51e0\u4e2a","mode":"video_only","order":7,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q08","question":"\u7528\u6237\u5982\u4f55\u9a8c\u6536\u5927\u6a21\u578b\u5fae\u8c03\u7ed3\u679c\uff1f","mode":"video_only","order":8,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q09","question":"\u5982\u4f55\u4ee3\u7801\u5fae\u8c03\uff1f\u5982\u679c\u7528colab","mode":"video_only","order":9,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q10","question":"colab\u548cunsloth\u662f\u4ec0\u4e48\uff1f\u4e3a\u4ec0\u4e48\u597d\u7528\uff1f\u9488\u5bf9\u521d\u5b66\u8005","mode":"video_plus_context","order":10,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q11","question":"\u8bb2\u8bb2colab\u5b9e\u64cd\u7684\u4f8b\u5b50\uff0c\u8981\u6c42\u8be6\u7ec6\u4ece\u5934\u5230\u5c3e","mode":"video_only","order":11,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q12","question":"\u6570\u636e\u96c6\u5b57\u6bb5\u7684\u683c\u5f0f\u5e94\u8be5\u662f\u4ec0\u4e48\uff1f\u4e3a\u4ec0\u4e48\u8981\u52a0\u4e0a\u601d\u8003\u94fe","mode":"video_only","order":12,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q13","question":"\u8bb2\u8bb2colab\u5b9e\u64cd\u8fc7\u7a0b\u4e2d\u8bb2\u5230\u7684\u53c2\u6570","mode":"video_only","order":13,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q14","question":"\u5982\u4f55\u5728\u672c\u5730\u4f7f\u7528colab\u8bad\u7ec3\u597d\u7684\u6a21\u578b","mode":"video_only","order":14,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q15","question":"\u4e0a\u4f20\u524d\u4e3a\u4ec0\u4e48\u8981\u5c06\u5927\u6a21\u578b\u8f6cGGUF\u683c\u5f0f\uff0cGGUF\u683c\u5f0f\u4e3a\u4ec0\u4e48\u9ad8\u6548\uff1f","mode":"video_plus_context","order":15,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q16","question":"\u600e\u4e48\u4e0a\u4f20\u5927\u6a21\u578b\u5230hugging face\uff1f","mode":"video_only","order":16,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q17","question":"\u663e\u5361\u578b\u53f7\u63a8\u8350","mode":"video_only","order":17,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]},
+    {"question_id":"q-unrelated-transformer","question":"\u8fd9\u4e2a\u89c6\u9891\u662f\u5426\u8bc1\u660e Transformer \u4e00\u5b9a\u4f18\u4e8e\u6240\u6709\u67b6\u6784\uff1f","mode":"video_only","order":18,"manual_checks":["coverage","grounding_separation","span_navigation","readability"]}
+  ]
+}

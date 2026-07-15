@@ -1,0 +1,84 @@
+{
+  "profile_id": "enterprise-knowledge",
+  "title": "视频流程的团队知识记录",
+  "sections": [
+    {
+      "kind": "purpose_scope",
+      "title": "目的、范围与适用性",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "本记录用于整理视频展示的交付流程，适用于需要明确输入、步骤和输出的重复性任务。",
+          "knowledge_refs": ["ku-purpose"],
+          "evidence_refs": ["ev-1"],
+          "source_spans": [{"start_ms": 0, "end_ms": 4000}]
+        }
+      ]
+    },
+    {
+      "kind": "terminology",
+      "title": "术语",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "输入指开始执行前已确认的材料；输出指步骤完成后需要复核的结果。",
+          "knowledge_refs": ["ku-terms"],
+          "evidence_refs": ["ev-2"],
+          "source_spans": [{"start_ms": 4000, "end_ms": 8000}]
+        }
+      ]
+    },
+    {
+      "kind": "process_practice",
+      "title": "流程与实践",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "视频的流程依次确认输入、执行操作并复核输出；每一步都保留可检查的记录。",
+          "knowledge_refs": ["ku-process"],
+          "evidence_refs": ["ev-3"],
+          "source_spans": [{"start_ms": 8000, "end_ms": 15000}]
+        }
+      ]
+    },
+    {
+      "kind": "roles_inputs_outputs",
+      "title": "角色、输入与输出",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "视频中的执行者确认输入并完成步骤，复核者检查输出是否满足既定条件。",
+          "knowledge_refs": ["ku-roles"],
+          "evidence_refs": ["ev-4"],
+          "source_spans": [{"start_ms": 15000, "end_ms": 21000}]
+        }
+      ]
+    },
+    {
+      "kind": "risks",
+      "title": "风险",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "若输入未确认或输出未复核，视频所示流程可能无法形成可追溯的交付结果。",
+          "knowledge_refs": ["ku-risks"],
+          "evidence_refs": ["ev-5"],
+          "source_spans": [{"start_ms": 21000, "end_ms": 26000}]
+        }
+      ]
+    },
+    {
+      "kind": "limitations_sources",
+      "title": "限制与来源",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "记录仅覆盖视频明确表达的实践；角色分工和时限需要由实际团队另行确认。",
+          "knowledge_refs": ["ku-limits"],
+          "evidence_refs": ["ev-6"],
+          "source_spans": [{"start_ms": 26000, "end_ms": 32000}]
+        }
+      ]
+    }
+  ]
+}

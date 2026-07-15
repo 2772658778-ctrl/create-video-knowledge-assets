@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>真正理解 Transformer 的 QKV</title>
+<style>
+
+:root {
+  color-scheme: light;
+  --ink: #1f2933;
+  --muted: #607080;
+  --line: #d9e2ec;
+  --blue: #245b7d;
+  --green: #2f6b4f;
+  --amber: #8a5a00;
+  --paper: #ffffff;
+  --bg: #f4f7f9;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+  line-height: 1.75;
+}
+main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 40px 28px 72px;
+  background: var(--paper);
+}
+h1, h2, h3 { line-height: 1.28; }
+h1 { font-size: 2rem; margin-bottom: 0.25rem; }
+h2 { border-top: 1px solid var(--line); padding-top: 1.4rem; margin-top: 2rem; }
+h3 { color: var(--blue); margin-top: 1.4rem; }
+.theme { font-size: 1.25rem; font-weight: 700; margin: 0.4rem 0 0.2rem; }
+.summary { font-size: 1.05rem; margin: 0.25rem 0 0.6rem; }
+.subtitle, .source, figcaption, .metadata { color: var(--muted); }
+.source { font-size: 0.9rem; margin-top: -0.4rem; }
+.metadata { display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 0.8rem; margin: 1rem 0; }
+.metadata dt { font-weight: 700; }
+.metadata dd { margin: 0; }
+nav { border: 1px solid var(--line); padding: 1rem 1.2rem; margin: 1.5rem 0 2rem; }
+img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+figure { margin: 1.3rem 0; }
+figcaption { font-size: 0.94rem; text-align: center; margin-top: 0.6rem; }
+.cover img { max-height: 320px; }
+.box { border-left: 5px solid var(--blue); background: #f7fbff; padding: 0.8rem 1rem; margin: 1rem 0; }
+.knowledgebox { border-left-color: var(--green); background: #f6fbf7; }
+.warningbox { border-left-color: var(--amber); background: #fffaf0; }
+.formula, pre { overflow-x: auto; background: #f6f8fa; padding: 0.9rem; border: 1px solid var(--line); }
+code, .formula { font-family: Consolas, "Cascadia Mono", monospace; }
+.profile-creator-article main { max-width: 760px; }
+.profile-creator-article h1 { font-size: 2.25rem; }
+.profile-enterprise-knowledge main { max-width: 1040px; }
+.profile-enterprise-knowledge h2 { color: var(--green); }
+.profile-enterprise-knowledge table { width: 100%; border-collapse: collapse; }
+.profile-enterprise-knowledge th, .profile-enterprise-knowledge td { border: 1px solid var(--line); padding: 0.55rem; text-align: left; vertical-align: top; }
+.profile-research-brief main { max-width: 980px; }
+.profile-research-brief h2 { color: #6b3d7a; }
+.profile-research-brief blockquote { border-left: 4px solid #8b5ca0; margin: 1rem 0; padding-left: 1rem; color: var(--muted); }
+@media (max-width: 680px) {
+  main { padding: 24px 16px 56px; }
+  h1 { font-size: 1.55rem; }
+}
+
+</style>
+</head>
+<body>
+<main>
+<h1>真正理解 Transformer 的 QKV</h1>
+<p class="theme">为什么注意力需要三种角色表示</p>
+<p class="summary">Q 和 K 学习从哪里取信息，V 承担实际传递的内容，三者共同把孤立词向量改写为有方向、可学习的上下文表示。</p>
+<p class="subtitle">从对称相似度、方向性匹配到上下文表示</p>
+<dl class="metadata">
+<dt>视频名称</dt><dd>Transformer 模型为何需要 QKV 三个矩阵？QKV 到底在计算什么？</dd>
+<dt>作者/UP主</dt><dd>人工智能研究所_</dd>
+<dt>发布时间</dt><dd>2026-07-04</dd>
+<dt>视频时长</dt><dd>09:55</dd>
+<dt>转录来源</dt><dd>Whisper small（faster-whisper CPU int8），经自动建议与人工上下文复核修订</dd>
+<dt>数据来源</dt><dd>视频元数据、修订后的 312 段时间线、8 张直接检查的关键画面</dd>
+<dt>视频链接</dt><dd>https://www.bilibili.com/video/BV1uPMA62E8e</dd>
+</dl>
+<figure class="cover"><img src="cover.jpg" alt="课程封面"></figure>
+<nav><strong>目录</strong><ol>
+<li><a href="#section-1">核心问题：词向量为什么要互相看一眼</a></li>
+<li><a href="#section-2">错误直觉：为什么 X X 的转置走不通</a></li>
+<li><a href="#section-3">QKV：三副可学习眼镜如何打破对称</a></li>
+<li><a href="#section-4">两套直觉：图书馆类比与几何投影</a></li>
+<li><a href="#section-5">从匹配分数到新的上下文表示</a></li>
+<li><a href="#section-6">总结、常见误区与延伸练习</a></li>
+</ol></nav>
+<section id="section-1">
+<h2>核心问题：词向量为什么要互相看一眼</h2>
+<aside class="box importantbox"><strong>核心主线</strong>
+<p>注意力不是从 Q、K、V 三个字母开始的。它首先要解决一个更朴素的问题：初始词向量彼此孤立，只有让每个词按相关程度吸收上下文信息，句子中的角色和关系才会进入表示。</p>
+</aside>
+<h3>孤立向量缺少什么</h3>
+<p>词嵌入把 I、love、AI 分别变成向量，但这一步只给出了每个词自己的初始位置。AI 的向量并不知道旁边站着 I 和 love，love 也尚未知道谁是动作发出者、谁是动作对象。换句话说，初始向量有词义，却没有当前句子的关系。</p>
+<figure>
+<img src="figures/01-contextual-meaning.jpg" alt="三个初始词向量是孤立点；虚线提示它们需要通过上下文关系重新调整。">
+<figcaption>三个初始词向量是孤立点；虚线提示它们需要通过上下文关系重新调整。</figcaption>
+</figure>
+<h3>从相互感知到动态表示</h3>
+<p>注意力机制让当前词先判断其他词与自己有多相关，再按相关程度吸收它们携带的信息。这样得到的新向量不再是词典式的固定坐标，而是针对当前句子临时生成的动态表示。同一个 love 出现在不同句子里，可以因为周围词不同而获得不同结果。</p>
+<h3>本章小结</h3>
+<p>先不要急着背公式：注意力的任务是把上下文写回词表示。只要一个词仍然是互不相知的孤立点，模型就还没有完成对句子结构的建模。</p>
+</section>
+<section id="section-2">
+<h2>错误直觉：为什么 X X 的转置走不通</h2>
+<h3>最直接的相似度方案</h3>
+<p>最自然的想法是把所有词向量按行堆成矩阵 X，再计算 X X 的转置。结果矩阵中的每个元素都是两个词向量的点积，可以理解为两词的原始相似度。这个方案计算简单，也确实给出了完整的两两匹配分数。</p>
+<p>直接相似度矩阵</p>
+<pre class="formula">S = X X^{T}, \qquad S_{ij}=x_i \cdot x_j</pre>
+<ul class="symbols">
+<li>X：按行堆叠的词向量矩阵</li>
+<li>S：词与词的点积相似度矩阵</li>
+</ul>
+<figure>
+<img src="figures/02-symmetric-xx-t.jpg" alt="X X 的转置必然得到对称矩阵，反向位置被迫取相同分数。">
+<figcaption>X X 的转置必然得到对称矩阵，反向位置被迫取相同分数。</figcaption>
+</figure>
+<h3>对称性与不可学习性</h3>
+<p>点积具有交换性，因此第 i 个词对第 j 个词的分数必然等于反向分数。可语言关系通常有方向：作为动词，love 需要寻找主语 I 和对象 AI；代词 I 却未必以同样程度依赖 love。对称矩阵把这种角色差异从结构上抹掉了。</p>
+<aside class="box warningbox"><strong>两个死穴必须同时看到</strong>
+<p>直接使用 X X 的转置不只会锁死方向，它还没有额外的可学习匹配参数。模型无法通过训练调整‘应该关注谁’，因此即使计算出了相似度，也不是足够灵活的注意力机制。</p>
+</aside>
+<h3>本章小结</h3>
+<p>静态相似度不是注意力的终点。一个可用的方案必须让反向关系可以不同，还必须让匹配规则能通过数据学习；这正是引入 Q、K、V 三组投影的原因。</p>
+</section>
+<section id="section-3">
+<h2>QKV：三副可学习眼镜如何打破对称</h2>
+<h3>同一个输入的三种角色</h3>
+<p>视频把 W_Q、W_K、W_V 比作三副魔法眼镜。输入 X 经过三组不同、可学习的线性变换后，得到 Query、Key、Value。Query 表示‘我想寻找什么’，Key 表示‘我可以如何被匹配’，Value 表示‘匹配后我真正传递什么’。</p>
+<p>三组角色投影</p>
+<pre class="formula">Q=XW_Q, \qquad K=XW_K, \qquad V=XW_V</pre>
+<ul class="symbols">
+<li>W_Q、W_K、W_V：由训练学习的投影矩阵</li>
+<li>Q/K：用于匹配，V：用于内容汇聚</li>
+</ul>
+<figure>
+<img src="figures/03-qkv-projections.jpg" alt="同一个 I 经三组投影后形成 Q、K、V 三个不同分身。">
+<figcaption>同一个 I 经三组投影后形成 Q、K、V 三个不同分身。</figcaption>
+</figure>
+<h3>不同投影如何产生方向性</h3>
+<p>由于 W_Q 与 W_K 不同，同一个词在提问角色和被匹配角色中的表示不同。于是 QK 的转置不再继承 X X 转置的强制对称性：love→I 与 I→love 可以得到不同分数，模型也能通过训练调整这种差异。</p>
+<figure>
+<img src="figures/04-asymmetric-qk-t.jpg" alt="手算结果中反向位置不再相等，QK 的转置表达出方向性匹配。">
+<figcaption>手算结果中反向位置不再相等，QK 的转置表达出方向性匹配。</figcaption>
+</figure>
+<p>在二维示例里，love 关注 I 的分数高于 I 关注 love 的分数。这个数值只是教学用玩具结果，但它准确展示了结构能力：同一对词的两个方向不必相等，注意力可以学习谁在当前关系中更需要谁。</p>
+<h3>本章小结</h3>
+<p>QKV 不是三个独立对象，而是同一输入的三种可训练角色。Q/K 负责建立方向性匹配，V 保留待传递的内容；角色分离同时带来了非对称性和可学习性。</p>
+</section>
+<section id="section-4">
+<h2>两套直觉：图书馆类比与几何投影</h2>
+<h3>图书馆：先匹配标签，再取走内容</h3>
+<p>想找恐龙书的需求是 Query；每本书的标签摘要是 Key；真正的书中内容是 Value。你先用需求与标签比较，找出高匹配书籍，但最后带走的是内容而不是标签。这个类比把匹配通道与内容通道清楚分开。</p>
+<figure>
+<img src="figures/05-library-analogy.jpg" alt="Query 与书籍 Key 匹配，高分标签定位相关内容；真正传递的是 Value。">
+<figcaption>Query 与书籍 Key 匹配，高分标签定位相关内容；真正传递的是 Value。</figcaption>
+</figure>
+<aside class="box knowledgebox"><strong>不要混淆 Key 与 Value</strong>
+<p>Key 像可检索的标签，负责让内容被找到；Value 才是后续加权汇入输出的信息。如果把两者混为一谈，就无法解释为什么匹配分数最终还要乘 V。</p>
+</aside>
+<h3>几何：在两套子空间中隔空比较</h3>
+<p>几何视角把 W_Q 看作对原始空间的拉伸，把 W_K 看作另一种基变换。于是同一个词在 Query 空间和 Key 空间中的位置不同。匹配分数是两个不同空间表示之间的点积，反向比较交换了角色，自然不再要求结果相等。</p>
+<figure>
+<img src="figures/06-geometric-projections.jpg" alt="原始、Query 与 Key 三个空间并列展示；同一词在两套投影空间中的位置不同。">
+<figcaption>原始、Query 与 Key 三个空间并列展示；同一词在两套投影空间中的位置不同。</figcaption>
+</figure>
+<h3>本章小结</h3>
+<p>图书馆类比回答‘Q/K/V 分别做什么’，几何投影回答‘为什么 QK 的转置可以非对称’。能同时说清匹配、内容和方向性，才算真正跨过了只会背字母的阶段。</p>
+</section>
+<section id="section-5">
+<h2>从匹配分数到新的上下文表示</h2>
+<h3>缩放与 Softmax：把分数变成比例</h3>
+<p>QK 的转置只产生原始匹配分数。视频接着把分数除以根号 d_k，控制高维点积的幅度，再通过 Softmax 转换成非负且总和为 1 的权重。这样，抽象分数就变成了当前词对各位置分配的注意力比例。</p>
+<p>缩放点积注意力的完整形式</p>
+<pre class="formula">\operatorname{Attention}(Q,K,V)=\operatorname{softmax}\!\left(\frac{QK^{T}}{\sqrt{d_k}}\right)V</pre>
+<ul class="symbols">
+<li>QK^T：方向性匹配分数</li>
+<li>d_k：Key 的维度</li>
+<li>Softmax：把分数归一化为权重</li>
+<li>V：被权重汇聚的内容表示</li>
+</ul>
+<figure>
+<img src="figures/07-softmax-normalization.jpg" alt="love 的三个分数先缩放，再经 Softmax 变成总和为 1 的注意力权重。">
+<figcaption>love 的三个分数先缩放，再经 Softmax 变成总和为 1 的注意力权重。</figcaption>
+</figure>
+<h3>为什么最后必须乘 V</h3>
+<p>权重本身只说明该去哪里取信息，仍不是新词表示。把每个权重乘到对应 Value 向量上并求和，才得到当前词的输出。对 love 而言，新向量混合了 I、love、AI 的内容，因此它的位置和含义都被当前上下文重新塑造。</p>
+<figure>
+<img src="figures/08-weighted-value-sum.jpg" alt="三个 Value 的加权和落在其三角形内部，形成 love 的新上下文向量。">
+<figcaption>三个 Value 的加权和落在其三角形内部，形成 love 的新上下文向量。</figcaption>
+</figure>
+<aside class="box knowledgebox"><strong>几何上的凸组合</strong>
+<p>Softmax 权重非负且总和为 1，因此加权结果位于 Value 向量的凸包中。视频的二维示例把它画成三角形内部的一个点，直观展示输出如何由多个上下文来源共同组成。</p>
+</aside>
+<h3>本章小结</h3>
+<p>完整注意力不是一次矩阵乘法，而是一条信息路由链：Q/K 计算方向性相关度，缩放和 Softmax 形成稳定权重，V 的加权和把相关上下文写入当前词。</p>
+</section>
+<section id="section-6">
+<h2>总结、常见误区与延伸练习</h2>
+<h3>一条可复述的因果链</h3>
+<p>从问题出发复述全片：初始词向量缺少上下文；X X 的转置虽然能算相似度，却对称且不可学习；W_Q 与 W_K 让提问和被匹配使用不同表示；缩放与 Softmax 把 QK 的转置变成权重；权重汇聚 V，形成新的上下文表示。</p>
+<h3>三个常见误区</h3>
+<ul>
+<li>误区一：Q、K、V 是三个不同的词。实际上它们是同一输入的三种角色投影。</li>
+<li>误区二：Key 是最终取出的内容。实际上 Key 用于匹配，Value 才承载被汇聚的信息。</li>
+<li>误区三：二维单头手算就是完整 Transformer。它只负责建立机制直觉，未覆盖多头、掩码、残差与高维实现。</li>
+</ul>
+<h3>自测与下一步</h3>
+<ol>
+<li>不用公式解释：为什么 love→I 与 I→love 不应被强制相等？</li>
+<li>画出图书馆类比，分别标出 Query、Key、Value，并说明最后真正带走的是什么。</li>
+<li>从 QK 的转置开始，口述缩放、Softmax 和乘 V 的每一步职责。</li>
+<li>进一步学习多头注意力、掩码、残差连接，并比较它们与本视频单头玩具例子的边界。</li>
+</ol>
+<aside class="box importantbox"><strong>最后带走的一句话</strong>
+<p>Q 和 K 学习‘从哪里取’，V 承担‘实际取什么’；注意力用方向性权重把相关上下文写回每个词，使词义成为随句子变化的动态表示。</p>
+</aside>
+</section>
+</main>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "samples": [
+    {
+      "sample_id": "bilibili-course-no-cc",
+      "source_type": "bilibili_url",
+      "required_traits": ["no_cc", "teaching", "visual_slides"],
+      "acceptance": ["asr_timeline", "inspected_frames", "course_notes_pdf", "provenance_check"]
+    },
+    {
+      "sample_id": "bilibili-technical-demo",
+      "source_type": "bilibili_url",
+      "required_traits": ["technical_demo", "code_or_ui", "visual_progression"],
+      "acceptance": ["asr_timeline", "final_state_frame", "course_notes_pdf", "baseline_comparison"]
+    }
+  ]
+}

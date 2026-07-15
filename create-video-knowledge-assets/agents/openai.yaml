@@ -1,0 +1,4 @@
+interface:
+  display_name: "LectureMind Video Knowledge"
+  short_description: "Create grounded video summaries, notes, and PDFs."
+  default_prompt: "Use $create-video-knowledge-assets to turn this Bilibili URL or local video into an evidence-backed Chinese general-deep summary or course note with PDF as the primary deliverable and optional HTML or Markdown; use a secondary creator, enterprise, research, or grounded Q&A profile only when I explicitly request it."

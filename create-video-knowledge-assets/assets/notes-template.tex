@@ -1,0 +1,125 @@
+\documentclass[a4paper]{article}
+
+% Basic packages
+\usepackage[fontset=fandol]{ctex}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[most]{tcolorbox}
+\usepackage{etoolbox}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{tikz}
+\IfFileExists{pgfplots.sty}{
+    \usepackage{pgfplots}
+    \pgfplotsset{compat=1.18}
+}{}
+
+% Highlight boxes
+\newtcolorbox{knowledgebox}[1]{
+    enhanced, colback=blue!5!white, colframe=blue!75!black, colbacktitle=blue!75!black,
+    coltitle=white, fonttitle=\bfseries, title=#1, attach boxed title to top left={yshift=-2mm, xshift=2mm},
+    boxrule=1pt, sharp corners
+}
+
+\newtcolorbox{importantbox}[1]{
+    enhanced, colback=yellow!10!white, colframe=yellow!80!black, colbacktitle=yellow!80!black,
+    coltitle=black, fonttitle=\bfseries, title=#1, sharp corners
+}
+
+\newtcolorbox{warningbox}[1]{
+    enhanced, colback=red!5!white, colframe=red!75!black, colbacktitle=red!75!black,
+    coltitle=white, fonttitle=\bfseries, title=#1, sharp corners
+}
+
+% Listings
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red!60!black},
+    commentstyle=\color{green!60!black},
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    captionpos=b,
+    extendedchars=false
+}
+
+% Front-page metadata
+\newcommand{\notetitle}{课程笔记：[在此填写课程主题]}
+\newcommand{\notetheme}{[在此填写主题]}
+\newcommand{\notecoresummary}{[用一句话概括视频最核心的认知]}
+\newcommand{\noteauthors}{五道口纳什 \& Codex}
+\newcommand{\notedate}{\today}
+\newcommand{\videosourcetitle}{[在此填写原视频名称]}
+\newcommand{\videochannel}{[在此填写频道或作者]}
+\newcommand{\videopublishdate}{[在此填写发布日期]}
+\newcommand{\videoduration}{[在此填写视频时长]}
+\newcommand{\videosubtitlesource}{[在此填写字幕或转录来源]}
+\newcommand{\videourl}{}
+\newcommand{\videocoverpath}{}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+{\Large 课程笔记\par}
+\vspace{1.2cm}
+{\huge\bfseries \notetitle\par}
+\vspace{0.45cm}
+{\Large\bfseries \notetheme\par}
+\vspace{0.3cm}
+{\large \notecoresummary\par}
+\vspace{0.7cm}
+{\large \noteauthors\par}
+\vspace{0.3cm}
+{\large \notedate\par}
+\vspace{1.2cm}
+
+\ifdefempty{\videocoverpath}{
+{\small 请在生成笔记时填入视频封面图的本地路径。\par}
+}{
+\includegraphics[width=0.82\textwidth,height=0.45\textheight,keepaspectratio]{\videocoverpath}\par
+}
+
+\vfill
+\begin{tcolorbox}[width=0.9\textwidth, colback=black!2!white, colframe=black!60, sharp corners]
+\textbf{视频名称}：\videosourcetitle\par
+\textbf{视频作者/频道}：\videochannel\par
+\textbf{发布日期}：\videopublishdate\par
+\textbf{视频时长}：\videoduration\par
+\textbf{字幕/转录来源}：\videosubtitlesource\par
+\textbf{视频链接}：
+\ifdefempty{\videourl}{
+未填写
+}{
+\href{\videourl}{\nolinkurl{\videourl}}
+}
+\end{tcolorbox}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+%% --- 正文内容开始 --- %%
+
+% Replace this block with the generated notes.
+% Fill the metadata block above, especially \notetheme, \notecoresummary,
+% \videosourcetitle, \videochannel, \videopublishdate, \videosubtitlesource,
+% and \videocoverpath, so the first page matches the source-aware baseline.
+% Keep images outside knowledgebox/importantbox/warningbox.
+% Keep video provenance in JSON artifacts. In PDF, render compact source-time
+% footnotes at the bottom of the page; Markdown/HTML may keep the reader view
+% clean while preserving provenance in document.json.
+% End the document with a final section such as:
+% \section{总结与延伸}
+% covering the speaker's closing discussion and your own synthesis.
+
+%% --- 正文内容结束 --- %%
+
+\end{document}

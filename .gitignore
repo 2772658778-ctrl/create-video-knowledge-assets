@@ -1,0 +1,57 @@
+# Python and test caches
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.pytest-tmp/
+/.pytest-tmp*
+/.venv/
+/build/
+/dist/
+/work/
+*.egg-info/
+
+# Local acceptance, comparison, and agent rerun workspaces
+/*acceptance-*
+/.comparison-*/
+/.rerun-subagents/
+
+# Internal iteration material and comparison baselines are not part of the public package.
+/docs/superpowers/
+/baselines/
+
+# Downloaded or generated media. Publish only explicitly reviewed demo assets.
+*.mp4
+*.mkv
+*.webm
+*.mov
+*.avi
+*.wav
+*.mp3
+*.m4a
+*.flac
+*.part
+
+# Local retrieval indexes and LaTeX build intermediates
+*.sqlite
+*.sqlite3
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.xdv
+
+# Public demos contain only PDF, Markdown, HTML, and their referenced images.
+/demos/**/*.json
+/demos/**/*.tex
+/demos/**/run-report.md
+
+# Credentials and local acquisition inputs
+/bilibili.txt
+cookies.txt
+*.cookies.txt
+cookie-*.txt
+.env
+.env.*
