@@ -1,0 +1,2042 @@
+[
+  {
+    "evidence_id": "raw-tr-000001",
+    "original_content": "竹筍,中国人春日餐桌的主角",
+    "repaired_content": "竹笋,中国人春日餐桌的主角",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000002",
+    "original_content": "将南的烟独仙,浙江的游门损,",
+    "repaired_content": "将南的烟独仙,浙江的游门笋",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000003",
+    "original_content": "民地的红遭损,",
+    "repaired_content": "民地的红遭笋",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000004",
+    "original_content": "殿贵的发酵酸,",
+    "repaired_content": "殿贵的发酵酸",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000005",
+    "original_content": "无论是监朝,",
+    "repaired_content": "无论是监朝",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000006",
+    "original_content": "顿主还是两半,",
+    "repaired_content": "顿主还是两半",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000007",
+    "original_content": "竹筍总能一先填",
+    "repaired_content": "竹笋总能一先填",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000008",
+    "original_content": "脆任的舌尖体验,",
+    "repaired_content": "脆任的舌尖体验",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000009",
+    "original_content": "政府中国人,",
+    "repaired_content": "政府中国人",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000010",
+    "original_content": "一货说是,",
+    "repaired_content": "一货说是",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000011",
+    "original_content": "中国人政府了竹筍,",
+    "repaired_content": "中国人政府了竹笋",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000013",
+    "original_content": "也就是青少年版的竹子,",
+    "repaired_content": "也就是青少年版的竹子",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000014",
+    "original_content": "目前包括亚太美洲,",
+    "repaired_content": "目前包括亚太美洲",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000015",
+    "original_content": "非洲在内,",
+    "repaired_content": "非洲在内",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000016",
+    "original_content": "地球上而超过两千两百万",
+    "repaired_content": "地球上而超过两千两百万",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000017",
+    "original_content": "公请的土地上升涨了竹子,",
+    "repaired_content": "公请的土地上升涨了竹子",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000018",
+    "original_content": "而中国只占不到三分之一的面积",
+    "repaired_content": "而中国只占不到三分之一的面积",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000019",
+    "original_content": "可见竹筍并非什么中国特有的食材",
+    "repaired_content": "可见竹笋并非什么中国特有的食材",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000020",
+    "original_content": "反观竹筍消费的数据上",
+    "repaired_content": "反观竹笋消费的数据上",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000021",
+    "original_content": "中国却占据世界消费的三分之二",
+    "repaired_content": "中国却占据世界消费的三分之二",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000029",
+    "original_content": "亚太分区的中国主区",
+    "repaired_content": "亚太分区的中国主区",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000030",
+    "original_content": "竹定面积达到750万公斤",
+    "repaired_content": "竹定面积达到750万公斤",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000031",
+    "original_content": "跑出东北 内蒙 新疆 西藏等地",
+    "repaired_content": "跑出东北 内蒙 新疆 西藏等地",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000032",
+    "original_content": "任你走北向南越东到西",
+    "repaired_content": "任你走北向南越东到西",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000035",
+    "original_content": "主损经过领冬的时间运辱",
+    "repaired_content": "主笋经过领冬的时间运辱",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000036",
+    "original_content": "春雨滋潤之后破土而出",
+    "repaired_content": "春雨滋潤之后破土而出",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000038",
+    "original_content": "星损每天可以往上穿20到30厘米",
+    "repaired_content": "星笋每天可以往上穿20到30厘米",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000039",
+    "original_content": "24校中就有一则哭华生损的故事",
+    "repaired_content": "24校中就有一则哭华生笋的故事",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000048",
+    "original_content": "可能是天气湛暖",
+    "repaired_content": "可能是天气湛暖",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000050",
+    "original_content": "到了朝师温暖的春节",
+    "repaired_content": "到了朝师温暖的春节",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000051",
+    "original_content": "冬日激烈的非结构性碳水化核物",
+    "repaired_content": "冬日激烈的非结构性碳水化核物",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000052",
+    "original_content": "也就是植物新神代謝构生中",
+    "repaired_content": "也就是植物新神代謝构生中",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000053",
+    "original_content": "最重要的能量货币",
+    "repaired_content": "最重要的能量货币",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000055",
+    "original_content": "会素食顶端分生区域的细胞加速分裏",
+    "repaired_content": "会素食顶端分生区域的细胞加速分裏",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000056",
+    "original_content": "并附于竹筍复杂多元的风味",
+    "repaired_content": "并附于竹笋复杂多元的风味",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000057",
+    "original_content": "通过气象色谱 制补的侧令发现",
+    "repaired_content": "通过气象色谱 制补的侧令发现",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000059",
+    "original_content": "是生竹筍主要的成为物质",
+    "repaired_content": "是生竹笋主要的呈味物质",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000060",
+    "original_content": "首先,竹筍中大量的花园糖为竹筍打了一个甜口的底味",
+    "repaired_content": "首先,竹笋中大量的花园糖为竹笋打了一个甜口的底味",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000061",
+    "original_content": "实际上,安妮酸有各思其之",
+    "repaired_content": "实际上,安妮酸有各思其之",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000065",
+    "original_content": "丹凝、草酸、黄麻减",
+    "repaired_content": "丹凝、草酸、黄麻减",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000069",
+    "original_content": "又给竹筍带来了爽脆的口感",
+    "repaired_content": "又给竹笋带来了爽脆的口感",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000070",
+    "original_content": "一口咬下去有咖啡的清脆声",
+    "repaired_content": "一口咬下去有咖啡的清脆声",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000071",
+    "original_content": "除了鲜甜脆口最好吃的优点",
+    "repaired_content": "除了鲜甜脆口最好吃的优点",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000072",
+    "original_content": "竹筍的蛋白质含量",
+    "repaired_content": "竹笋的蛋白质含量",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000073",
+    "original_content": "也在我们的1.2%到5.8%",
+    "repaired_content": "也在我们的1.2%到5.8%",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000074",
+    "original_content": "其安机酸组成的比例均衡",
+    "repaired_content": "其安机酸组成的比例均衡",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000075",
+    "original_content": "八种人体必须的安机酸含量丰富",
+    "repaired_content": "八种人体必须的安机酸含量丰富",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000076",
+    "original_content": "是优质的植物代卖来源",
+    "repaired_content": "是优质的植物代卖来源",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000087",
+    "original_content": "很遗憾",
+    "repaired_content": "很遗憾",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000088",
+    "original_content": "并不是什么主损都是可以吃的",
+    "repaired_content": "并不是什么主笋都是可以吃的",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000089",
+    "original_content": "世界上同共有1300多種竹子",
+    "repaired_content": "世界上同共有1300多種竹子",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000090",
+    "original_content": "我國境內也有500種",
+    "repaired_content": "我國境內也有500種",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000091",
+    "original_content": "根據品種漲出來的損災",
+    "repaired_content": "根據品種漲出來的損災",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000093",
+    "original_content": "有小玉山竹",
+    "repaired_content": "有小玉山竹",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000095",
+    "original_content": "又或是像洗光的汙補雞竹",
+    "repaired_content": "又或是像洗光的汙補雞竹",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000096",
+    "original_content": "唇體纖維硬",
+    "repaired_content": "唇體纖維硬",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000097",
+    "original_content": "苦味濃重",
+    "repaired_content": "苦味濃重",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000098",
+    "original_content": "總之經過中國祖先數百年",
+    "repaired_content": "總之經過中國祖先數百年",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000099",
+    "original_content": "甚至數千年的挑挑減減",
+    "repaired_content": "甚至數千年的挑挑減減",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000100",
+    "original_content": "最終只剩下20宇宙",
+    "repaired_content": "最終只剩下20宇宙",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000102",
+    "original_content": "除去竹子品種",
+    "repaired_content": "除去竹子品種",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000103",
+    "original_content": "不同產區的氣候條件",
+    "repaired_content": "不同產區的氣候條件",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000104",
+    "original_content": "地形地貌",
+    "repaired_content": "地形地貌",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000105",
+    "original_content": "突然類型",
+    "repaired_content": "突然類型",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000106",
+    "original_content": "水紋特徵等生態因子",
+    "repaired_content": "水紋特徵等生態因子",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000107",
+    "original_content": "也對竹損分位產生了顯著的影響",
+    "repaired_content": "也對竹損分位產生了顯著的影響",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000109",
+    "original_content": "随便得这个主材肯",
+    "repaired_content": "随便得这个主材肯",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000110",
+    "original_content": "就会解锁马嘴的位置体验",
+    "repaired_content": "就会解锁马嘴的位置体验",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000112",
+    "original_content": "这股负合的苦澀味",
+    "repaired_content": "这股负合的苦澀味",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000113",
+    "original_content": "默合的推手之一就是光照",
+    "repaired_content": "默合的推手之一就是光照",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000114",
+    "original_content": "主损见不得光",
+    "repaired_content": "主笋见不得光",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000115",
+    "original_content": "光照增强光合作用",
+    "repaired_content": "光照增强光合作用",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000116",
+    "original_content": "可能增加淡素积累",
+    "repaired_content": "可能增加淡素积累",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000117",
+    "original_content": "间接的促进竹筍体内一种名为",
+    "repaired_content": "间接的促进竹笋体内一种名为",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000119",
+    "original_content": "且有毒的物质产生",
+    "repaired_content": "且有毒的物质产生",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000120",
+    "original_content": "同时光照会加速损中单凝物质的合成",
+    "repaired_content": "同时光照会加速笋中单凝物质的合成",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000122",
+    "original_content": "对于碰触智慧麦克斯中文来说",
+    "repaired_content": "对于碰触智慧麦克斯中文来说",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000123",
+    "original_content": "这些马嘴的可使用猪腿",
+    "repaired_content": "这些马嘴的可使用猪腿",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000124",
+    "original_content": "虽然不好吃",
+    "repaired_content": "虽然不好吃",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000127",
+    "original_content": "也能让猪腿变得好吃",
+    "repaired_content": "也能让猪腿变得好吃",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000128",
+    "original_content": "方看中国祖先早期征服猪腿的文馅",
+    "repaired_content": "方看中国祖先早期征服猪腿的文馅",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000129",
+    "original_content": "例如周底中的",
+    "repaired_content": "例如周底中的",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000130",
+    "original_content": "加豆之时 损猪鱼海",
+    "repaired_content": "加豆之时 笋猪鱼海",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000131",
+    "original_content": "猪是腌菜的意思",
+    "repaired_content": "猪是腌菜的意思",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000132",
+    "original_content": "损猪就是为了掩盖苦澀",
+    "repaired_content": "笋猪就是为了掩盖苦澀",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000133",
+    "original_content": "方便处藏腌损",
+    "repaired_content": "方便处藏腌笋",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000134",
+    "original_content": "其名要树里也记录了",
+    "repaired_content": "其名要树里也记录了",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000135",
+    "original_content": "春曲损 主儿铺之的",
+    "repaired_content": "春曲笋 主儿铺之的",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000136",
+    "original_content": "将猪腿煮熟",
+    "repaired_content": "将猪腿煮熟",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000137",
+    "original_content": "晒干去除苦澀的方法",
+    "repaired_content": "晒干去除苦澀的方法",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000138",
+    "original_content": "這種通過煙質發酵 煮熟曬乾來降低竹村苦澀味的古老預處的方式流存至今",
+    "repaired_content": "這種通過煙質發酵 煮熟曬乾來降低竹村苦澀味的古老預處的方式流存至今",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000139",
+    "original_content": "例如穿前盛產的苦損乾",
+    "repaired_content": "例如穿前盛產的苦損乾",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000140",
+    "original_content": "顛貴地區流行吃的酸損",
+    "repaired_content": "顛貴地區流行吃的酸損",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000142",
+    "original_content": "事業越過邊界線 飛隊兵 印尼和馬來西亞",
+    "repaired_content": "事業越過邊界線 飛隊兵 印尼和馬來西亞",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000143",
+    "original_content": "則將損與耶江一起捧人",
+    "repaired_content": "則將損與耶江一起捧人",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000144",
+    "original_content": "以耶堂 耶指的田美純厚來綜合苦澀",
+    "repaired_content": "以耶堂 耶指的田美純厚來綜合苦澀",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000145",
+    "original_content": "印度人則習愛用重口味的馬沙拉粉來遮蔽苦澀",
+    "repaired_content": "印度人則習愛用重口味的馬沙拉粉來遮蔽苦澀",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000146",
+    "original_content": "而中國江南地區與南方山區所產的竹村",
+    "repaired_content": "而中國江南地區與南方山區所產的竹村",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000147",
+    "original_content": "因为農曆三至四月稀缺的秦天",
+    "repaired_content": "因为農曆三至四月稀缺的秦天",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000148",
+    "original_content": "春季因语绵绵的天气条件",
+    "repaired_content": "春季因语绵绵的天气条件",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000149",
+    "original_content": "将竹筍中部分产生苦澀的",
+    "repaired_content": "将竹笋中部分产生苦澀的",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000151",
+    "original_content": "饿杀在的药栏里",
+    "repaired_content": "饿杀在的药栏里",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000152",
+    "original_content": "竹筍不用时间发酵或调味腌制",
+    "repaired_content": "竹笋不用长时间发酵或调味腌制",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000153",
+    "original_content": "在线损的状态下",
+    "repaired_content": "在线笋的状态下",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000158",
+    "original_content": "如何将竹筍的美味发回到极致",
+    "repaired_content": "如何将竹笋的美味发回到极致",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000159",
+    "original_content": "宋耐以前吃损并没有什么花头巾",
+    "repaired_content": "宋耐以前吃笋并没有什么花头巾",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000160",
+    "original_content": "无非是争、竹、烟、烤、任人所好",
+    "repaired_content": "无非是争、竹、烟、烤、任人所好",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000161",
+    "original_content": "日本竹料理至今还挺留在汉堂这种清淡本位的朋友方式",
+    "repaired_content": "日本竹料理至今还挺留在唐宋这种清淡本位的烹饪方式",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000165",
+    "original_content": "写下了山家清共里",
+    "repaired_content": "写下了山家清共里",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000166",
+    "original_content": "记载了十数道与损相关的菜谣",
+    "repaired_content": "记载了十数道与笋相关的菜谣",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000167",
+    "original_content": "可以归纳出中国竹损朋友的一个重大突破",
+    "repaired_content": "可以归纳出中国竹笋朋友的一个重大突破",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000170",
+    "original_content": "嫩损小迅狗起菜",
+    "repaired_content": "嫩笋小迅狗起菜",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000171",
+    "original_content": "油炒做更加胡椒油家",
+    "repaired_content": "油炒做更加胡椒油家",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000172",
+    "original_content": "相比之下用蒸煮的方式来处理损",
+    "repaired_content": "相比之下用蒸煮的方式来处理笋",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000173",
+    "original_content": "灰发性物质容易容易水而流失",
+    "repaired_content": "灰发性物质容易容易水而流失",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000174",
+    "original_content": "香气淡薄口感单一",
+    "repaired_content": "香气淡薄口感单一",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000175",
+    "original_content": "油炒损在高温和油脂的催化作用下",
+    "repaired_content": "油炒笋在高温和油脂的催化作用下",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000176",
+    "original_content": "可以灰发掉部分的清苦器",
+    "repaired_content": "可以灰发掉部分的清苦器",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000177",
+    "original_content": "同时增加敷难类比其类物质",
+    "repaired_content": "同时增加敷难类比其类物质",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000178",
+    "original_content": "呈现出胶糖香味",
+    "repaired_content": "呈现出胶糖香味",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000183",
+    "original_content": "炒损片",
+    "repaired_content": "炒笋片",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000184",
+    "original_content": "爆损丁的广为流传",
+    "repaired_content": "爆笋丁的广为流传",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000185",
+    "original_content": "也能看出中国人对于油炒损的肯定",
+    "repaired_content": "也能看出中国人对于油炒笋的肯定",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000186",
+    "original_content": "在鲜损圈里唯一能和有吵",
+    "repaired_content": "在鲜笋圈里唯一能和有",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000187",
+    "original_content": "相抗衡的朋友方式也只有盾肉了",
+    "repaired_content": "相抗衡的烹饪方式也只有盾肉了",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000188",
+    "original_content": "损门肉推广大使苏氏那首诗总结的好了",
+    "repaired_content": "笋门肉推广大使苏氏那首诗总结的好了",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000189",
+    "original_content": "无主令人俗无肉使人瘦",
+    "repaired_content": "无主令人俗无肉使人瘦",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000191",
+    "original_content": "主损门主肉",
+    "repaired_content": "主笋门主肉",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000192",
+    "original_content": "损门肉之所以能获得文人老套苏氏的青莱",
+    "repaired_content": "笋门肉之所以能获得文人老套苏氏的青莱",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000193",
+    "original_content": "关键就在鱼",
+    "repaired_content": "关键就在鱼",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000194",
+    "original_content": "肉内中含有的鸡干酸和鸟干酸",
+    "repaired_content": "肉内中含有的鸡干酸和鸟干酸",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000195",
+    "original_content": "与主损中的鲜味",
+    "repaired_content": "与主笋中的鲜味",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000196",
+    "original_content": "安鸡酸碰撞",
+    "repaired_content": "安鸡酸碰撞",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000197",
+    "original_content": "会产生鲜味鞋桶效益",
+    "repaired_content": "会产生鲜味鞋桶效益",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000198",
+    "original_content": "可使的鲜味强度提升5-10倍",
+    "repaired_content": "可使的鲜味强度提升5-10倍",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000199",
+    "original_content": "而竹筍內部是纖維多孔的結構",
+    "repaired_content": "而竹笋內部是纖維多孔的結構",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000201",
+    "original_content": "並釋放出了指容性的香氣",
+    "repaired_content": "並釋放出了指容性的香氣",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000202",
+    "original_content": "如人權、鬼酸",
+    "repaired_content": "如人權、鬼酸",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000203",
+    "original_content": "進入並包裹竹筍纖維",
+    "repaired_content": "進入並包裹竹笋纖維",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000204",
+    "original_content": "是整體風味更加濃郁",
+    "repaired_content": "是整體風味更加濃郁",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000205",
+    "original_content": "說了這麼多",
+    "repaired_content": "說了這麼多",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000206",
+    "original_content": "我們再回到開頭那個問題",
+    "repaired_content": "我們再回到開頭那個問題",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000207",
+    "original_content": "為什麼世界竹林資源如此豐富",
+    "repaired_content": "為什麼世界竹林資源如此豐富",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000208",
+    "original_content": "而除了中國",
+    "repaired_content": "而除了中國",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000209",
+    "original_content": "卻很少有國家吃損呢？",
+    "repaired_content": "卻很少有國家吃損呢？",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000210",
+    "original_content": "但顯而易見",
+    "repaired_content": "但顯而易見",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000211",
+    "original_content": "因為竹筍是一種極其交金的食材",
+    "repaired_content": "因為竹笋是一種極其交金的食材",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000212",
+    "original_content": "首先不是所有的竹筍品種都可以使用",
+    "repaired_content": "首先不是所有的竹笋品種都可以使用",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000213",
+    "original_content": "即便是可以使用的竹筍品種",
+    "repaired_content": "即便是可以使用的竹笋品種",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000214",
+    "original_content": "竹筍产趣的環境氣候",
+    "repaired_content": "竹笋产趣的環境氣候",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000215",
+    "original_content": "也会影响竹筍的口感",
+    "repaired_content": "也会影响竹笋的口感",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000216",
+    "original_content": "非洲",
+    "repaired_content": "非洲",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000217",
+    "original_content": "哪周这些竹区",
+    "repaired_content": "哪周这些竹区",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000218",
+    "original_content": "当地也没有使用竹筍的传统",
+    "repaired_content": "当地也没有使用竹笋的传统",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000219",
+    "original_content": "毕竟不是原产地",
+    "repaired_content": "毕竟不是原产地",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000220",
+    "original_content": "大部分竹林是近代为了以竹代目",
+    "repaired_content": "大部分竹林是近代为了以竹代目",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000221",
+    "original_content": "从亚洲一致而来的",
+    "repaired_content": "从亚洲一致而来的",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000222",
+    "original_content": "竹子的感用价值",
+    "repaired_content": "竹子的感用价值",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000223",
+    "original_content": "待于使用价值",
+    "repaired_content": "待于使用价值",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000224",
+    "original_content": "可使用竹筍本就不多",
+    "repaired_content": "可使用竹笋本就不多",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000225",
+    "original_content": "而吃损连门的亚洲",
+    "repaired_content": "而吃笋连门的亚洲",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000226",
+    "original_content": "南亚",
+    "repaired_content": "南亚",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000227",
+    "original_content": "东南亚",
+    "repaired_content": "东南亚",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000228",
+    "original_content": "由于光照教墙",
+    "repaired_content": "由于光照教墙",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000229",
+    "original_content": "所产的损字味道苦澀",
+    "repaired_content": "所产的笋字味道苦澀",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000230",
+    "original_content": "即便也腌制",
+    "repaired_content": "即便也腌制",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000231",
+    "original_content": "晒干",
+    "repaired_content": "晒干",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000232",
+    "original_content": "加香料的预处地方是",
+    "repaired_content": "加香料的预处地方是",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000233",
+    "original_content": "也无法完全消除苦味",
+    "repaired_content": "也无法完全消除苦味",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000234",
+    "original_content": "这无一限制了损在该地区的使用率",
+    "repaired_content": "这无一限制了笋在该地区的使用率",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000235",
+    "original_content": "中国西南地区所产的主损也多苦澀",
+    "repaired_content": "中国西南地区所产的主笋也多苦澀",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000236",
+    "original_content": "但中国特别的困人方式炒",
+    "repaired_content": "但中国特别的困人方式炒",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000237",
+    "original_content": "拥补了这一点",
+    "repaired_content": "拥补了这一点",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000238",
+    "original_content": "损在高温和油脂脆化作用下",
+    "repaired_content": "笋在高温和油脂脆化作用下",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000239",
+    "original_content": "可以二次会发掉部分的亲苦气",
+    "repaired_content": "可以二次会发掉部分的亲苦气",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000240",
+    "original_content": "同时增加的富奶泪和比型泪物质",
+    "repaired_content": "同时增加的富奶泪和比型泪物质",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000241",
+    "original_content": "增加的交腾香味",
+    "repaired_content": "增加的交腾香味",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000242",
+    "original_content": "这一件苦味",
+    "repaired_content": "这一件苦味",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000243",
+    "original_content": "一整香气的加重结果",
+    "repaired_content": "一整香气的加重结果",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000244",
+    "original_content": "就是拔高了苦嘴的美味程度",
+    "repaired_content": "就是拔高了苦嘴的美味程度",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000246",
+    "original_content": "将南地区和南方山区",
+    "repaired_content": "江南地区和南方山区",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000247",
+    "original_content": "评解着德天读厚的自然条件",
+    "repaired_content": "评解着德天读厚的自然条件",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000248",
+    "original_content": "可以直接产出",
+    "repaired_content": "可以直接产出",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000249",
+    "original_content": "没有什么使用门砍的甜脆线损",
+    "repaired_content": "没有什么使用门砍的甜脆线笋",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000250",
+    "original_content": "顺带一提",
+    "repaired_content": "顺带一提",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000251",
+    "original_content": "日本是除了中国之外的另外一个吃损大户",
+    "repaired_content": "日本是除了中国之外的另外一个吃笋大户",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000252",
+    "original_content": "也是中国主损的最大出口国",
+    "repaired_content": "也是中国主笋的最大出口国",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000253",
+    "original_content": "有赖于温和湿云的海洋性气候",
+    "repaired_content": "有赖于温和湿云的海洋性气候",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000254",
+    "original_content": "和75%国土为山地的特殊地理环境",
+    "repaired_content": "和75%国土为山地的特殊地理环境",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000255",
+    "original_content": "日本所产的主损相对先田",
+    "repaired_content": "日本所产的主笋相对先田",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000256",
+    "original_content": "使用历史也可以追溯至千年以前",
+    "repaired_content": "使用历史也可以追溯至千年以前",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000257",
+    "original_content": "如原始物于就提及春损艳",
+    "repaired_content": "如原始物于就提及春笋艳",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000258",
+    "original_content": "高级的日本料理为了追求主损急事的先田脆嫩",
+    "repaired_content": "高级的日本料理为了追求主笋急事的先田脆嫩",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000259",
+    "original_content": "会对主损采用一种遮光技术",
+    "repaired_content": "会对主笋采用一种遮光技术",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000260",
+    "original_content": "也就是在主损上位破土之时",
+    "repaired_content": "也就是在主笋上位破土之时",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000261",
+    "original_content": "用稻草和黑色的遮光部覆盖土染",
+    "repaired_content": "用稻草和黑色的遮光部覆盖土染",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000262",
+    "original_content": "借此阻断阳光",
+    "repaired_content": "借此阻断阳光",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000271",
+    "original_content": "对时刻来说",
+    "repaired_content": "对时刻来说",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000272",
+    "original_content": "具有穿越时间",
+    "repaired_content": "具有穿越时间",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000274",
+    "original_content": "来和线损的交金",
+    "repaired_content": "来和线笋的交金",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000275",
+    "original_content": "不止于产力的物后条件",
+    "repaired_content": "不止于产力的物后条件",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000276",
+    "original_content": "主损有五小时",
+    "repaired_content": "主笋有五小时",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000277",
+    "original_content": "黄金沙清加工的说法",
+    "repaired_content": "黄金时间加工的说法",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000278",
+    "original_content": "如果不采取特殊的住存和处理手段",
+    "repaired_content": "如果不采取特殊的储存和处理手段",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000279",
+    "original_content": "被挖掘出来之后",
+    "repaired_content": "被挖掘出来之后",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000280",
+    "original_content": "随着主损的呼吸作用",
+    "repaired_content": "随着主笋的呼吸作用",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000281",
+    "original_content": "主损中的总堂和还原堂",
+    "repaired_content": "主笋中的总堂和还原堂",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000282",
+    "original_content": "但白質維斯的含量將會降低",
+    "repaired_content": "但白質維斯的含量將會降低",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000283",
+    "original_content": "喪失部分的甜味",
+    "repaired_content": "喪失部分的甜味",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000284",
+    "original_content": "於此同時細胞必物之物之化",
+    "repaired_content": "於此同時細胞必物之物之化",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000285",
+    "original_content": "令主損的口感越來越粗糙",
+    "repaired_content": "令主損的口感越來越粗糙",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000286",
+    "original_content": "過去說到先田技術的限制",
+    "repaired_content": "過去說到先田技術的限制",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000287",
+    "original_content": "中國南方只在東春才能吃上先損",
+    "repaired_content": "中國南方只在東春才能吃上先損",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000288",
+    "original_content": "勝於的主損則通過風乾、煙質、發酵的方式",
+    "repaired_content": "勝於的主損則通過風乾、煙質、發酵的方式",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000289",
+    "original_content": "來進行保存",
+    "repaired_content": "來進行保存",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000290",
+    "original_content": "然而復水主持的損乾",
+    "repaired_content": "然而復水主持的損乾",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000291",
+    "original_content": "無法達到先損先田脆嫩的原味",
+    "repaired_content": "無法達到先損先田脆嫩的原味",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000292",
+    "original_content": "甚至還有些發臭",
+    "repaired_content": "甚至還有些發臭",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000294",
+    "original_content": "讓中國人一年四季無論東西",
+    "repaired_content": "讓中國人一年四季無論東西",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000295",
+    "original_content": "都能長到一口先損",
+    "repaired_content": "都能長到一口先損",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000296",
+    "original_content": "林华七共正是中国现代吃损的牵行者",
+    "repaired_content": "林华七共正是中国现代吃笋的牵行者",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000297",
+    "original_content": "这里是中国主损之都福建南平建欧",
+    "repaired_content": "这里是中国主笋之都福建南平建瓯",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000298",
+    "original_content": "北人五一",
+    "repaired_content": "北人五一",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000299",
+    "original_content": "山脉高峻万岩",
+    "repaired_content": "山脉高峻万岩",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000301",
+    "original_content": "平均海拔700米",
+    "repaired_content": "平均海拔700米",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000303",
+    "original_content": "就业文差10-15摄氏度",
+    "repaired_content": "就业文差10-15摄氏度",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000304",
+    "original_content": "东林明江水系产产",
+    "repaired_content": "东林明江水系产产",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000305",
+    "original_content": "任则万物",
+    "repaired_content": "任则万物",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000306",
+    "original_content": "山林间的空气如习",
+    "repaired_content": "山林间的空气如习",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000307",
+    "original_content": "富阳泥子超过2万美平方0米",
+    "repaired_content": "富阳泥子超过2万美平方0米",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000308",
+    "original_content": "林华七共再次自由6万母",
+    "repaired_content": "林华七共再次自由6万母",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000309",
+    "original_content": "远离城市人阴的高山主林",
+    "repaired_content": "远离城市人阴的高山主林",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000310",
+    "original_content": "温和市自然环境",
+    "repaired_content": "温和市自然环境",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000311",
+    "original_content": "加之五一山特有的微酸性红黄土壤",
+    "repaired_content": "加之五一山特有的微酸性红黄土壤",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000312",
+    "original_content": "使主损内的可容性汤与油迪暗击酸慢慢击剧",
+    "repaired_content": "使主笋内的可容性汤与油迪暗击酸慢慢击剧",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000313",
+    "original_content": "带来了先田脆爽的口感",
+    "repaired_content": "带来了先田脆爽的口感",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000314",
+    "original_content": "甚至有些主损生吃也不麻醉",
+    "repaired_content": "甚至有些主笋生吃也不麻醉",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000315",
+    "original_content": "接些生长于五一山卖的主损被踩摘以后",
+    "repaired_content": "接些生长于五一山卖的主笋被踩摘以后",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000316",
+    "original_content": "七共抓住了五小时黄金沙清加工的时间窗口",
+    "repaired_content": "企业抓住了五小时黄金时间加工的时间窗口",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000317",
+    "original_content": "立即将主损送出了10万级无军智能化绿色工厂进行处理",
+    "repaired_content": "立即将主笋送出了10万级无菌智能化绿色工厂进行处理",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000318",
+    "original_content": "传统先损加工的争主速动一直存在营养和先田双流氏的问题",
+    "repaired_content": "传统先笋加工的争主速动一直存在营养和先田双流氏的问题",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000319",
+    "original_content": "七共实现了国内损家工技术的升级",
+    "repaired_content": "七共实现了国内笋家工技术的升级",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000320",
+    "original_content": "先采用了最新的过热蒸气技术",
+    "repaired_content": "先采用了最新的过热蒸气技术",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000321",
+    "original_content": "进行了一次沙清",
+    "repaired_content": "进行了一次沙清",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000322",
+    "original_content": "去除损体中的草番和单凝",
+    "repaired_content": "去除笋体中的草番和单凝",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000323",
+    "original_content": "最大线度的去除了线损的苦色味",
+    "repaired_content": "最大线度的去除了线笋的苦涩味",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000324",
+    "original_content": "出锅后再进行三次冰水的进泡",
+    "repaired_content": "出锅后再进行三次冰水的进泡",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000325",
+    "original_content": "打到顺间冷却的效果",
+    "repaired_content": "打到顺间冷却的效果",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000326",
+    "original_content": "所入线损本身的线",
+    "repaired_content": "所入线笋本身的线",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000327",
+    "original_content": "香甜脆",
+    "repaired_content": "香甜脆",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000328",
+    "original_content": "PH值保持在5.5以上",
+    "repaired_content": "pH值保持在5.5以上",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000329",
+    "original_content": "零下45摄氏度到零下65摄氏度",
+    "repaired_content": "零下45摄氏度到零下65摄氏度",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000330",
+    "original_content": "超低温冷动紧随其后",
+    "repaired_content": "超低温冷动紧随其后",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  },
+  {
+    "evidence_id": "raw-tr-000331",
+    "original_content": "激动过程紧需数分钟",
+    "repaired_content": "冷冻过程紧需数分钟",
+    "confidence": "medium",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000333",
+    "original_content": "在環保理念上,七共損業以自然綠色為時",
+    "repaired_content": "在環保理念上,七共損業以自然綠色為時",
+    "confidence": "low",
+    "reason": "Conservative ASR normalization using the retained SRT, nearby context, and inspected frame notes; unresolved wording remains close to raw ASR.",
+    "uncertain": true
+  }
+]

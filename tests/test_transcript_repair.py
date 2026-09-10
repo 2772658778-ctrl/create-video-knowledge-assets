@@ -1,0 +1,96 @@
+import json
+
+from vka.transcript_repair import (
+    apply_transcript_repairs,
+    build_asr_repair_prompt,
+    suggest_asr_repairs,
+)
+from vka_cli import main
+
+
+ROWS = [
+    {
+        "evidence_id": "tr-000001",
+        "origin": "video",
+        "modality": "transcript",
+        "spans": [{"start_ms": 10_000, "end_ms": 14_000}],
+        "content": "但是你肯定听说过Chad GPT",
+        "acquisition": "asr",
+        "schema_version": "1.0",
+    },
+    {
+        "evidence_id": "tr-000002",
+        "origin": "video",
+        "modality": "transcript",
+        "spans": [{"start_ms": 14_000, "end_ms": 18_000}],
+        "content": "只知道一个公式Q乘以K的转制，送进sulfmax会导致t度消失",
+        "acquisition": "asr",
+        "schema_version": "1.0",
+    },
+]
+
+
+def test_build_asr_repair_prompt_preserves_ids_and_output_contract() -> None:
+    prompt = build_asr_repair_prompt(ROWS, title="注意力机制")
+
+    assert "不要改写讲者原意" in prompt
+    assert "evidence_id" in prompt
+    assert "repaired_content" in prompt
+    assert "tr-000001" in prompt
+    assert "00:00:10--00:00:14" in prompt
+
+
+def test_suggest_asr_repairs_catches_common_technical_errors() -> None:
+    repairs = suggest_asr_repairs(ROWS)
+
+    assert repairs[0]["repaired_content"] == "但是你肯定听说过ChatGPT"
+    assert "转置" in repairs[1]["repaired_content"]
+    assert "softmax" in repairs[1]["repaired_content"]
+    assert "梯度消失" in repairs[1]["repaired_content"]
+
+
+def test_apply_transcript_repairs_keeps_original_and_marks_quality() -> None:
+    repairs = [
+        {
+            "evidence_id": "tr-000001",
+            "original_content": "但是你肯定听说过Chad GPT",
+            "repaired_content": "但是你肯定听说过 ChatGPT",
+            "confidence": "high",
+            "reason": "英文专名",
+            "uncertain": False,
+        }
+    ]
+
+    repaired_rows = apply_transcript_repairs(ROWS, repairs)
+
+    assert repaired_rows[0]["content"] == "但是你肯定听说过 ChatGPT"
+    assert repaired_rows[0]["original_content"] == "但是你肯定听说过Chad GPT"
+    assert repaired_rows[0]["quality"]["repair_status"] == "repaired"
+    assert repaired_rows[1]["content"] == "只知道一个公式Q乘以K的转制，送进sulfmax会导致t度消失"
+
+
+def test_cli_repair_roundtrip(tmp_path, capsys) -> None:
+    timeline = tmp_path / "timeline.jsonl"
+    repairs = tmp_path / "repairs.json"
+    output = tmp_path / "timeline.repaired.jsonl"
+    timeline.write_text(
+        "\n".join(json.dumps(row, ensure_ascii=False) for row in ROWS),
+        encoding="utf-8",
+    )
+
+    assert main(["suggest-repairs", "--timeline", str(timeline), "--output", str(repairs)]) == 0
+    assert main(
+        [
+            "apply-transcript-repairs",
+            "--timeline",
+            str(timeline),
+            "--repairs",
+            str(repairs),
+            "--output",
+            str(output),
+        ]
+    ) == 0
+    captured = capsys.readouterr()
+
+    assert "Traceback" not in captured.err
+    assert "ChatGPT" in output.read_text(encoding="utf-8")

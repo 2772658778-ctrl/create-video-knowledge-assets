@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1220"/>
+      <stop offset="1" stop-color="#0f1d33"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.12" cy="0.25" r="0.6">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1280" height="360" fill="url(#bg)"/>
+  <rect width="1280" height="360" fill="url(#glow)"/>
+
+  <!-- title -->
+  <text x="80" y="152" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="56" font-weight="700" fill="#f8fafc" letter-spacing="0">
+    <tspan fill="url(#accent)">create-video-knowledge</tspan>-assets
+  </text>
+
+  <!-- tagline -->
+  <text x="82" y="210" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="26" fill="#94a3b8" letter-spacing="0.5">
+    把知识视频，变成可学习 · 可追问 · 可复用 · 可归档的知识资产
+  </text>
+
+  <!-- pipeline -->
+  <g font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+    <rect x="80"   y="252" width="240" height="56" rx="12" fill="#16233c" stroke="#2a3a5c"/>
+    <rect x="340"  y="252" width="180" height="56" rx="12" fill="#16233c" stroke="#2a3a5c"/>
+    <rect x="540"  y="252" width="180" height="56" rx="12" fill="#16233c" stroke="#2a3a5c"/>
+    <rect x="740"  y="252" width="220" height="56" rx="12" fill="#16233c" stroke="url(#accent)" stroke-width="1.6"/>
+
+    <text x="200" y="286" text-anchor="middle" font-size="19" fill="#e2e8f0">知识视频</text>
+    <text x="430" y="286" text-anchor="middle" font-size="19" fill="#e2e8f0">证据</text>
+    <text x="630" y="286" text-anchor="middle" font-size="19" fill="#e2e8f0">知识</text>
+    <text x="850" y="286" text-anchor="middle" font-size="19" fill="#22d3ee" font-weight="600">PDF · HTML · MD</text>
+
+    <!-- arrows -->
+    <g stroke="#3b82f6" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="330,280 348,280"/>
+      <polyline points="530,280 548,280"/>
+      <polyline points="730,280 748,280"/>
+    </g>
+    <g fill="#3b82f6">
+      <polygon points="352,276 344,280 352,284"/>
+      <polygon points="552,276 544,280 552,284"/>
+      <polygon points="752,276 744,280 752,284"/>
+    </g>
+  </g>
+</svg>

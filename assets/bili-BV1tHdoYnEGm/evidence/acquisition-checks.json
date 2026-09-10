@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "input_url": "https://www.bilibili.com/video/BV1tHdoYnEGm/",
+  "canonical_url": "https://www.bilibili.com/video/BV1tHdoYnEGm",
+  "bvid": "BV1tHdoYnEGm",
+  "title": "为什么除了中国，很少有国家吃笋呢？",
+  "uploader": "赛博食录",
+  "upload_date": "20250416",
+  "duration_seconds": 708.948,
+  "single_part_check": {
+    "status": "passed",
+    "reason": "metadata has no entries list, chapters is null, and one downloaded video file is present."
+  },
+  "subtitle_check": {
+    "status": "no_platform_subtitles",
+    "metadata_subtitle_keys": [],
+    "metadata_auto_caption_keys": [],
+    "acquisition_result": "no requested SRT; faster-whisper base fallback used."
+  },
+  "asr_check": {
+    "status": "completed_with_repair",
+    "backend": "faster-whisper",
+    "model": "base",
+    "device": "cpu",
+    "compute_type": "int8",
+    "source_srt": "source/asr/audio-faster-base.srt",
+    "raw_timeline": "evidence/timeline.raw.jsonl",
+    "repaired_timeline": "evidence/timeline.jsonl",
+    "raw_rows": 355,
+    "repair_rows": 255,
+    "cache_roots": [
+      ".cache/whisper",
+      ".cache/hf/faster-whisper"
+    ]
+  },
+  "frame_check": {
+    "status": "completed",
+    "candidate_count": 16,
+    "promoted_inspected_frames": 6,
+    "inspection_basis": "direct visual inspection via view_image for selected candidates."
+  }
+}

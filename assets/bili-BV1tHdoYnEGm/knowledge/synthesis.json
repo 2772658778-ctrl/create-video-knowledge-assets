@@ -1,0 +1,28 @@
+{
+  "video_summary": "视频把“为什么除了中国，很少有国家吃笋”拆成一条从资源到餐桌的链路：可食用品种并不普遍，产区和光照会影响苦涩，中国发展出腌渍、发酵、油炒等去涩方法，又通过采后快速加工和冷冻技术把季节性鲜笋延伸到全年消费。",
+  "video_summary_refs": [
+    "ku-core-question",
+    "ku-resource-vs-consumption",
+    "ku-edible-varieties",
+    "ku-preservation-fermentation",
+    "ku-oil-frying",
+    "ku-five-hour-window",
+    "ku-modern-processing"
+  ],
+  "agent_extensions": [
+    "文章将视频的地域、烹饪和加工叙事归纳为“食笋文化需要整条链路协同”的分析框架，并单独标出品牌案例的证据边界。"
+  ],
+  "agent_extension_refs": [
+    "ku-supply-chain-thesis",
+    "ku-advertorial-boundary"
+  ],
+  "evidence_refs": [
+    "tr-000017",
+    "tr-000106",
+    "tr-000167",
+    "tr-000271",
+    "tr-000310",
+    "ev-frame-factory-blanching"
+  ],
+  "schema_version": "1.1"
+}

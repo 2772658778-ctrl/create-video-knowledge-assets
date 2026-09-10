@@ -1,0 +1,84 @@
+{
+  "profile_id": "deep-article",
+  "title": "把复杂流程拆成可验证的步骤",
+  "sections": [
+    {
+      "kind": "reader_promise",
+      "title": "读完能带走什么",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "本文帮助读者把视频中讲解的流程整理为可以检查、可以复用的行动步骤。",
+          "knowledge_refs": ["ku-promise"],
+          "evidence_refs": ["ev-1"],
+          "source_spans": [{"start_ms": 0, "end_ms": 4000}]
+        }
+      ]
+    },
+    {
+      "kind": "core_point",
+      "title": "核心观点",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "视频将可靠交付归结为明确输入、执行步骤和复核输出之间的连续关系。",
+          "knowledge_refs": ["ku-core"],
+          "evidence_refs": ["ev-2"],
+          "source_spans": [{"start_ms": 4000, "end_ms": 9000}]
+        }
+      ]
+    },
+    {
+      "kind": "narrative",
+      "title": "从问题到方法",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "先识别流程中容易遗漏的输入，再按视频说明的顺序执行，并在最后检查输出是否满足目标。",
+          "knowledge_refs": ["ku-flow"],
+          "evidence_refs": ["ev-3"],
+          "source_spans": [{"start_ms": 9000, "end_ms": 15000}]
+        }
+      ]
+    },
+    {
+      "kind": "video_evidence",
+      "title": "视频中的依据",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "讲解者用一个完整示例说明了输入、步骤与输出如何彼此对应。",
+          "knowledge_refs": ["ku-evidence"],
+          "evidence_refs": ["ev-4"],
+          "source_spans": [{"start_ms": 15000, "end_ms": 22000}]
+        }
+      ]
+    },
+    {
+      "kind": "actionable_takeaway",
+      "title": "可执行的带走项",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "下次执行同类任务时，先写出输入清单，再逐项记录步骤，并用输出检查表完成复核。",
+          "knowledge_refs": ["ku-takeaway"],
+          "evidence_refs": ["ev-5"],
+          "source_spans": [{"start_ms": 22000, "end_ms": 28000}]
+        }
+      ]
+    },
+    {
+      "kind": "limitations_sources",
+      "title": "适用边界与来源",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "本文只归纳视频展示的流程；不同工具和团队条件下，需要结合原视频证据判断是否适用。",
+          "knowledge_refs": ["ku-limits"],
+          "evidence_refs": ["ev-6"],
+          "source_spans": [{"start_ms": 28000, "end_ms": 34000}]
+        }
+      ]
+    }
+  ]
+}

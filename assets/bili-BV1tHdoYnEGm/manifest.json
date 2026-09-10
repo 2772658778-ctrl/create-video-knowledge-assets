@@ -1,0 +1,282 @@
+{
+  "asset_id": "bili-BV1tHdoYnEGm",
+  "schema_version": "1.1",
+  "source": {
+    "kind": "bilibili",
+    "bvid": "BV1tHdoYnEGm",
+    "selection_required": true,
+    "canonical_url": "https://www.bilibili.com/video/BV1tHdoYnEGm",
+    "asset_id": "bili-BV1tHdoYnEGm"
+  },
+  "input": {
+    "kind": "bilibili",
+    "bvid": "BV1tHdoYnEGm",
+    "selection_required": true,
+    "canonical_url": "https://www.bilibili.com/video/BV1tHdoYnEGm",
+    "asset_id": "bili-BV1tHdoYnEGm"
+  },
+  "config": {
+    "profile": "deep-article",
+    "selected_asr": {
+      "backend": "faster-whisper",
+      "model": "base",
+      "device": "cpu",
+      "compute_type": "int8",
+      "source": "source/asr/audio-faster-base.srt"
+    }
+  },
+  "tool_versions": {
+    "asr_backend": "faster-whisper",
+    "asr_model": "base",
+    "asr_device": "cpu",
+    "asr_compute_type": "int8"
+  },
+  "created_at": "2026-09-09T00:00:00+00:00",
+  "stages": {
+    "source": {
+      "completed_at": "2026-09-10T00:00:00+08:00",
+      "schema_version": "1.1",
+      "outputs": [
+        {
+          "path": "source/metadata.json",
+          "sha256": "3d1c91c8ed898768081c77b675357b898bc1b9a2fd02ce2dc96a8a9893727235"
+        },
+        {
+          "path": "source/cover/BV1tHdoYnEGm.jpg",
+          "sha256": "0523c9480b4df7cb3b99a5b2073c0a393dc2c64e4765e654051937bbe34a19b6"
+        },
+        {
+          "path": "source/video/BV1tHdoYnEGm.mp4",
+          "sha256": "1a9d8d621db54e31de466996bd5af50deacbc9b0f5b36fc9b978062c2f3aed75"
+        },
+        {
+          "path": "source/asr/audio.wav",
+          "sha256": "03782c5ab76b9c556fe854c33a07140dcaaedddee1831ab7afac8ee2b930e4c3"
+        },
+        {
+          "path": "source/asr/audio-faster-base.srt",
+          "sha256": "431885ba60cb61ad1cd6bf1ce0caac0b55102122931f9b6cf954f522ab1b1fad"
+        }
+      ]
+    },
+    "evidence": {
+      "completed_at": "2026-09-10T09:10:02.547376+00:00",
+      "schema_version": "1.1",
+      "outputs": [
+        {
+          "path": "evidence/acquisition-checks.json",
+          "sha256": "a22b9a1e9d443ba0099c04b288cdf3267bb87293d301498b2e3d75294545d273"
+        },
+        {
+          "path": "evidence/asr-repair-prompt.md",
+          "sha256": "6605c027d29f13c679e858369690ec69534e51c3622971ee9e95fea8fbbd5617"
+        },
+        {
+          "path": "evidence/asr-repairs.json",
+          "sha256": "71afbc0228b97a3d02a47dd246fcc4b0a086dea22bf1d0ccfe429ec3a3aff78a"
+        },
+        {
+          "path": "evidence/asr-repairs.suggested.json",
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-005000.jpg",
+          "sha256": "438b184ce97e14617136451a2c12e02c273fddc288040dd9c16c965a95c9fbee"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-035000.jpg",
+          "sha256": "72cc23634a339973bbb4d4035af13c54115f2a44090492d33441b8d80f9b8ee4"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-055000.jpg",
+          "sha256": "16ace00bb311e138de2ece309772755bfde6a00765fb5b20ee4883feacba50f7"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-075000.jpg",
+          "sha256": "409b25178b3b7b84fbedba81830e8d5b63e1a1e7236cfa1539482022ba45d23b"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-110000.jpg",
+          "sha256": "bd8168367cd7089ee3b25aca5d0ce1a32cfbf6c61036bf90b00fed55286e5fbb"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-145000.jpg",
+          "sha256": "306480c5ff88234515a73c130bbe3a95536b6c9fbedb8f95e5e62ba05280e282"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-190000.jpg",
+          "sha256": "f4d32d1b39b6a2d5077d787b988ec8b38578be3d509ab427446acd0286d8b987"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-250000.jpg",
+          "sha256": "bdb14d204d0b3e6a80042159b83376d266c17a573fc7f7456de0925a6703f394"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-305000.jpg",
+          "sha256": "ad958b9ee4876e9f57d4fe2400bf21d608a768a860456aa031ed3732f6f0337e"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-345000.jpg",
+          "sha256": "c8ff2696434c89f18c566d5ab0dc476c4d95c3995d6db114fc8c4e1702e3648d"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-380000.jpg",
+          "sha256": "ee7d17735ca50e3415070cec0b3893b1077bca3a0acc6ecba14c9cd284989bf7"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-420000.jpg",
+          "sha256": "d1e099049ee96d4fbd520524c9d7cf992ad075447e02cfaa3eaa2aa9486d7aed"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-470000.jpg",
+          "sha256": "55091f6d4adecdcd4d16a049ab2ccaf72ece32b0b2aa7e587a3450d49aa135f2"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-520000.jpg",
+          "sha256": "5948198568bfd49cdd620c797c8552c886aa9f0f4e954cfdbebcf9aad0b35dcd"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-575000.jpg",
+          "sha256": "c8607e84fa2854422bf71c9ef9ec1d9600c646c4cc3e73edd0652e185fb7cd2d"
+        },
+        {
+          "path": "evidence/frames/candidates/frame-630000.jpg",
+          "sha256": "05c8d40f633f4da4f1dd13cf392b49bd9496c90323d216924a358dfdbaa61bf9"
+        },
+        {
+          "path": "evidence/frames/inspected/01-regional-bamboo-shoot-dishes-map.jpg",
+          "sha256": "438b184ce97e14617136451a2c12e02c273fddc288040dd9c16c965a95c9fbee"
+        },
+        {
+          "path": "evidence/frames/inspected/02-bamboo-shoot-flavor-and-protein.jpg",
+          "sha256": "306480c5ff88234515a73c130bbe3a95536b6c9fbedb8f95e5e62ba05280e282"
+        },
+        {
+          "path": "evidence/frames/inspected/03-make-unpleasant-shoots-edible.jpg",
+          "sha256": "ad958b9ee4876e9f57d4fe2400bf21d608a768a860456aa031ed3732f6f0337e"
+        },
+        {
+          "path": "evidence/frames/inspected/04-stir-fried-bamboo-shoots.jpg",
+          "sha256": "55091f6d4adecdcd4d16a049ab2ccaf72ece32b0b2aa7e587a3450d49aa135f2"
+        },
+        {
+          "path": "evidence/frames/inspected/05-wuyi-mountain-bamboo-forest.jpg",
+          "sha256": "c8607e84fa2854422bf71c9ef9ec1d9600c646c4cc3e73edd0652e185fb7cd2d"
+        },
+        {
+          "path": "evidence/frames/inspected/06-overheated-steam-blanching-line.jpg",
+          "sha256": "05c8d40f633f4da4f1dd13cf392b49bd9496c90323d216924a358dfdbaa61bf9"
+        },
+        {
+          "path": "evidence/records.jsonl",
+          "sha256": "5066718465d2d5900b26ecda121da90576d753ece5c27e51302be320351846c2"
+        },
+        {
+          "path": "evidence/timeline.jsonl",
+          "sha256": "788e4a9a215ed726aee3f8f65591b01e7143d92e975274a15a26c794131c9b0a"
+        },
+        {
+          "path": "evidence/timeline.raw.jsonl",
+          "sha256": "d39884a31933a49c6c89d31ff238c09da3a861492c97b3daa9bfdc3ab34f84be"
+        }
+      ]
+    },
+    "knowledge": {
+      "completed_at": "2026-09-10T09:10:02.616179+00:00",
+      "schema_version": "1.1",
+      "outputs": [
+        {
+          "path": "knowledge/units.jsonl",
+          "sha256": "a116e600a9450b4ac147a72872269cbfe519f5703c6113cdb392a74e6aa3229b"
+        },
+        {
+          "path": "knowledge/relations.jsonl",
+          "sha256": "d6029fc5c8af1199a360d739aee8370fa6e8713442fc070e015ab344284ab797"
+        },
+        {
+          "path": "knowledge/synthesis.json",
+          "sha256": "8b0185e0e2e836e686c9ecd29d978b870dff0ba3eafdc8f06cea6a956491f6a1"
+        },
+        {
+          "path": "knowledge/outline.json",
+          "sha256": "a88d5f6d191799cf704d9df14d269ac92cefe69304963eaa14a840defd1edca5"
+        },
+        {
+          "path": "content/units.jsonl",
+          "sha256": "908e83d63d12a701a44008b84eab7a83cb9aa8b17c01708664fb9f34b1156a2e"
+        },
+        {
+          "path": "content/index.json",
+          "sha256": "bf0b8949ee0b9946b2c72df88cb02dc0d33f2fad09ed73f0ecf55653b36b0a46"
+        }
+      ]
+    },
+    "views/deep-article/plan": {
+      "completed_at": "2026-09-10T09:39:34.428724+00:00",
+      "schema_version": "1.1",
+      "outputs": [
+        {
+          "path": "views/deep-article/projection-plan.json",
+          "sha256": "8745f7080800f685ad4c18a78bd9a903b307b67822790ed7609c569c70f32978"
+        }
+      ]
+    },
+    "views/deep-article": {
+      "completed_at": "2026-09-10T11:36:56.044966+00:00",
+      "schema_version": "1.1",
+      "outputs": [
+        {
+          "path": "views/deep-article/view-manifest.json",
+          "sha256": "d7bb1eab7195f3e4148621aeea9b5d2fb98244406f056a877a05deb46dc23685"
+        },
+        {
+          "path": "views/deep-article/document.json",
+          "sha256": "c61a438a254ab1d38e55b71ffc2b8ea08c71e78e1279c9f4975b293af2044300"
+        }
+      ]
+    }
+  },
+  "profile_selection": {
+    "profile_id": "deep-article",
+    "selection_source": "explicit_profile",
+    "reason": "selected registered explicit profile",
+    "requested": {
+      "explicit_profile": "deep-article",
+      "intent": null
+    },
+    "requested_formats": [],
+    "formats": [
+      "md",
+      "html",
+      "tex",
+      "pdf"
+    ],
+    "schema_version": "1.1"
+  },
+  "requested_formats": [],
+  "formats": [
+    "md",
+    "html",
+    "tex",
+    "pdf"
+  ],
+  "profile_selections": {
+    "deep-article": {
+      "profile_id": "deep-article",
+      "selection_source": "explicit_profile",
+      "reason": "selected registered explicit profile",
+      "requested": {
+        "explicit_profile": "deep-article",
+        "intent": null
+      },
+      "requested_formats": [],
+      "formats": [
+        "md",
+        "html",
+        "tex",
+        "pdf"
+      ],
+      "schema_version": "1.1"
+    }
+  }
+}

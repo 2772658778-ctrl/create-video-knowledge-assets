@@ -1,0 +1,101 @@
+{
+  "profile_id": "research-brief",
+  "title": "视频流程观点的研究简报",
+  "evidence_origins": {
+    "ev-video": "video",
+    "ev-inference": "video",
+    "ext-user-001": "external",
+    "ev-limit": "video"
+  },
+  "sections": [
+    {
+      "kind": "video_evidence",
+      "title": "视频明确观点/证据",
+      "blocks": [{
+        "kind": "paragraph",
+        "text": "视频明确指出，可靠交付需要先确认输入，再执行步骤并复核输出。",
+        "knowledge_refs": ["ku-video"],
+        "evidence_refs": ["ev-video"],
+        "source_spans": [{"start_ms": 1000, "end_ms": 5000}],
+        "data": {
+          "claim_status": "video_explicit",
+          "source_category": "video_explicit",
+          "visible_label": "视频明确指出",
+          "structured_refs": [{"knowledge_id": "ku-video", "evidence_id": "ev-video", "source_category": "video_explicit"}]
+        }
+      }]
+    },
+    {
+      "kind": "analysis_inference",
+      "title": "分析与推断",
+      "blocks": [{
+        "kind": "paragraph",
+        "text": "分析与推断：该流程可降低遗漏输入和未复核输出的风险。",
+        "knowledge_refs": ["ku-inference"],
+        "evidence_refs": ["ev-inference"],
+        "source_spans": [{"start_ms": 5000, "end_ms": 9000}],
+        "data": {
+          "claim_status": "agent_inference",
+          "source_category": "agent_inference",
+          "visible_label": "分析与推断",
+          "structured_refs": [{"knowledge_id": "ku-inference", "evidence_id": "ev-inference", "source_category": "agent_inference"}]
+        }
+      }]
+    },
+    {
+      "kind": "external_enrichment",
+      "title": "外部资料",
+      "blocks": [{
+        "kind": "paragraph",
+        "text": "用户提供资料：外部资料只作为背景补充，不改写视频观点。",
+        "knowledge_refs": ["ku-external"],
+        "evidence_refs": ["ext-user-001"],
+        "data": {
+          "claim_status": "external_enrichment",
+          "source_category": "external_enrichment",
+          "visible_label": "用户提供资料",
+          "structured_refs": [{"knowledge_id": "ku-external", "evidence_id": "ext-user-001", "source_category": "external_enrichment"}]
+        }
+      }]
+    },
+    {
+      "kind": "limitations_questions",
+      "title": "争议、限制、待验证问题",
+      "blocks": [{
+        "kind": "paragraph",
+        "text": "待验证问题：视频没有比较不同团队条件下的适用性。",
+        "knowledge_refs": ["ku-limit"],
+        "evidence_refs": ["ev-limit"],
+        "source_spans": [{"start_ms": 9000, "end_ms": 12000}],
+        "data": {
+          "claim_status": "insufficient_evidence",
+          "source_category": "insufficient_evidence",
+          "visible_label": "争议、限制、待验证问题",
+          "structured_refs": [{"knowledge_id": "ku-limit", "evidence_id": "ev-limit", "source_category": "insufficient_evidence"}]
+        }
+      }]
+    },
+    {
+      "kind": "source_navigation",
+      "title": "来源导航",
+      "blocks": [{
+        "kind": "paragraph",
+        "text": "来源导航：视频观点、推断和用户提供资料分别保留其结构化引用。",
+        "knowledge_refs": ["ku-video", "ku-inference", "ku-external", "ku-limit"],
+        "evidence_refs": ["ev-video", "ev-inference", "ext-user-001", "ev-limit"],
+        "source_spans": [{"start_ms": 12000, "end_ms": 15000}],
+        "data": {
+          "claim_status": "source_navigation",
+          "source_category": "source_navigation",
+          "visible_label": "来源导航",
+          "structured_refs": [
+            {"knowledge_id": "ku-video", "evidence_id": "ev-video", "source_category": "video_explicit"},
+            {"knowledge_id": "ku-inference", "evidence_id": "ev-inference", "source_category": "agent_inference"},
+            {"knowledge_id": "ku-external", "evidence_id": "ext-user-001", "source_category": "external_enrichment"},
+            {"knowledge_id": "ku-limit", "evidence_id": "ev-limit", "source_category": "insufficient_evidence"}
+          ]
+        }
+      }]
+    }
+  ]
+}

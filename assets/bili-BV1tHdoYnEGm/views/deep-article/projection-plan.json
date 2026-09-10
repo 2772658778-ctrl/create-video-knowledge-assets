@@ -1,0 +1,344 @@
+{
+  "schema_version": "1.0",
+  "plan_id": "pp-deep-article-bv1thdoynegm-002",
+  "profile_id": "deep-article",
+  "profile_spec_version": "1.0",
+  "canonical_hash_tree": {
+    "source/asr/audio-faster-base.selected.srt": "431885ba60cb61ad1cd6bf1ce0caac0b55102122931f9b6cf954f522ab1b1fad",
+    "source/asr/audio-faster-base.srt": "431885ba60cb61ad1cd6bf1ce0caac0b55102122931f9b6cf954f522ab1b1fad",
+    "source/asr/audio-faster-tiny.srt": "7aa8375ac1ce0157b986950574d645f5ecf0f6191155a7f7e9b8bb33a9ca93e2",
+    "source/asr/audio-small.srt": "a1148e00fc4c589a4a1ba08e214167975db7162a6750dfbbfd72a7a1b6ff5047",
+    "source/asr/audio.srt": "a1148e00fc4c589a4a1ba08e214167975db7162a6750dfbbfd72a7a1b6ff5047",
+    "source/asr/audio.wav": "03782c5ab76b9c556fe854c33a07140dcaaedddee1831ab7afac8ee2b930e4c3",
+    "source/cover/BV1tHdoYnEGm.jpg": "0523c9480b4df7cb3b99a5b2073c0a393dc2c64e4765e654051937bbe34a19b6",
+    "source/metadata.json": "3d1c91c8ed898768081c77b675357b898bc1b9a2fd02ce2dc96a8a9893727235",
+    "source/video/BV1tHdoYnEGm.mp4": "1a9d8d621db54e31de466996bd5af50deacbc9b0f5b36fc9b978062c2f3aed75",
+    "evidence/acquisition-checks.json": "a22b9a1e9d443ba0099c04b288cdf3267bb87293d301498b2e3d75294545d273",
+    "evidence/asr-repair-prompt.md": "6605c027d29f13c679e858369690ec69534e51c3622971ee9e95fea8fbbd5617",
+    "evidence/asr-repairs.json": "71afbc0228b97a3d02a47dd246fcc4b0a086dea22bf1d0ccfe429ec3a3aff78a",
+    "evidence/asr-repairs.suggested.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "evidence/frames/candidates/frame-005000.jpg": "438b184ce97e14617136451a2c12e02c273fddc288040dd9c16c965a95c9fbee",
+    "evidence/frames/candidates/frame-035000.jpg": "72cc23634a339973bbb4d4035af13c54115f2a44090492d33441b8d80f9b8ee4",
+    "evidence/frames/candidates/frame-055000.jpg": "16ace00bb311e138de2ece309772755bfde6a00765fb5b20ee4883feacba50f7",
+    "evidence/frames/candidates/frame-075000.jpg": "409b25178b3b7b84fbedba81830e8d5b63e1a1e7236cfa1539482022ba45d23b",
+    "evidence/frames/candidates/frame-110000.jpg": "bd8168367cd7089ee3b25aca5d0ce1a32cfbf6c61036bf90b00fed55286e5fbb",
+    "evidence/frames/candidates/frame-145000.jpg": "306480c5ff88234515a73c130bbe3a95536b6c9fbedb8f95e5e62ba05280e282",
+    "evidence/frames/candidates/frame-190000.jpg": "f4d32d1b39b6a2d5077d787b988ec8b38578be3d509ab427446acd0286d8b987",
+    "evidence/frames/candidates/frame-250000.jpg": "bdb14d204d0b3e6a80042159b83376d266c17a573fc7f7456de0925a6703f394",
+    "evidence/frames/candidates/frame-305000.jpg": "ad958b9ee4876e9f57d4fe2400bf21d608a768a860456aa031ed3732f6f0337e",
+    "evidence/frames/candidates/frame-345000.jpg": "c8ff2696434c89f18c566d5ab0dc476c4d95c3995d6db114fc8c4e1702e3648d",
+    "evidence/frames/candidates/frame-380000.jpg": "ee7d17735ca50e3415070cec0b3893b1077bca3a0acc6ecba14c9cd284989bf7",
+    "evidence/frames/candidates/frame-420000.jpg": "d1e099049ee96d4fbd520524c9d7cf992ad075447e02cfaa3eaa2aa9486d7aed",
+    "evidence/frames/candidates/frame-470000.jpg": "55091f6d4adecdcd4d16a049ab2ccaf72ece32b0b2aa7e587a3450d49aa135f2",
+    "evidence/frames/candidates/frame-520000.jpg": "5948198568bfd49cdd620c797c8552c886aa9f0f4e954cfdbebcf9aad0b35dcd",
+    "evidence/frames/candidates/frame-575000.jpg": "c8607e84fa2854422bf71c9ef9ec1d9600c646c4cc3e73edd0652e185fb7cd2d",
+    "evidence/frames/candidates/frame-630000.jpg": "05c8d40f633f4da4f1dd13cf392b49bd9496c90323d216924a358dfdbaa61bf9",
+    "evidence/frames/inspected/01-regional-bamboo-shoot-dishes-map.jpg": "438b184ce97e14617136451a2c12e02c273fddc288040dd9c16c965a95c9fbee",
+    "evidence/frames/inspected/02-bamboo-shoot-flavor-and-protein.jpg": "306480c5ff88234515a73c130bbe3a95536b6c9fbedb8f95e5e62ba05280e282",
+    "evidence/frames/inspected/03-make-unpleasant-shoots-edible.jpg": "ad958b9ee4876e9f57d4fe2400bf21d608a768a860456aa031ed3732f6f0337e",
+    "evidence/frames/inspected/04-stir-fried-bamboo-shoots.jpg": "55091f6d4adecdcd4d16a049ab2ccaf72ece32b0b2aa7e587a3450d49aa135f2",
+    "evidence/frames/inspected/05-wuyi-mountain-bamboo-forest.jpg": "c8607e84fa2854422bf71c9ef9ec1d9600c646c4cc3e73edd0652e185fb7cd2d",
+    "evidence/frames/inspected/06-overheated-steam-blanching-line.jpg": "05c8d40f633f4da4f1dd13cf392b49bd9496c90323d216924a358dfdbaa61bf9",
+    "evidence/records.jsonl": "5066718465d2d5900b26ecda121da90576d753ece5c27e51302be320351846c2",
+    "evidence/timeline.jsonl": "788e4a9a215ed726aee3f8f65591b01e7143d92e975274a15a26c794131c9b0a",
+    "evidence/timeline.raw.jsonl": "d39884a31933a49c6c89d31ff238c09da3a861492c97b3daa9bfdc3ab34f84be",
+    "knowledge/outline.json": "a88d5f6d191799cf704d9df14d269ac92cefe69304963eaa14a840defd1edca5",
+    "knowledge/relations.jsonl": "d6029fc5c8af1199a360d739aee8370fa6e8713442fc070e015ab344284ab797",
+    "knowledge/synthesis.json": "8b0185e0e2e836e686c9ecd29d978b870dff0ba3eafdc8f06cea6a956491f6a1",
+    "knowledge/units.jsonl": "a116e600a9450b4ac147a72872269cbfe519f5703c6113cdb392a74e6aa3229b"
+  },
+  "reader_goal": "让读者看清：竹笋资源并不自动变成食笋文化，真正起作用的是品种、产区、去涩烹饪、保存和采后加工共同接成的一条链路。",
+  "status": "ready",
+  "selected_content_units": [
+    {
+      "content_unit_id": "cu-reader-problem",
+      "role": "reader_promise"
+    },
+    {
+      "content_unit_id": "cu-edible-threshold",
+      "role": "edible_threshold"
+    },
+    {
+      "content_unit_id": "cu-preservation",
+      "role": "traditional_preservation"
+    },
+    {
+      "content_unit_id": "cu-oil-fry",
+      "role": "flavor_amplification"
+    },
+    {
+      "content_unit_id": "cu-umami",
+      "role": "food_pairing"
+    },
+    {
+      "content_unit_id": "cu-japan",
+      "role": "comparative_example"
+    },
+    {
+      "content_unit_id": "cu-five-hour",
+      "role": "postharvest_window"
+    },
+    {
+      "content_unit_id": "cu-modern-chain",
+      "role": "modern_processing"
+    },
+    {
+      "content_unit_id": "cu-limits",
+      "role": "source_boundary"
+    }
+  ],
+  "sections": [
+    {
+      "section_id": "reader_promise",
+      "kind": "reader_promise",
+      "reader_question": "竹林很多，为什么并不等于餐桌上会稳定出现竹笋？",
+      "knowledge_refs": [
+        "ku-core-question",
+        "ku-resource-vs-consumption",
+        "ku-supply-chain-thesis"
+      ],
+      "evidence_refs": [
+        "tr-000013",
+        "tr-000017",
+        "tr-000019",
+        "ev-frame-regional-map"
+      ],
+      "required_blocks": [
+        "paragraph",
+        "image",
+        "caption"
+      ]
+    },
+    {
+      "section_id": "core_point",
+      "kind": "core_point",
+      "reader_question": "视频给出的核心解释，究竟是资源数量，还是一整套食用门槛？",
+      "knowledge_refs": [
+        "ku-resource-vs-consumption",
+        "ku-edible-varieties",
+        "ku-light-bitterness",
+        "ku-supply-chain-thesis"
+      ],
+      "evidence_refs": [
+        "tr-000011",
+        "tr-000014",
+        "tr-000087",
+        "tr-000106",
+        "tr-000110"
+      ],
+      "required_blocks": [
+        "paragraph",
+        "callout",
+        "table"
+      ]
+    },
+    {
+      "section_id": "narrative",
+      "kind": "narrative",
+      "reader_question": "竹笋如何从带苦涩的季节性材料，变成有吸引力、可跨季节食用的食物？",
+      "knowledge_refs": [
+        "ku-flavor-nutrition",
+        "ku-preservation-fermentation",
+        "ku-oil-frying",
+        "ku-meat-umami",
+        "ku-japan-case"
+      ],
+      "evidence_refs": [
+        "tr-000053",
+        "tr-000071",
+        "tr-000127",
+        "tr-000137",
+        "tr-000166",
+        "tr-000176",
+        "tr-000191",
+        "tr-000199",
+        "tr-000246",
+        "tr-000259",
+        "ev-frame-flavor-protein",
+        "ev-frame-edible-threshold",
+        "ev-frame-stir-fry"
+      ],
+      "required_blocks": [
+        "paragraph",
+        "image",
+        "paragraph",
+        "image",
+        "table"
+      ]
+    },
+    {
+      "section_id": "video_evidence",
+      "kind": "video_evidence",
+      "reader_question": "视频画面具体展示了哪些可以核对的步骤和场景？",
+      "knowledge_refs": [
+        "ku-five-hour-window",
+        "ku-modern-processing",
+        "ku-advertorial-boundary"
+      ],
+      "evidence_refs": [
+        "tr-000271",
+        "tr-000292",
+        "tr-000310",
+        "tr-000314",
+        "tr-000320",
+        "tr-000324",
+        "tr-000330",
+        "ev-frame-wuyi-bamboo-forest",
+        "ev-frame-factory-blanching"
+      ],
+      "required_blocks": [
+        "paragraph",
+        "image",
+        "paragraph",
+        "image",
+        "table"
+      ]
+    },
+    {
+      "section_id": "actionable_takeaway",
+      "kind": "actionable_takeaway",
+      "reader_question": "如果要判断一个地方能否形成稳定的食笋链路，应该按什么顺序检查？",
+      "knowledge_refs": [
+        "ku-edible-varieties",
+        "ku-light-bitterness",
+        "ku-preservation-fermentation",
+        "ku-oil-frying",
+        "ku-five-hour-window",
+        "ku-modern-processing",
+        "ku-supply-chain-thesis"
+      ],
+      "evidence_refs": [
+        "tr-000087",
+        "tr-000106",
+        "tr-000127",
+        "tr-000167",
+        "tr-000271",
+        "tr-000314",
+        "tr-000320"
+      ],
+      "required_blocks": [
+        "paragraph",
+        "list"
+      ]
+    },
+    {
+      "section_id": "limitations_sources",
+      "kind": "limitations_sources",
+      "reader_question": "哪些内容是视频明确说的，哪些只是文章基于视频的归纳？",
+      "knowledge_refs": [
+        "ku-japan-case",
+        "ku-advertorial-boundary",
+        "ku-supply-chain-thesis"
+      ],
+      "evidence_refs": [
+        "tr-000246",
+        "tr-000259",
+        "tr-000291",
+        "tr-000333",
+        "ev-asr-001",
+        "ev-acquisition-checks"
+      ],
+      "required_blocks": [
+        "paragraph",
+        "list",
+        "table"
+      ]
+    }
+  ],
+  "selected_figures": [
+    {
+      "section_id": "reader_promise",
+      "evidence_id": "ev-frame-regional-map",
+      "artifact_ref": "evidence/frames/inspected/01-regional-bamboo-shoot-dishes-map.jpg",
+      "reader_purpose": "让读者直接看到中国不同地域的竹笋菜式与处理方式，建立资源和饮食文化之间存在转换链路的入口。",
+      "caption_intent": "画面不是在证明全球统计，而是在展示中国食笋文化已经发展出多种地域化处理方式。",
+      "required": true
+    },
+    {
+      "section_id": "narrative",
+      "evidence_id": "ev-frame-flavor-protein",
+      "artifact_ref": "evidence/frames/inspected/02-bamboo-shoot-flavor-and-protein.jpg",
+      "reader_purpose": "把视频对鲜味、脆爽和营养吸引力的说明落到可见画面上。",
+      "caption_intent": "画面中的风味与营养信息解释了竹笋为什么值得被继续加工，而不只是说明它存在于竹林里。",
+      "required": true
+    },
+    {
+      "section_id": "narrative",
+      "evidence_id": "ev-frame-edible-threshold",
+      "artifact_ref": "evidence/frames/inspected/03-make-unpleasant-shoots-edible.jpg",
+      "reader_purpose": "展示腌渍、发酵、煮熟和晒干如何成为降低苦涩、延长保存的处理路径。",
+      "caption_intent": "这张图对应文章从‘原料门槛’转向‘处理技术’的关键转折。",
+      "required": true
+    },
+    {
+      "section_id": "narrative",
+      "evidence_id": "ev-frame-stir-fry",
+      "artifact_ref": "evidence/frames/inspected/04-stir-fried-bamboo-shoots.jpg",
+      "reader_purpose": "让读者看到油炒并非抽象的烹饪标签，而是把竹笋从能吃推向更有吸引力的风味步骤。",
+      "caption_intent": "油炒画面承接视频关于高温、油脂和熟香方向的解释，但不把画面本身扩展成未经验证的化学结论。",
+      "required": true
+    },
+    {
+      "section_id": "video_evidence",
+      "evidence_id": "ev-frame-wuyi-bamboo-forest",
+      "artifact_ref": "evidence/frames/inspected/05-wuyi-mountain-bamboo-forest.jpg",
+      "reader_purpose": "展示产地环境在采后时间窗口中的位置：产地条件是链路起点，不是全部答案。",
+      "caption_intent": "画面支持对武夷山竹林与产地环境的描述，不单独证明产品效果或企业实力。",
+      "required": true
+    },
+    {
+      "section_id": "video_evidence",
+      "evidence_id": "ev-frame-factory-blanching",
+      "artifact_ref": "evidence/frames/inspected/06-overheated-steam-blanching-line.jpg",
+      "reader_purpose": "让读者核对过热蒸汽杀青及工厂化处理设备，理解现代流程如何接住鲜笋的短时窗口。",
+      "caption_intent": "画面对应杀青、冷却和后续冷冻流程；文章会明确这是视频展示的案例，不是外部认证。",
+      "required": true
+    }
+  ],
+  "rejected_frames": [
+    {
+      "evidence_id": "candidate-frame-035000",
+      "reason": "画面信息与开头地域分布图重复，不能增加新的证据价值。"
+    },
+    {
+      "evidence_id": "candidate-frame-055000",
+      "reason": "信息密度低于已检查的地域分布图，且不承担独立的文章论点。"
+    },
+    {
+      "evidence_id": "candidate-frame-075000",
+      "reason": "适合做视频过场，但没有清晰、可复用的论点状态。"
+    },
+    {
+      "evidence_id": "candidate-frame-110000",
+      "reason": "与风味营养 inspected frame 的信息重复。"
+    },
+    {
+      "evidence_id": "candidate-frame-190000",
+      "reason": "未形成比已选处理路径更完整的可读状态。"
+    },
+    {
+      "evidence_id": "candidate-frame-250000",
+      "reason": "属于处理过程中的中间画面，无法单独承载保存机制。"
+    },
+    {
+      "evidence_id": "candidate-frame-345000",
+      "reason": "与油炒 inspected frame 的烹饪信息重复。"
+    },
+    {
+      "evidence_id": "candidate-frame-380000",
+      "reason": "肉类协同段落的画面不足以单独证明机制，保留文字与时间证据即可。"
+    },
+    {
+      "evidence_id": "candidate-frame-420000",
+      "reason": "转入地域案例的过渡画面，缺少独立的信息焦点。"
+    },
+    {
+      "evidence_id": "candidate-frame-520000",
+      "reason": "时间窗口段落尚未呈现完整加工步骤，不能替代工厂处理 inspected frame。"
+    }
+  ],
+  "quality_targets": {
+    "minimum_meaningful_blocks": 20,
+    "requires_visual": true
+  }
+}

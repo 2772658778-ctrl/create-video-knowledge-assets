@@ -1,0 +1,10 @@
+{"relation_id": "kr-001", "source_unit_id": "ku-core-question", "target_unit_id": "ku-resource-vs-consumption", "relation_type": "explains", "evidence_refs": ["tr-000013", "tr-000017"], "schema_version": "1.1"}
+{"relation_id": "kr-002", "source_unit_id": "ku-growth-seasonality", "target_unit_id": "ku-flavor-nutrition", "relation_type": "supports", "evidence_refs": ["tr-000036", "tr-000055"], "schema_version": "1.1"}
+{"relation_id": "kr-003", "source_unit_id": "ku-edible-varieties", "target_unit_id": "ku-light-bitterness", "relation_type": "explains", "evidence_refs": ["tr-000100", "tr-000106"], "schema_version": "1.1"}
+{"relation_id": "kr-004", "source_unit_id": "ku-light-bitterness", "target_unit_id": "ku-preservation-fermentation", "relation_type": "causes", "evidence_refs": ["tr-000112", "tr-000137"], "schema_version": "1.1"}
+{"relation_id": "kr-005", "source_unit_id": "ku-preservation-fermentation", "target_unit_id": "ku-oil-frying", "relation_type": "contrasts", "evidence_refs": ["tr-000153", "tr-000170"], "schema_version": "1.1"}
+{"relation_id": "kr-006", "source_unit_id": "ku-oil-frying", "target_unit_id": "ku-meat-umami", "relation_type": "supports", "evidence_refs": ["tr-000173", "tr-000193"], "schema_version": "1.1"}
+{"relation_id": "kr-007", "source_unit_id": "ku-world-low-adoption", "target_unit_id": "ku-japan-case", "relation_type": "exemplifies", "evidence_refs": ["tr-000206", "tr-000246"], "schema_version": "1.1"}
+{"relation_id": "kr-008", "source_unit_id": "ku-five-hour-window", "target_unit_id": "ku-modern-processing", "relation_type": "explains", "evidence_refs": ["tr-000271", "tr-000310"], "schema_version": "1.1"}
+{"relation_id": "kr-009", "source_unit_id": "ku-modern-processing", "target_unit_id": "ku-advertorial-boundary", "relation_type": "contrasts", "evidence_refs": ["tr-000310", "tr-000333"], "schema_version": "1.1"}
+{"relation_id": "kr-010", "source_unit_id": "ku-supply-chain-thesis", "target_unit_id": "ku-core-question", "relation_type": "explains", "evidence_refs": ["tr-000201", "tr-000204"], "schema_version": "1.1"}

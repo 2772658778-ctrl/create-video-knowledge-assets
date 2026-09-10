@@ -1,0 +1,84 @@
+{
+  "profile_id": "short-video-script",
+  "title": "按钮为什么会卡住",
+  "sections": [
+    {
+      "kind": "hook",
+      "title": "开场钩子",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "镜头一开始，直接看这个按钮为什么会卡住。",
+          "knowledge_refs": ["ku-hook"],
+          "evidence_refs": ["ev-1"],
+          "source_spans": [{"start_ms": 0, "end_ms": 2000}]
+        }
+      ]
+    },
+    {
+      "kind": "context",
+      "title": "最小背景",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "用户点击后要经历加载、确认和反馈三个步骤。",
+          "knowledge_refs": ["ku-context"],
+          "evidence_refs": ["ev-2"],
+          "source_spans": [{"start_ms": 2000, "end_ms": 4000}]
+        }
+      ]
+    },
+    {
+      "kind": "core_point",
+      "title": "核心观点",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "核心点是把复杂动作拆成可观察的三步，观众更容易跟上。",
+          "knowledge_refs": ["ku-core"],
+          "evidence_refs": ["ev-3"],
+          "source_spans": [{"start_ms": 4000, "end_ms": 6000}]
+        }
+      ]
+    },
+    {
+      "kind": "evidence",
+      "title": "证据",
+      "blocks": [
+        {
+          "kind": "quote",
+          "text": "这里的原话说明了加载时间和用户感知的关系。",
+          "knowledge_refs": ["ku-evidence"],
+          "evidence_refs": ["ev-4"],
+          "source_spans": [{"start_ms": 6000, "end_ms": 8000}]
+        }
+      ]
+    },
+    {
+      "kind": "payoff",
+      "title": "收益",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "所以真正要记住的是：先把动作拆开，再讲价值。",
+          "knowledge_refs": ["ku-payoff"],
+          "evidence_refs": ["ev-5"],
+          "source_spans": [{"start_ms": 8000, "end_ms": 10000}]
+        }
+      ]
+    },
+    {
+      "kind": "closing",
+      "title": "收尾",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "最后一句，回到这个按钮本身。",
+          "knowledge_refs": ["ku-closing"],
+          "evidence_refs": ["ev-6"],
+          "source_spans": [{"start_ms": 10000, "end_ms": 12000}]
+        }
+      ]
+    }
+  ]
+}
