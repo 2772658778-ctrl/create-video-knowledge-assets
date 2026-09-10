@@ -10,9 +10,8 @@ dependencies = ["pydantic>=2.7,<3", "srt>=3.5,<4"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<9", "PyYAML>=6,<7"]
-asr = ["zhconv>=1.4,<2"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["create-video-knowledge-assets/scripts"]
-addopts = ["--basetemp=.pytest-tmp"]
+addopts = ["--basetemp=.tmp/pytest"]

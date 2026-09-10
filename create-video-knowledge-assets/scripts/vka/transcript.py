@@ -19,7 +19,7 @@ def parse_srt_as_evidence(
     """Parse an SRT into timeline evidence.
 
     A raw ASR timeline should be written with an `id_prefix` such as `raw-`.
-    The canonical timeline produced by `apply-transcript-repairs` then drops
+    The canonical timeline produced by `apply-reviewed-transcript` then drops
     that prefix, so `parent_ids` can name the raw row instead of pointing at
     the row's own identifier.
     """

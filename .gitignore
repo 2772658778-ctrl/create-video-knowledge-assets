@@ -33,6 +33,11 @@
 *.flac
 *.part
 
+# Local run assets. A run produces transcripts, frames, and intermediate
+# records that belong to the operator, not to the published skill. The repo
+# ships the skill, its docs, and reviewed demos only.
+/assets/bili-*/
+
 # Local retrieval indexes and LaTeX build intermediates
 *.sqlite
 *.sqlite3

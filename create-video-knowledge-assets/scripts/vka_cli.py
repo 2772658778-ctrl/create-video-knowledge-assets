@@ -64,10 +64,9 @@ from vka.store import AssetStore
 from vka.teaching_outline import validate_teaching_outline
 from vka.transcript import parse_srt_as_evidence
 from vka.transcript_repair import (
-    apply_transcript_repairs,
-    build_asr_repair_prompt,
-    load_glossary,
-    suggest_asr_repairs,
+    apply_reviewed_transcript,
+    build_asr_review_prompt,
+    parse_reviewed_transcript,
 )
 
 
@@ -164,29 +163,18 @@ def _build_parser() -> argparse.ArgumentParser:
     repair_prompt.add_argument("--title")
     repair_prompt.set_defaults(func=_run_build_repair_prompt)
 
-    suggest_repairs = subparsers.add_parser("suggest-repairs")
-    suggest_repairs.add_argument("--timeline", required=True)
-    suggest_repairs.add_argument("--output", required=True)
-    suggest_repairs.add_argument(
-        "--glossary",
-        help="optional JSON object of per-video terms: {\"错写\": \"正确写法\"}",
+    apply_reviewed = subparsers.add_parser(
+        "apply-reviewed-transcript",
+        help="build the canonical timeline from the reviewer's corrected sheet",
     )
-    suggest_repairs.add_argument(
-        "--simplified",
-        action="store_true",
-        help="also normalize Traditional Chinese characters to Simplified",
+    apply_reviewed.add_argument("--timeline", required=True)
+    apply_reviewed.add_argument(
+        "--reviewed",
+        required=True,
+        help="the reviewer's sheet: lines of '12|修订后的文本', or '12|?' when unverifiable",
     )
-    suggest_repairs.set_defaults(func=_run_suggest_repairs)
-
-    apply_repairs = subparsers.add_parser("apply-transcript-repairs")
-    apply_repairs.add_argument("--timeline", required=True)
-    apply_repairs.add_argument("--repairs", required=True)
-    apply_repairs.add_argument("--output", required=True)
-    apply_repairs.add_argument(
-        "--uncertain-ids",
-        help="optional JSON array of evidence ids the reviewer read but could not verify",
-    )
-    apply_repairs.add_argument(
+    apply_reviewed.add_argument("--output", required=True)
+    apply_reviewed.add_argument(
         "--parent-prefix",
         default=None,
         help=(
@@ -194,12 +182,7 @@ def _build_parser() -> argparse.ArgumentParser:
             "use the same value passed to normalize-srt --id-prefix"
         ),
     )
-    apply_repairs.add_argument(
-        "--assume-reviewed",
-        action="store_true",
-        help="mark unrepaired rows raw_preserved instead of unreviewed; only when the whole transcript was read",
-    )
-    apply_repairs.set_defaults(func=_run_apply_transcript_repairs)
+    apply_reviewed.set_defaults(func=_run_apply_reviewed_transcript)
 
     acquire_metadata = subparsers.add_parser("acquire-metadata")
     acquire_metadata.add_argument("--url", required=True)
@@ -474,7 +457,7 @@ def _run_normalize_srt(args: argparse.Namespace) -> None:
 def _run_build_repair_prompt(args: argparse.Namespace) -> int:
     try:
         rows = _read_jsonl(Path(args.timeline))
-        prompt = build_asr_repair_prompt(rows, title=args.title)
+        prompt = build_asr_review_prompt(rows, title=args.title)
         output_path = Path(args.output)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(prompt, encoding="utf-8")
@@ -508,45 +491,16 @@ def _run_timeline_digest(args: argparse.Namespace) -> int:
     return 0
 
 
-def _run_suggest_repairs(args: argparse.Namespace) -> int:
+def _run_apply_reviewed_transcript(args: argparse.Namespace) -> int:
     try:
         rows = _read_jsonl(Path(args.timeline))
-        glossary = (
-            load_glossary(json.loads(Path(args.glossary).read_text(encoding="utf-8-sig")))
-            if args.glossary
-            else None
+        reviewed = parse_reviewed_transcript(
+            Path(args.reviewed).read_text(encoding="utf-8-sig")
         )
-        repairs = suggest_asr_repairs(
+        repaired_rows = apply_reviewed_transcript(
             rows,
-            glossary=glossary,
-            simplified=args.simplified,
-        )
-        output_path = Path(args.output)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        output_path.write_text(json.dumps(repairs, ensure_ascii=False, indent=2), encoding="utf-8")
-    except (OSError, ValueError, json.JSONDecodeError) as exc:
-        sys.stderr.write(f"error: failed to suggest ASR repairs: {exc}\n")
-        return 1
-    return 0
-
-
-def _run_apply_transcript_repairs(args: argparse.Namespace) -> int:
-    try:
-        rows = _read_jsonl(Path(args.timeline))
-        repairs = json.loads(Path(args.repairs).read_text(encoding="utf-8-sig"))
-        uncertain_ids = (
-            json.loads(Path(args.uncertain_ids).read_text(encoding="utf-8-sig"))
-            if args.uncertain_ids
-            else None
-        )
-        if uncertain_ids is not None and not isinstance(uncertain_ids, list):
-            raise ValueError("uncertain ids must be a JSON array")
-        repaired_rows = apply_transcript_repairs(
-            rows,
-            repairs,
-            uncertain_ids=uncertain_ids,
+            reviewed,
             parent_prefix=args.parent_prefix,
-            assume_reviewed=args.assume_reviewed,
         )
         output_path = Path(args.output)
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -555,7 +509,7 @@ def _run_apply_transcript_repairs(args: argparse.Namespace) -> int:
                 file.write(json.dumps(row, ensure_ascii=False))
                 file.write("\n")
     except (OSError, ValueError, json.JSONDecodeError) as exc:
-        sys.stderr.write(f"error: failed to apply ASR repairs: {exc}\n")
+        sys.stderr.write(f"error: failed to apply the reviewed transcript: {exc}\n")
         return 1
     return 0
 

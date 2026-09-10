@@ -1,57 +1,58 @@
-# Transcript Repair
+# Transcript Review
 
 Use this reference after CC/ASR normalization and before knowledge extraction.
 
+Correcting speech recognition is a reading task. It needs the sentence, the
+topic, and the frame the speaker was pointing at, so the reviewer — a model or
+a person — rewrites the text. This skill deliberately ships **no** substitution
+table or term glossary: a fixed word list can only fit the one video it was
+written for, and it silently rewrites text the reviewer never read.
+
 ## Required Artifacts
 
-Keep all three files when ASR is used:
+Keep all four files when ASR is used:
 
-- `source/asr/audio.srt`: raw Whisper SRT.
+- `source/asr/<backend>-<model>.srt`: the raw ASR output.
 - `evidence/timeline.raw.jsonl`: normalized raw transcript evidence.
-- `evidence/timeline.jsonl`: repaired transcript evidence used downstream.
+- `evidence/transcript-review.md`: the numbered sheet handed to the reviewer.
+- `evidence/transcript-reviewed.txt`: the reviewer's corrected sheet.
+- `evidence/timeline.jsonl`: canonical transcript evidence used downstream.
 
-If repair changes any row, preserve `original_content`, `repair_reason`, and `quality.repair_status=repaired`.
+## Workflow
 
-## Repair Workflow
-
-1. Write the raw timeline with a raw id prefix, so the canonical timeline can
+1. Normalize the raw SRT with a raw id prefix, so the canonical timeline can
    point back at it:
    `vka normalize-srt --input <raw.srt> --acquisition asr --id-prefix raw- --output evidence/timeline.raw.jsonl`.
-2. Run `vka build-repair-prompt --timeline evidence/timeline.raw.jsonl --output evidence/asr-repair-prompt.md --title "<video title>"`.
-3. Review the prompt with the video title, nearby transcript context, and inspected frame notes.
-4. Start from the deterministic pass, which needs no model judgment:
-   `vka suggest-repairs --timeline evidence/timeline.raw.jsonl --glossary evidence/asr-glossary.json --simplified --output evidence/asr-repairs.suggested.json`.
-   `--glossary` carries the per-video proper nouns an ASR mis-hears over and
-   over; `--simplified` normalizes the Traditional/Simplified switching that
-   Chinese ASR produces inside one transcript. Both are rendering/terminology
-   normalization, not interpretation.
-5. Save model or human edits as JSON. Either shape is accepted:
-   - an array of `evidence_id`, `original_content`, `repaired_content`, `confidence`, `reason`, `uncertain`;
-   - an object `{"repairs": [...], "reviewed_ids": [...], "uncertain_ids": [...]}`.
-     Use `reviewed_ids` for rows you read and kept as-is, and `uncertain_ids`
-     for rows you read but cannot verify. Never invent a `repaired_content`
-     just to mark a row uncertain. Rows you never looked at stay `unreviewed`,
-     which is honest but cannot ground a `video_explicit` claim.
-6. Run
-   `vka apply-transcript-repairs --timeline evidence/timeline.raw.jsonl --repairs evidence/asr-repairs.json --parent-prefix raw- --output evidence/timeline.jsonl`.
+2. Build the review sheet:
+   `vka build-repair-prompt --timeline evidence/timeline.raw.jsonl --output evidence/transcript-review.md --title "<video title>"`.
+   It is a numbered list of transcript lines — no timestamps, no JSON, no ids.
+3. Read the sheet and answer in the same numbering:
+
+   ```text
+   1|竹笋，中国人春日餐桌的主角
+   2|江南的腌笋、浙江的油焖笋
+   5|?
+   ```
+
+   - `N|文本` — this is what the speaker said. Fix only what you are sure of:
+     wrong characters, terms, English names, punctuation, mixed
+     Traditional/Simplified. Write Simplified Chinese. Do not add explanations,
+     quotes, or facts the speaker did not say.
+   - `N|?` — you read the row and cannot verify it. The raw text is kept and
+     the row is marked uncertain.
+   - omitting a row means you did not read it. It stays `unreviewed`.
+4. Apply it:
+   `vka apply-reviewed-transcript --timeline evidence/timeline.raw.jsonl --reviewed evidence/transcript-reviewed.txt --parent-prefix raw- --output evidence/timeline.jsonl`.
    Canonical rows drop the raw prefix and record the raw identifier in
-   `parent_ids`; every row records `quality.repair_status` as `repaired`,
+   `parent_ids`. Every row records `quality.repair_status` as `repaired`,
    `raw_preserved`, or `unreviewed`.
-7. Use `vka timeline-digest --timeline evidence/timeline.jsonl --output .tmp/timeline-digest.md`
-   as the reading view when you build knowledge units. Cite ids from
-   `timeline.jsonl`, not from the digest.
-8. Use only `evidence/timeline.jsonl` for knowledge units and document views.
-   Run `vka validate-knowledge --asset <asset>` before projecting any profile.
+5. Build knowledge from `evidence/timeline.jsonl`. Use
+   `vka timeline-digest --timeline evidence/timeline.jsonl --output logs/timeline-digest.md`
+   as the reading view instead of re-reading the JSONL. Cite `evidence_id`
+   values from `timeline.jsonl`, not row numbers from the digest.
+6. Run `vka validate-knowledge --asset <asset>` before projecting any profile.
 
-## Repair Rules
-
-- Fix only evidence-supported ASR mistakes: technical terms, English names, punctuation, simplified/traditional normalization, and obvious homophones.
-- Do not summarize, combine rows, invent missing explanations, or turn uncertain audio into confident claims.
-- Mark unresolved phrases with `quality.uncertain=true` and use `insufficient_evidence` for affected knowledge units.
-- `quality.uncertain=true` is a real constraint, not a note. A knowledge or
-  content unit marked `video_explicit` must cite at least one checked frame, a
-  reviewed transcript row (`repaired` or `raw_preserved`), or external
-  evidence; `vka validate-knowledge` fails the asset otherwise.
-  Metadata and audio records describe provenance, so citing them never makes a
-  claim `video_explicit`.
-- Prefer conservative technical repairs such as `Chad GPT -> ChatGPT`, `转制 -> 转置`, `攻势 -> 公式`, and `磁像量 -> 词向量` only when the surrounding context supports them.
+Reading a whole transcript is not required. Review what the deliverable will
+cite; everything else stays `unreviewed`, which is honest and cannot ground a
+`video_explicit` claim. Review cost tracks the citations a run makes, not the
+length of the video.

@@ -93,18 +93,13 @@ python $VKA normalize-srt `
 
 python $VKA build-repair-prompt `
   --timeline "$ASSET/evidence/timeline.raw.jsonl" `
-  --output "$ASSET/evidence/asr-repair-prompt.md" `
+  --output "$ASSET/evidence/transcript-review.md" `
   --title "$VIDEO_TITLE"
 
-python $VKA suggest-repairs `
+# 逐行审校后写出 evidence/transcript-reviewed.txt，再应用：
+python $VKA apply-reviewed-transcript `
   --timeline "$ASSET/evidence/timeline.raw.jsonl" `
-  --glossary "$ASSET/evidence/asr-glossary.json" `
-  --simplified `
-  --output "$ASSET/evidence/asr-repairs.suggested.json"
-
-python $VKA apply-transcript-repairs `
-  --timeline "$ASSET/evidence/timeline.raw.jsonl" `
-  --repairs "$ASSET/evidence/asr-repairs.json" `
+  --reviewed "$ASSET/evidence/transcript-reviewed.txt" `
   --parent-prefix raw- `
   --output "$ASSET/evidence/timeline.jsonl"
 

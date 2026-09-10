@@ -3,18 +3,16 @@ import json
 import pytest
 
 from vka.transcript_repair import (
-    apply_transcript_repairs,
-    build_asr_repair_prompt,
-    load_glossary,
-    suggest_asr_repairs,
-    to_simplified,
+    apply_reviewed_transcript,
+    build_asr_review_prompt,
+    parse_reviewed_transcript,
 )
 from vka_cli import main
 
 
 ROWS = [
     {
-        "evidence_id": "tr-000001",
+        "evidence_id": "raw-tr-000001",
         "origin": "video",
         "modality": "transcript",
         "spans": [{"start_ms": 10_000, "end_ms": 14_000}],
@@ -23,7 +21,7 @@ ROWS = [
         "schema_version": "1.0",
     },
     {
-        "evidence_id": "tr-000002",
+        "evidence_id": "raw-tr-000002",
         "origin": "video",
         "modality": "transcript",
         "spans": [{"start_ms": 14_000, "end_ms": 18_000}],
@@ -31,326 +29,166 @@ ROWS = [
         "acquisition": "asr",
         "schema_version": "1.0",
     },
+    {
+        "evidence_id": "raw-tr-000003",
+        "origin": "video",
+        "modality": "transcript",
+        "spans": [{"start_ms": 18_000, "end_ms": 20_000}],
+        "content": "聽不清的一句",
+        "acquisition": "asr",
+        "schema_version": "1.0",
+    },
 ]
 
 
-def test_build_asr_repair_prompt_preserves_ids_and_output_contract() -> None:
-    prompt = build_asr_repair_prompt(ROWS, title="注意力机制")
+def test_review_prompt_numbers_rows_without_timestamps_or_json() -> None:
+    prompt = build_asr_review_prompt(ROWS, title="注意力机制")
 
-    assert "不要改写讲者原意" in prompt
-    assert "evidence_id" in prompt
-    assert "repaired_content" in prompt
-    assert "tr-000001" in prompt
-    assert "00:00:10--00:00:14" in prompt
-
-
-def test_suggest_asr_repairs_catches_common_technical_errors() -> None:
-    repairs = suggest_asr_repairs(ROWS)
-
-    assert repairs[0]["repaired_content"] == "但是你肯定听说过ChatGPT"
-    assert "转置" in repairs[1]["repaired_content"]
-    assert "softmax" in repairs[1]["repaired_content"]
-    assert "梯度消失" in repairs[1]["repaired_content"]
+    assert "视频标题：注意力机制" in prompt
+    assert "1|但是你肯定听说过Chad GPT" in prompt
+    assert "2|只知道一个公式Q乘以K的转制，送进sulfmax会导致t度消失" in prompt
+    assert "00:00:10" not in prompt
+    assert "evidence_id" not in prompt
 
 
-def test_apply_transcript_repairs_keeps_original_and_marks_quality() -> None:
-    repairs = [
-        {
-            "evidence_id": "tr-000001",
-            "original_content": "但是你肯定听说过Chad GPT",
-            "repaired_content": "但是你肯定听说过 ChatGPT",
-            "confidence": "high",
-            "reason": "英文专名",
-            "uncertain": False,
-        }
+def test_review_prompt_rejects_an_empty_timeline() -> None:
+    with pytest.raises(ValueError, match="must not be empty"):
+        build_asr_review_prompt([])
+
+
+def test_parse_reviewed_transcript_reads_text_comments_and_uncertainty() -> None:
+    reviewed = parse_reviewed_transcript(
+        """
+        # 审校结果
+        1|但是你肯定听说过ChatGPT
+
+        3|?
+        """
+    )
+
+    assert reviewed == {1: "但是你肯定听说过ChatGPT", 3: None}
+
+
+@pytest.mark.parametrize(
+    "text",
+    ["1 没有分隔符", "1|", "0|文本", "1|a\n1|b", "no rows here"],
+)
+def test_parse_reviewed_transcript_rejects_malformed_sheets(text: str) -> None:
+    with pytest.raises(ValueError):
+        parse_reviewed_transcript(text)
+
+
+def test_reviewed_rows_are_labeled_repaired_preserved_or_unreviewed() -> None:
+    reviewed = parse_reviewed_transcript("1|但是你肯定听说过ChatGPT\n3|?")
+
+    rows = apply_reviewed_transcript(ROWS, reviewed, parent_prefix="raw-")
+
+    assert [row["evidence_id"] for row in rows] == ["tr-000001", "tr-000002", "tr-000003"]
+    assert [row["parent_ids"] for row in rows] == [
+        ["raw-tr-000001"],
+        ["raw-tr-000002"],
+        ["raw-tr-000003"],
     ]
+    assert rows[0]["content"] == "但是你肯定听说过ChatGPT"
+    assert rows[0]["original_content"] == "但是你肯定听说过Chad GPT"
+    assert rows[0]["quality"]["repair_status"] == "repaired"
+    assert rows[1]["quality"]["repair_status"] == "unreviewed"
+    assert "original_content" not in rows[1]
+    assert rows[2]["quality"] == {"repair_status": "raw_preserved", "uncertain": "true"}
+    assert rows[2]["content"] == "聽不清的一句"
 
-    repaired_rows = apply_transcript_repairs(ROWS, repairs)
 
-    assert repaired_rows[0]["content"] == "但是你肯定听说过 ChatGPT"
-    assert repaired_rows[0]["original_content"] == "但是你肯定听说过Chad GPT"
-    assert repaired_rows[0]["quality"]["repair_status"] == "repaired"
-    assert repaired_rows[1]["content"] == "只知道一个公式Q乘以K的转制，送进sulfmax会导致t度消失"
+def test_a_row_the_reviewer_left_unchanged_is_raw_preserved() -> None:
+    rows = apply_reviewed_transcript(ROWS, {2: ROWS[1]["content"]})
+
+    assert rows[1]["quality"] == {"repair_status": "raw_preserved"}
+    assert "original_content" not in rows[1]
 
 
-def test_cli_repair_roundtrip(tmp_path, capsys) -> None:
-    timeline = tmp_path / "timeline.jsonl"
-    repairs = tmp_path / "repairs.json"
-    output = tmp_path / "timeline.repaired.jsonl"
+def test_apply_rejects_a_sheet_row_beyond_the_timeline() -> None:
+    with pytest.raises(ValueError, match="references row 9"):
+        apply_reviewed_transcript(ROWS, {9: "文本"})
+
+
+def test_apply_rejects_ids_without_the_parent_prefix() -> None:
+    unprefixed = [{**ROWS[0], "evidence_id": "tr-000001"}]
+
+    with pytest.raises(ValueError, match="does not start with parent prefix"):
+        apply_reviewed_transcript(unprefixed, {1: "文本"}, parent_prefix="raw-")
+
+
+def test_cli_review_roundtrip(tmp_path, capsys) -> None:
+    timeline = tmp_path / "timeline.raw.jsonl"
+    prompt_path = tmp_path / "review-prompt.md"
+    reviewed = tmp_path / "reviewed.txt"
+    output = tmp_path / "timeline.jsonl"
     timeline.write_text(
         "\n".join(json.dumps(row, ensure_ascii=False) for row in ROWS),
         encoding="utf-8",
     )
 
-    assert main(["suggest-repairs", "--timeline", str(timeline), "--output", str(repairs)]) == 0
-    assert main(
-        [
-            "apply-transcript-repairs",
-            "--timeline",
-            str(timeline),
-            "--repairs",
-            str(repairs),
-            "--output",
-            str(output),
-        ]
-    ) == 0
-    captured = capsys.readouterr()
-
-    assert "Traceback" not in captured.err
-    assert "ChatGPT" in output.read_text(encoding="utf-8")
-
-
-def test_unrepaired_rows_record_that_they_were_preserved() -> None:
-    repaired_rows = apply_transcript_repairs(
-        ROWS,
-        {"repairs": [], "reviewed_ids": ["tr-000001", "tr-000002"]},
-    )
-
-    assert [row["quality"]["repair_status"] for row in repaired_rows] == [
-        "raw_preserved",
-        "raw_preserved",
-    ]
-    assert all("uncertain" not in row["quality"] for row in repaired_rows)
-
-
-def test_rows_nobody_reviewed_are_labeled_unreviewed() -> None:
-    repaired_rows = apply_transcript_repairs(ROWS, {"repairs": [], "reviewed_ids": ["tr-000001"]})
-
-    assert repaired_rows[0]["quality"]["repair_status"] == "raw_preserved"
-    assert repaired_rows[1]["quality"]["repair_status"] == "unreviewed"
-
-
-def test_uncertain_ids_imply_the_row_was_reviewed() -> None:
-    repaired_rows = apply_transcript_repairs(
-        ROWS,
-        {"repairs": [], "uncertain_ids": ["tr-000002"]},
-    )
-
-    assert repaired_rows[1]["quality"]["repair_status"] == "raw_preserved"
-    assert repaired_rows[1]["quality"]["uncertain"] == "true"
-
-
-def test_assume_reviewed_marks_every_remaining_row_as_read() -> None:
-    repaired_rows = apply_transcript_repairs(
-        ROWS,
-        {"repairs": [], "uncertain_ids": ["tr-000002"]},
-        assume_reviewed=True,
-    )
-
-    assert [row["quality"]["repair_status"] for row in repaired_rows] == [
-        "raw_preserved",
-        "raw_preserved",
-    ]
-    assert repaired_rows[1]["quality"]["uncertain"] == "true"
-
-
-def test_uncertain_ids_flag_rows_without_rewriting_them() -> None:
-    repaired_rows = apply_transcript_repairs(
-        ROWS,
-        {"repairs": [], "uncertain_ids": ["tr-000002"]},
-    )
-
-    assert repaired_rows[0]["quality"]["repair_status"] == "unreviewed"
-    assert "uncertain" not in repaired_rows[0]["quality"]
-    assert repaired_rows[1]["quality"]["uncertain"] == "true"
-    assert repaired_rows[1]["content"] == ROWS[1]["content"]
-
-
-def test_parent_prefix_turns_raw_ids_into_explicit_provenance() -> None:
-    raw_rows = [
-        {**ROWS[0], "evidence_id": "raw-tr-000001"},
-        {**ROWS[1], "evidence_id": "raw-tr-000002"},
-    ]
-    repairs = [
-        {
-            "evidence_id": "raw-tr-000001",
-            "original_content": ROWS[0]["content"],
-            "repaired_content": "但是你肯定听说过ChatGPT",
-            "confidence": "high",
-            "reason": "英文专名",
-            "uncertain": False,
-        }
-    ]
-
-    repaired_rows = apply_transcript_repairs(raw_rows, repairs, parent_prefix="raw-")
-
-    assert [row["evidence_id"] for row in repaired_rows] == ["tr-000001", "tr-000002"]
-    assert [row["parent_ids"] for row in repaired_rows] == [
-        ["raw-tr-000001"],
-        ["raw-tr-000002"],
-    ]
-    assert repaired_rows[0]["quality"]["repair_status"] == "repaired"
-
-
-def test_parent_prefix_rejects_ids_without_the_prefix() -> None:
-    with pytest.raises(ValueError, match="does not start with parent prefix"):
-        apply_transcript_repairs(ROWS, [], parent_prefix="raw-")
-
-
-def test_glossary_repairs_domain_proper_nouns() -> None:
-    rows = [
-        {
-            "evidence_id": "tr-000001",
-            "origin": "video",
-            "modality": "transcript",
-            "spans": [{"start_ms": 0, "end_ms": 2_000}],
-            "content": "王老奇两查和加多保的黄耀集团之争",
-            "acquisition": "asr",
-        }
-    ]
-
-    repairs = suggest_asr_repairs(
-        rows,
-        glossary={"王老奇": "王老吉", "两查": "凉茶", "加多保": "加多宝", "黄耀": "广药"},
-    )
-
-    assert repairs[0]["repaired_content"] == "王老吉凉茶和加多宝的广药集团之争"
-
-
-def test_glossary_prefers_the_longest_key() -> None:
-    rows = [
-        {
-            "evidence_id": "tr-000001",
-            "origin": "video",
-            "modality": "transcript",
-            "spans": [{"start_ms": 0, "end_ms": 2_000}],
-            "content": "王老奇两查很好喝",
-            "acquisition": "asr",
-        }
-    ]
-
-    repairs = suggest_asr_repairs(
-        rows,
-        glossary={"王老奇两查": "王老吉凉茶", "王老奇": "王老吉"},
-    )
-
-    assert repairs[0]["repaired_content"] == "王老吉凉茶很好喝"
-
-
-def test_cli_suggest_repairs_accepts_a_glossary_file(tmp_path, capsys) -> None:
-    timeline = tmp_path / "timeline.raw.jsonl"
-    glossary = tmp_path / "glossary.json"
-    output = tmp_path / "repairs.json"
-    timeline.write_text(
-        json.dumps(
-            {
-                "evidence_id": "raw-tr-000001",
-                "origin": "video",
-                "modality": "transcript",
-                "spans": [{"start_ms": 0, "end_ms": 2_000}],
-                "content": "王老奇的兩查",
-                "acquisition": "asr",
-            },
-            ensure_ascii=False,
+    assert (
+        main(
+            [
+                "build-repair-prompt",
+                "--timeline",
+                str(timeline),
+                "--output",
+                str(prompt_path),
+                "--title",
+                "注意力机制",
+            ]
         )
-        + "\n",
+        == 0
+    )
+    assert "1|但是你肯定听说过Chad GPT" in prompt_path.read_text(encoding="utf-8")
+
+    reviewed.write_text("1|但是你肯定听说过ChatGPT\n3|?\n", encoding="utf-8")
+    assert (
+        main(
+            [
+                "apply-reviewed-transcript",
+                "--timeline",
+                str(timeline),
+                "--reviewed",
+                str(reviewed),
+                "--parent-prefix",
+                "raw-",
+                "--output",
+                str(output),
+            ]
+        )
+        == 0
+    )
+
+    assert "Traceback" not in capsys.readouterr().err
+    rows = [json.loads(line) for line in output.read_text(encoding="utf-8").splitlines()]
+    assert rows[0]["content"] == "但是你肯定听说过ChatGPT"
+    assert rows[0]["evidence_id"] == "tr-000001"
+
+
+def test_cli_reports_a_malformed_sheet_without_a_traceback(tmp_path, capsys) -> None:
+    timeline = tmp_path / "timeline.raw.jsonl"
+    reviewed = tmp_path / "reviewed.txt"
+    timeline.write_text(
+        "\n".join(json.dumps(row, ensure_ascii=False) for row in ROWS),
         encoding="utf-8",
     )
-    glossary.write_text(
-        json.dumps({"王老奇": "王老吉", "兩查": "凉茶"}, ensure_ascii=False),
-        encoding="utf-8",
-    )
+    reviewed.write_text("这不是一个合法的审校文件\n", encoding="utf-8")
 
     exit_code = main(
         [
-            "suggest-repairs",
+            "apply-reviewed-transcript",
             "--timeline",
             str(timeline),
-            "--glossary",
-            str(glossary),
+            "--reviewed",
+            str(reviewed),
             "--output",
-            str(output),
+            str(tmp_path / "out.jsonl"),
         ]
     )
 
-    assert exit_code == 0
-    repairs = json.loads(output.read_text(encoding="utf-8"))
-    assert repairs[0]["repaired_content"] == "王老吉的凉茶"
-    assert repairs[0]["evidence_id"] == "raw-tr-000001"
-
-
-def test_load_glossary_rejects_invalid_entries() -> None:
-    with pytest.raises(ValueError, match="glossary must be an object"):
-        load_glossary(["not", "an", "object"])
-    with pytest.raises(ValueError, match="must be a non-empty string"):
-        load_glossary({"王老奇": ""})
-
-
-def test_simplified_normalization_converts_traditional_rows(monkeypatch) -> None:
-    rows = [
-        {
-            "evidence_id": "tr-000001",
-            "origin": "video",
-            "modality": "transcript",
-            "spans": [{"start_ms": 0, "end_ms": 2_000}],
-            "content": "從國民飲料到被年輕人抛棄",
-            "acquisition": "asr",
-        }
-    ]
-    fake = type("zhconv", (), {"convert": staticmethod(lambda value, target: value.replace("國", "国"))})
-    monkeypatch.setitem(__import__("sys").modules, "zhconv", fake)
-
-    repairs = suggest_asr_repairs(rows, simplified=True)
-
-    assert repairs[0]["repaired_content"] == "從国民飲料到被年輕人抛棄"
-    assert "繁体转简体" in repairs[0]["reason"]
-
-
-def test_simplified_normalization_with_the_real_converter() -> None:
-    pytest.importorskip("zhconv")
-    rows = [
-        {
-            "evidence_id": "tr-000001",
-            "origin": "video",
-            "modality": "transcript",
-            "spans": [{"start_ms": 0, "end_ms": 2_000}],
-            "content": "從國民飲料到被年輕人抛棄",
-            "acquisition": "asr",
-        }
-    ]
-
-    repairs = suggest_asr_repairs(rows, simplified=True)
-
-    assert repairs[0]["repaired_content"] == "从国民饮料到被年轻人抛弃"
-
-
-def test_simplified_normalization_reports_a_missing_dependency(monkeypatch) -> None:
-    monkeypatch.setitem(__import__("sys").modules, "zhconv", None)
-
-    with pytest.raises(ValueError, match="zhconv is required"):
-        to_simplified("繁體")
-
-
-def test_glossary_and_simplified_normalization_converge(monkeypatch) -> None:
-    """A Simplified key must still match after the Traditional text is converted."""
-    rows = [
-        {
-            "evidence_id": "tr-000001",
-            "origin": "video",
-            "modality": "transcript",
-            "spans": [{"start_ms": 0, "end_ms": 2_000}],
-            "content": "改變中國引讓使的廣告語",  # Traditional "引讓使"
-            "acquisition": "asr",
-        }
-    ]
-    monkeypatch.setitem(
-        __import__("sys").modules,
-        "zhconv",
-        type(
-            "zhconv",
-            (),
-            {
-                "convert": staticmethod(
-                    lambda value, target: value.replace("讓", "让")
-                    .replace("國", "国")
-                    .replace("廣", "广")
-                    .replace("語", "语")
-                    .replace("變", "变")
-                )
-            },
-        ),
-    )
-
-    repairs = suggest_asr_repairs(rows, glossary={"引让使": "饮料史"}, simplified=True)
-
-    assert repairs[0]["repaired_content"] == "改变中国饮料史的广告语"
+    assert exit_code == 1
+    captured = capsys.readouterr()
+    assert "failed to apply the reviewed transcript" in captured.err
+    assert "Traceback" not in captured.err
