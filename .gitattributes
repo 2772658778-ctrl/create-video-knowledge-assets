@@ -1,0 +1,10 @@
+# Normalize line endings so Windows checkouts do not rewrite every file.
+* text=auto eol=lf
+
+# Binary assets must never be line-ending normalized.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.wav binary
+*.mp4 binary

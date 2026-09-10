@@ -36,6 +36,7 @@ Use these gates to decide whether to continue, degrade the output, or stop and a
 ## Evidence References
 
 - Continue: every knowledge unit has valid `evidence_refs` pointing to evidence records for transcript windows, inspected frames, source files, or derived manifests.
+- Stop and repair: a knowledge or content unit is marked `video_explicit` while every citation is an uncertain transcript row or a provenance-only metadata/audio record. `vka validate-knowledge --asset "$ASSET_DIR"` fails this case; cite a checked frame or a reviewed transcript row, or downgrade the unit.
 - Degrade: nonessential enrichment lacks video evidence; remove it, attach external evidence and mark it `external_enrichment`, or mark it `agent_inference` only when cited evidence supports the inference.
 - Stop and ask user: core claims, chapter boundaries, or examples cannot be tied to evidence.
 

@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from vka.transcript_repair import (
     apply_transcript_repairs,
     build_asr_repair_prompt,
@@ -94,3 +96,56 @@ def test_cli_repair_roundtrip(tmp_path, capsys) -> None:
 
     assert "Traceback" not in captured.err
     assert "ChatGPT" in output.read_text(encoding="utf-8")
+
+
+def test_unrepaired_rows_record_that_they_were_preserved() -> None:
+    repaired_rows = apply_transcript_repairs(ROWS, [])
+
+    assert [row["quality"]["repair_status"] for row in repaired_rows] == [
+        "raw_preserved",
+        "raw_preserved",
+    ]
+    assert all("uncertain" not in row["quality"] for row in repaired_rows)
+
+
+def test_uncertain_ids_flag_rows_without_rewriting_them() -> None:
+    repaired_rows = apply_transcript_repairs(
+        ROWS,
+        {"repairs": [], "uncertain_ids": ["tr-000002"]},
+    )
+
+    assert repaired_rows[0]["quality"]["repair_status"] == "raw_preserved"
+    assert "uncertain" not in repaired_rows[0]["quality"]
+    assert repaired_rows[1]["quality"]["uncertain"] == "true"
+    assert repaired_rows[1]["content"] == ROWS[1]["content"]
+
+
+def test_parent_prefix_turns_raw_ids_into_explicit_provenance() -> None:
+    raw_rows = [
+        {**ROWS[0], "evidence_id": "raw-tr-000001"},
+        {**ROWS[1], "evidence_id": "raw-tr-000002"},
+    ]
+    repairs = [
+        {
+            "evidence_id": "raw-tr-000001",
+            "original_content": ROWS[0]["content"],
+            "repaired_content": "但是你肯定听说过ChatGPT",
+            "confidence": "high",
+            "reason": "英文专名",
+            "uncertain": False,
+        }
+    ]
+
+    repaired_rows = apply_transcript_repairs(raw_rows, repairs, parent_prefix="raw-")
+
+    assert [row["evidence_id"] for row in repaired_rows] == ["tr-000001", "tr-000002"]
+    assert [row["parent_ids"] for row in repaired_rows] == [
+        ["raw-tr-000001"],
+        ["raw-tr-000002"],
+    ]
+    assert repaired_rows[0]["quality"]["repair_status"] == "repaired"
+
+
+def test_parent_prefix_rejects_ids_without_the_prefix() -> None:
+    with pytest.raises(ValueError, match="does not start with parent prefix"):
+        apply_transcript_repairs(ROWS, [], parent_prefix="raw-")

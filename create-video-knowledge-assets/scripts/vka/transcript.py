@@ -10,7 +10,22 @@ from vka.models import Evidence
 SCHEMA_VERSION = "1.0"
 
 
-def parse_srt_as_evidence(srt_text: str, acquisition: str) -> list[dict[str, object]]:
+def parse_srt_as_evidence(
+    srt_text: str,
+    acquisition: str,
+    *,
+    id_prefix: str = "",
+) -> list[dict[str, object]]:
+    """Parse an SRT into timeline evidence.
+
+    A raw ASR timeline should be written with an `id_prefix` such as `raw-`.
+    The canonical timeline produced by `apply-transcript-repairs` then drops
+    that prefix, so `parent_ids` can name the raw row instead of pointing at
+    the row's own identifier.
+    """
+    if id_prefix and not _is_safe_id_prefix(id_prefix):
+        raise ValueError("id_prefix must contain only letters, digits, '-', '_', or '.'")
+
     rows: list[dict[str, object]] = []
     try:
         for subtitle in srt.parse(srt_text):
@@ -28,7 +43,7 @@ def parse_srt_as_evidence(srt_text: str, acquisition: str) -> list[dict[str, obj
 
             evidence_number = len(rows) + 1
             row: dict[str, object] = {
-                "evidence_id": f"tr-{evidence_number:06d}",
+                "evidence_id": f"{id_prefix}tr-{evidence_number:06d}",
                 "origin": "video",
                 "modality": "transcript",
                 "spans": [{"start_ms": start_ms, "end_ms": end_ms}],
@@ -60,6 +75,10 @@ def whisper_command(audio_path: str, output_dir: str, model: str = "medium") -> 
 
 def _normalize_content(content: str) -> str:
     return " ".join(content.split())
+
+
+def _is_safe_id_prefix(value: str) -> bool:
+    return all(character.isalnum() or character in "-_." for character in value)
 
 
 def _timedelta_to_ms(value: timedelta) -> int:

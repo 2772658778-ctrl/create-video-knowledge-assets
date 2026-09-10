@@ -16,6 +16,7 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 from vka.acquire import metadata_command, subtitle_command
+from vka.digest import DEFAULT_WINDOW_MS, build_timeline_digest
 from vka.frames import plan_candidate_timestamps
 from vka.inputs import (
     archive_local_video,
@@ -24,6 +25,7 @@ from vka.inputs import (
     sanitize_acquired_metadata,
     validate_bilibili_part_selection,
 )
+from vka.knowledge_gate import validate_asset_knowledge
 from vka.lifecycle import execute_l2_cleanup, plan_l2_cleanup, verify_asset
 from vka.preflight import inspect_commands
 from vka.preflight import find_command
@@ -104,7 +106,26 @@ def _build_parser() -> argparse.ArgumentParser:
     normalize_srt.add_argument("--input", required=True)
     normalize_srt.add_argument("--output", required=True)
     normalize_srt.add_argument("--acquisition", choices=("cc", "asr"), required=True)
+    normalize_srt.add_argument(
+        "--id-prefix",
+        default="",
+        help="prefix raw evidence ids, for example raw- when writing timeline.raw.jsonl",
+    )
     normalize_srt.set_defaults(func=_run_normalize_srt)
+
+    timeline_digest = subparsers.add_parser(
+        "timeline-digest",
+        help="write a compact reading view of a canonical timeline",
+    )
+    timeline_digest.add_argument("--timeline", required=True)
+    timeline_digest.add_argument("--output", required=True)
+    timeline_digest.add_argument(
+        "--window-ms",
+        type=int,
+        default=DEFAULT_WINDOW_MS,
+        help="group rows into windows of this length",
+    )
+    timeline_digest.set_defaults(func=_run_timeline_digest)
 
     repair_prompt = subparsers.add_parser("build-repair-prompt")
     repair_prompt.add_argument("--timeline", required=True)
@@ -121,6 +142,14 @@ def _build_parser() -> argparse.ArgumentParser:
     apply_repairs.add_argument("--timeline", required=True)
     apply_repairs.add_argument("--repairs", required=True)
     apply_repairs.add_argument("--output", required=True)
+    apply_repairs.add_argument(
+        "--parent-prefix",
+        default=None,
+        help=(
+            "strip this prefix from input ids and record the raw id in parent_ids; "
+            "use the same value passed to normalize-srt --id-prefix"
+        ),
+    )
     apply_repairs.set_defaults(func=_run_apply_transcript_repairs)
 
     acquire_metadata = subparsers.add_parser("acquire-metadata")
@@ -144,6 +173,13 @@ def _build_parser() -> argparse.ArgumentParser:
     verify_asset_parser = subparsers.add_parser("verify-asset")
     verify_asset_parser.add_argument("--asset", required=True)
     verify_asset_parser.set_defaults(func=_run_verify_asset)
+
+    validate_knowledge = subparsers.add_parser(
+        "validate-knowledge",
+        help="check knowledge reference closure and evidence-strength honesty",
+    )
+    validate_knowledge.add_argument("--asset", required=True)
+    validate_knowledge.set_defaults(func=_run_validate_knowledge)
 
     complete_stage = subparsers.add_parser(
         "complete-stage",
@@ -332,6 +368,7 @@ def _run_normalize_srt(args: argparse.Namespace) -> None:
     rows = parse_srt_as_evidence(
         input_path.read_text(encoding="utf-8"),
         acquisition=args.acquisition,
+        id_prefix=args.id_prefix,
     )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -354,6 +391,30 @@ def _run_build_repair_prompt(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_timeline_digest(args: argparse.Namespace) -> int:
+    try:
+        rows = _read_jsonl(Path(args.timeline))
+        digest = build_timeline_digest(rows, window_ms=args.window_ms)
+        output_path = Path(args.output)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(digest, encoding="utf-8")
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        sys.stderr.write(f"error: failed to build timeline digest: {exc}\n")
+        return 1
+    print(
+        json.dumps(
+            {
+                "timeline": args.timeline,
+                "output": args.output,
+                "rows": len(rows),
+                "characters": len(digest),
+            },
+            ensure_ascii=False,
+        )
+    )
+    return 0
+
+
 def _run_suggest_repairs(args: argparse.Namespace) -> int:
     try:
         rows = _read_jsonl(Path(args.timeline))
@@ -371,9 +432,11 @@ def _run_apply_transcript_repairs(args: argparse.Namespace) -> int:
     try:
         rows = _read_jsonl(Path(args.timeline))
         repairs = json.loads(Path(args.repairs).read_text(encoding="utf-8"))
-        if not isinstance(repairs, list):
-            raise ValueError("repairs must be a JSON array")
-        repaired_rows = apply_transcript_repairs(rows, repairs)
+        repaired_rows = apply_transcript_repairs(
+            rows,
+            repairs,
+            parent_prefix=args.parent_prefix,
+        )
         output_path = Path(args.output)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with output_path.open("w", encoding="utf-8") as file:
@@ -521,6 +584,12 @@ def _run_plan_frames(args: argparse.Namespace) -> None:
 
 def _run_verify_asset(args: argparse.Namespace) -> int:
     report = verify_asset(Path(args.asset))
+    print(json.dumps(report, ensure_ascii=False))
+    return 0 if report["valid"] else 1
+
+
+def _run_validate_knowledge(args: argparse.Namespace) -> int:
+    report = validate_asset_knowledge(Path(args.asset))
     print(json.dumps(report, ensure_ascii=False))
     return 0 if report["valid"] else 1
 
