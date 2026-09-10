@@ -537,78 +537,6 @@ def _short_video_script_document_errors(document: object) -> list[str]:
     return errors
 
 
-def _short_video_script_document_errors(document: object) -> list[str]:
-    """Validate a short-form script without leaking provenance into visible copy."""
-    if not isinstance(document, Mapping):
-        return ["short-video-script document must be an object"]
-
-    required_sections = (
-        "hook",
-        "context",
-        "core_point",
-        "evidence",
-        "payoff",
-        "closing",
-    )
-    errors = _required_profile_sections(
-        document,
-        "short-video-script",
-        tuple(
-            (section, f"short-video-script needs {section.replace('_', ' ')}")
-            for section in required_sections
-        ),
-    )
-
-    sections = document.get("sections")
-    if not isinstance(sections, list):
-        return errors
-
-    section_kinds = tuple(
-        section.get("kind") if isinstance(section, Mapping) else None for section in sections
-    )
-    if section_kinds != required_sections:
-        errors.append("short-video-script sections must follow the required hook-to-closing order")
-
-    prose_parts: list[str] = []
-    quote_seen = False
-    quote_with_source = False
-
-    for section in sections:
-        if not isinstance(section, Mapping):
-            continue
-        section_kind = section.get("kind")
-        if section_kind not in required_sections:
-            continue
-        blocks = section.get("blocks")
-        if not isinstance(blocks, list) or not any(
-            isinstance(block, Mapping) and _block_has_content(block) for block in blocks
-        ):
-            errors.append(
-                f"short-video-script section {section_kind!r} must contain non-empty content blocks"
-            )
-            continue
-
-        section_text = "\n".join(_block_text(block) for block in blocks if isinstance(block, Mapping))
-        prose_parts.append(section_text)
-
-        for block in blocks:
-            if not isinstance(block, Mapping):
-                continue
-            if block.get("kind") == "quote":
-                quote_seen = True
-                if _valid_source_spans(block.get("source_spans")):
-                    quote_with_source = True
-                else:
-                    errors.append("short-video-script quote blocks must preserve source spans")
-
-    prose = "\n".join(prose_parts).strip()
-    if _short_video_script_is_vacuous(prose):
-        errors.append("short-video-script prose is too abstract; add concrete script beats")
-    if quote_seen and not quote_with_source:
-        errors.append("short-video-script needs at least one source-backed quote")
-    return errors
-
-
 def _creator_article_document_errors(document: object) -> list[str]:
     """Validate a source-led article without manufacturing author testimony."""
     if not isinstance(document, Mapping):
@@ -842,18 +770,6 @@ def _research_brief_document_errors(document: object) -> list[str]:
     return _unique_errors(errors)
 
 
-def _short_video_script_is_vacuous(text: str) -> bool:
-    if not isinstance(text, str) or not text.strip():
-        return True
-    if len(text.strip()) < 120:
-        return True
-    if not _short_video_script_concrete_signal(text):
-        return True
-    return sum(1 for phrase in SHORT_VIDEO_SCRIPT_VACUOUS_PHRASES if phrase in text) >= 3
-
-
-def _short_video_script_concrete_signal(text: str) -> bool:
-    return bool(SHORT_VIDEO_SCRIPT_CONCRETE_RE.search(text))
 
 
 def _has_analysis_video_attribution(label: object, text: str) -> bool:
