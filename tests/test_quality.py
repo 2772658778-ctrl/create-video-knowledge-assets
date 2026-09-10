@@ -262,6 +262,65 @@ def test_short_video_script_gate_accepts_grounded_script() -> None:
     assert validate_document_quality(document) == []
 
 
+def _article_document(reader_promise: str, *, takeaway: str | None = None) -> dict:
+    def block(text: str, ref: str) -> dict:
+        return {
+            "kind": "paragraph",
+            "text": text,
+            "knowledge_refs": [f"ku-{ref}"],
+            "evidence_refs": [f"ev-{ref}"],
+            "source_spans": [{"start_ms": 0, "end_ms": 2_000}],
+        }
+
+    return {
+        "profile_id": "deep-article",
+        "title": "文章",
+        "sections": [
+            {"kind": kind, "title": kind, "blocks": [block(text, str(index))]}
+            for index, (kind, text) in enumerate(
+                [
+                    ("reader_promise", reader_promise),
+                    ("core_point", "核心判断是：这段素材真正回答的是一个具体问题。"),
+                    ("narrative", "叙事从问题走到方法，再到观众可以看到的结果。"),
+                    ("video_evidence", "画面里第 3 个镜头给出了关键的状态对比。"),
+                    (
+                        "actionable_takeaway",
+                        takeaway or "你可以按三步照做：先看对象，再看条件，最后看结果。",
+                    ),
+                    ("limitations_sources", "边界是：结论只在这段素材的范围内成立。"),
+                ],
+                start=1,
+            )
+        ],
+        "evidence_origins": {},
+    }
+
+
+def test_article_rejects_an_announcement_opener() -> None:
+    errors = validate_document_quality(
+        _article_document("在当今这个信息爆炸的时代，写作能力变得越来越重要。")
+    )
+
+    assert any("must open on the reader's situation" in error for error in errors)
+
+
+def test_article_rejects_business_cliche_register() -> None:
+    errors = validate_document_quality(
+        _article_document(
+            "你可能正在为一个标题改到凌晨，反复删掉又写回来。",
+            takeaway="值得注意的是，这个工具能打通你的写作流程。",
+        )
+    )
+
+    assert any("must not use announcement register" in error for error in errors)
+
+
+def test_article_accepts_a_reader_situation_opener() -> None:
+    document = _article_document("你可能正在为一个标题改到凌晨，反复删掉又写回来。")
+
+    assert validate_document_quality(document) == []
+
+
 def _script_document(hook: str, closing: str, *, payoff: str | None = None) -> dict:
     def block(text: str, ref: str) -> dict:
         return {

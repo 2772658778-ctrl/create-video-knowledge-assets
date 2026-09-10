@@ -98,6 +98,24 @@ SHORT_VIDEO_SCRIPT_WRITTEN_CONNECTIVES = (
     "因此",
 )
 
+# Long-form article craft. Readers of a WeChat-style article decide in the
+# first two paragraphs, and the fastest way to lose them is an opener that
+# announces the topic instead of naming their situation. The second list is the
+# business-writing register that marks machine prose.
+ARTICLE_ANNOUNCEMENT_OPENERS = re.compile(
+    r"^\s*(?:在当今|在这个.{0,6}时代|随着[^，。]{0,12}(?:发展|进步|普及|兴起)|"
+    r"近年来|众所周知|大家好|今天我们来聊|让我们一起来|本期文章)",
+)
+ARTICLE_CLICHE_PHRASES = (
+    "综上所述",
+    "值得注意的是",
+    "接下来我们将",
+    "赋能",
+    "抓手",
+    "底层逻辑",
+    "打通",
+)
+
 
 def validate_course_document_quality(document: object) -> list[str]:
     """Return quality errors that would make a P1 course-note document unreadable."""
@@ -668,9 +686,46 @@ def _creator_article_document_errors(document: object) -> list[str]:
     )
     if CREATOR_OUTCOME_RE.search(prose) or CREATOR_AUTHOR_RESULT_RE.search(prose):
         errors.append("creator-article must not invent author experience or outcome")
+    errors.extend(_article_opening_errors(sections))
+    cliches = [phrase for phrase in ARTICLE_CLICHE_PHRASES if phrase in prose]
+    if cliches:
+        errors.append(
+            "creator-article must not use announcement register; replace "
+            + "、".join(cliches)
+        )
     if not _section_has_video_span(document, "video_evidence"):
         errors.append("creator-article video evidence must retain video source spans")
     return errors
+
+
+def _article_opening_errors(sections: object) -> list[str]:
+    if not isinstance(sections, list):
+        return []
+    reader_promise = next(
+        (
+            section
+            for section in sections
+            if isinstance(section, Mapping) and section.get("kind") == "reader_promise"
+        ),
+        None,
+    )
+    if not isinstance(reader_promise, Mapping):
+        return []
+    blocks = reader_promise.get("blocks")
+    if not isinstance(blocks, list):
+        return []
+    first = next(
+        (block for block in blocks if isinstance(block, Mapping) and block.get("kind") == "paragraph"),
+        None,
+    )
+    if first is None:
+        return []
+    if ARTICLE_ANNOUNCEMENT_OPENERS.search(_block_text(first).strip()):
+        return [
+            "creator-article must open on the reader's situation, not on an "
+            "announcement (在当今这个时代 / 随着…的发展 / 近年来 / 大家好)"
+        ]
+    return []
 
 
 def _enterprise_knowledge_document_errors(document: object) -> list[str]:
