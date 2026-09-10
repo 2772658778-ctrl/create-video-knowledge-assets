@@ -138,6 +138,7 @@ def render_document_tex(
     *,
     asset_root: str | None = None,
     output_directory: str | None = None,
+    source_navigation: bool = True,
 ) -> str:
     """Render a profile-selected document without applying P1's course gate."""
     if not isinstance(document, Mapping):
@@ -148,7 +149,9 @@ def render_document_tex(
     if rebased_image_paths:
         document = rebase_document_image_paths(document, asset_root, output_directory)
     title, sections = document_sections_for_render(
-        document, allow_rebased_image_paths=rebased_image_paths
+        document,
+        allow_rebased_image_paths=rebased_image_paths,
+        source_navigation=source_navigation,
     )
     profile_id = document.get("profile_id")
     title_page_label = {

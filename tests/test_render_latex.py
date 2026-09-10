@@ -237,6 +237,28 @@ def test_general_document_tex_keeps_time_footnotes_and_all_formats_write(tmp_pat
     assert "00:00:10--00:00:18" in outputs["tex"].read_text(encoding="utf-8")
 
 
+def test_short_video_script_hides_source_footnotes_but_keeps_them_elsewhere(
+    tmp_path,
+) -> None:
+    script = {
+        "profile_id": "short-video-script", "title": "脚本", "sections": [{"title": "开场", "blocks": [{
+            "kind": "paragraph", "text": "三年少卖十个亿，这是开场的第一句。",
+            "knowledge_refs": ["ku-1"], "evidence_refs": ["tr-1"],
+            "source_spans": [{"start_ms": 0, "end_ms": 1680}],
+        }]}],
+    }
+    deep = {**script, "profile_id": "general-deep"}
+
+    script_outputs = render_all_formats(script, tmp_path / "script")
+    deep_tex = render_all_formats(deep, tmp_path / "deep")["tex"].read_text(encoding="utf-8")
+
+    script_tex = script_outputs["tex"].read_text(encoding="utf-8")
+    assert "来源时间" not in script_tex
+    assert "00:00:00--00:00:01" not in script_tex
+    assert "开场" in script_tex
+    assert r"\footnote{来源时间：" in deep_tex
+
+
 def test_renderer_writes_section_with_bottom_time_footnote() -> None:
     tex = render_course_tex(
         "测试课程",

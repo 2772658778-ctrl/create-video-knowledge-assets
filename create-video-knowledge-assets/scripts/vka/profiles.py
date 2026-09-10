@@ -134,7 +134,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
             ),
             formats=("md", "html", "tex", "pdf"),
             validator=_validate_course_notes,
-            renderer_options=_options(teaching_footnotes=True),
+            renderer_options=_options(source_navigation=True),
             reference_path="references/profile-course-notes.md",
         ),
         "creator-article": ProfileSpec(
@@ -149,7 +149,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
             ),
             formats=("md", "html", "tex", "pdf"),
             validator=_validate_creator_article,
-            renderer_options=_options(byline=False, source_navigation=True),
+            renderer_options=_options(source_navigation=True),
             reference_path="references/profile-creator-article.md",
         ),
         "deep-article": ProfileSpec(
@@ -164,7 +164,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
             ),
             formats=("md", "html", "tex", "pdf"),
             validator=_validate_creator_article,
-            renderer_options=_options(byline=False, source_navigation=True),
+            renderer_options=_options(source_navigation=True),
             reference_path="references/profile-creator-article.md",
         ),
         "enterprise-knowledge": ProfileSpec(
@@ -179,7 +179,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
             ),
             formats=("md", "html", "tex", "pdf"),
             validator=_validate_enterprise_knowledge,
-            renderer_options=_options(decision_log=False, source_navigation=True),
+            renderer_options=_options(source_navigation=True),
             reference_path="references/profile-enterprise-knowledge.md",
         ),
         "research-brief": ProfileSpec(
@@ -193,7 +193,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
             ),
             formats=("md", "html", "tex", "pdf"),
             validator=_validate_research_brief,
-            renderer_options=_options(citation_notes=True),
+            renderer_options=_options(source_navigation=True),
             reference_path="references/profile-research-brief.md",
         ),
         "short-video-script": ProfileSpec(
@@ -208,7 +208,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
             ),
             formats=("md", "html", "tex", "pdf"),
             validator=_validate_short_video_script,
-            renderer_options=_options(byline=False, source_navigation=False),
+            renderer_options=_options(source_navigation=False),
             reference_path="references/profile-short-video-script.md",
         ),
     }
@@ -239,6 +239,19 @@ def get_profile(profile_id: str) -> ProfileSpec:
         return PROFILES[profile_id]
     except KeyError as exc:
         raise ValueError(f"unknown profile {profile_id!r}") from exc
+
+
+def renderer_options_for(profile_id: object) -> dict[str, object]:
+    """Resolve the renderer options a profile declares, or defaults.
+
+    Renderers read their behavior from here instead of declaring knobs nothing
+    implements: `source_navigation` is the only option that changes rendered
+    output today.
+    """
+    if not isinstance(profile_id, str):
+        return {}
+    spec = PROFILES.get(profile_id)
+    return dict(spec.renderer_options) if spec is not None else {}
 
 
 def validate_profile_document(profile_id: str, document: object) -> list[str]:

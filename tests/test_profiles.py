@@ -406,10 +406,7 @@ def test_new_profile_specs_are_registered_with_approved_contracts() -> None:
     )
     assert short_script.formats == ("md", "html", "tex", "pdf")
     assert short_script.reference_path == "references/profile-short-video-script.md"
-    assert short_script.renderer_options == {
-        "byline": False,
-        "source_navigation": False,
-    }
+    assert short_script.renderer_options == {"source_navigation": False}
     errors = short_script.validator({"sections": []})
     assert errors[:6] == [
         "short-video-script needs hook",

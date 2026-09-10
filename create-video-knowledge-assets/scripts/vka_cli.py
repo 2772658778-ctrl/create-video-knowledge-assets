@@ -41,6 +41,7 @@ from vka.preflight import find_command
 from vka.profiles import (
     canonical_hash_tree,
     get_profile,
+    renderer_options_for,
     reproject_profile_documents,
     write_profile_selection,
     write_projection_plan,
@@ -1108,24 +1109,19 @@ def _render_document_format(
     asset_root: str | Path | None = None,
     output_directory: str | Path | None = None,
 ) -> str:
+    shared = {
+        "asset_root": str(asset_root) if asset_root is not None else None,
+        "output_directory": str(output_directory) if output_directory is not None else None,
+        "source_navigation": bool(
+            renderer_options_for(document.get("profile_id")).get("source_navigation", True)
+        ),
+    }
     if format_name == "md":
-        return render_document_markdown(
-            document,
-            asset_root=str(asset_root) if asset_root is not None else None,
-            output_directory=str(output_directory) if output_directory is not None else None,
-        )
+        return render_document_markdown(document, **shared)
     if format_name == "html":
-        return render_document_html(
-            document,
-            asset_root=str(asset_root) if asset_root is not None else None,
-            output_directory=str(output_directory) if output_directory is not None else None,
-        )
+        return render_document_html(document, **shared)
     if format_name == "tex":
-        return render_document_tex(
-            document,
-            asset_root=str(asset_root) if asset_root is not None else None,
-            output_directory=str(output_directory) if output_directory is not None else None,
-        )
+        return render_document_tex(document, **shared)
     raise ValueError("document format must be md, html, or tex")
 
 

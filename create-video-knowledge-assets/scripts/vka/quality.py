@@ -71,6 +71,33 @@ SHORT_VIDEO_SCRIPT_VACUOUS_PHRASES = (
     "都是为了",
 )
 
+# Short-form scripts are spoken, not read. Two openings end a video before it
+# starts and two endings hand the viewer a moral instead of a thought, so the
+# gate names them instead of leaving the difference to taste.
+SHORT_VIDEO_SCRIPT_ANNOUNCEMENT_OPENERS = re.compile(
+    r"^\s*(?:大家好|各位好|哈喽|hello|hi\b|今天(?:我们|我来|我来给|给大家)|"
+    r"本期视频|这个视频|这一期|在这期)",
+    re.IGNORECASE,
+)
+SHORT_VIDEO_SCRIPT_LESSON_ENDINGS = (
+    "希望对你有所帮助",
+    "希望对你有帮助",
+    "希望这个视频",
+    "希望你能",
+    "记住这句话",
+    "最后想说的是",
+    "与大家共勉",
+    "共勉",
+    "愿你我",
+)
+SHORT_VIDEO_SCRIPT_WRITTEN_CONNECTIVES = (
+    "综上所述",
+    "综上",
+    "总而言之",
+    "由此可见",
+    "因此",
+)
+
 
 def validate_course_document_quality(document: object) -> list[str]:
     """Return quality errors that would make a P1 course-note document unreadable."""
@@ -370,9 +397,17 @@ def rebase_document_image_paths(
 
 
 def document_sections_for_render(
-    document: object, *, allow_rebased_image_paths: bool = False
+    document: object,
+    *,
+    allow_rebased_image_paths: bool = False,
+    source_navigation: bool = True,
 ) -> tuple[str, list[dict[str, Any]]]:
-    """Return the legacy section surface while retaining generic document provenance."""
+    """Return the legacy section surface while retaining generic document provenance.
+
+    `source_navigation=False` means the profile's visible copy has to stand on
+    its own, so source-time footnotes are dropped from the rendered view. The
+    canonical document keeps its spans; only the delivery surface loses them.
+    """
     if not isinstance(document, Mapping):
         raise ValueError("document must be an object")
     title = document.get("title")
@@ -409,7 +444,12 @@ def document_sections_for_render(
                 {
                     "title": section_title,
                     "blocks": [
-                        _normalise_document_block(block, evidence_origins) for block in raw_blocks
+                        _normalise_document_block(
+                            block,
+                            evidence_origins,
+                            source_navigation=source_navigation,
+                        )
+                        for block in raw_blocks
                     ],
                 }
             )
@@ -519,6 +559,11 @@ def _short_video_script_document_errors(document: object) -> list[str]:
         section_text = "\n".join(_block_text(block) for block in blocks if isinstance(block, Mapping))
         prose_parts.append(section_text)
 
+        if section_kind == "hook":
+            errors.extend(_short_video_script_opening_errors(blocks))
+        if section_kind == "closing":
+            errors.extend(_short_video_script_ending_errors(blocks))
+
         for block in blocks:
             if not isinstance(block, Mapping):
                 continue
@@ -534,7 +579,50 @@ def _short_video_script_document_errors(document: object) -> list[str]:
         errors.append("short-video-script prose is too abstract; add concrete script beats")
     if quote_seen and not quote_with_source:
         errors.append("short-video-script needs at least one source-backed quote")
+    written = [word for word in SHORT_VIDEO_SCRIPT_WRITTEN_CONNECTIVES if word in prose]
+    if written:
+        errors.append(
+            "short-video-script must sound spoken, not written; replace "
+            + "、".join(written)
+        )
     return errors
+
+
+def _short_video_script_opening_errors(blocks: Sequence[object]) -> list[str]:
+    first = next(
+        (block for block in blocks if isinstance(block, Mapping) and block.get("kind") == "paragraph"),
+        None,
+    )
+    if first is None:
+        return []
+    text = _block_text(first).strip()
+    if SHORT_VIDEO_SCRIPT_ANNOUNCEMENT_OPENERS.search(text):
+        return [
+            "short-video-script hook must start mid-conversation, not with an "
+            "announcement (大家好 / 今天我们来讲 / 本期视频)"
+        ]
+    return []
+
+
+def _short_video_script_ending_errors(blocks: Sequence[object]) -> list[str]:
+    last = next(
+        (
+            block
+            for block in reversed(list(blocks))
+            if isinstance(block, Mapping) and block.get("kind") == "paragraph"
+        ),
+        None,
+    )
+    if last is None:
+        return []
+    text = _block_text(last).strip()
+    matched = [phrase for phrase in SHORT_VIDEO_SCRIPT_LESSON_ENDINGS if phrase in text]
+    if matched:
+        return [
+            "short-video-script must end on the thought, not on a lesson or a "
+            "golden line"
+        ]
+    return []
 
 
 def _creator_article_document_errors(document: object) -> list[str]:
@@ -1066,7 +1154,10 @@ def _resolve_asset_image_path(asset_root: Path, path: str) -> Path:
 
 
 def _normalise_document_block(
-    block: object, evidence_origins: Mapping[str, str]
+    block: object,
+    evidence_origins: Mapping[str, str],
+    *,
+    source_navigation: bool = True,
 ) -> dict[str, Any]:
     if not isinstance(block, Mapping):
         raise ValueError("block must be an object")
@@ -1081,7 +1172,10 @@ def _normalise_document_block(
             normalized["path"] = path
     kind_map = {"list": "bullet_list", "callout": "importantbox", "summary": "paragraph"}
     normalized["kind"] = kind_map.get(normalized.get("kind"), normalized.get("kind"))
-    if _block_allows_empty_source_spans(normalized, evidence_origins) and not normalized.get("source_spans"):
+    if not source_navigation:
+        normalized.pop("source_spans", None)
+        normalized["_allow_empty_source_spans"] = True
+    elif _block_allows_empty_source_spans(normalized, evidence_origins) and not normalized.get("source_spans"):
         normalized["_allow_empty_source_spans"] = True
     return normalized
 

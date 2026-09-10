@@ -262,6 +262,73 @@ def test_short_video_script_gate_accepts_grounded_script() -> None:
     assert validate_document_quality(document) == []
 
 
+def _script_document(hook: str, closing: str, *, payoff: str | None = None) -> dict:
+    def block(text: str, ref: str) -> dict:
+        return {
+            "kind": "paragraph",
+            "text": text,
+            "knowledge_refs": [f"ku-{ref}"],
+            "evidence_refs": [f"ev-{ref}"],
+            "source_spans": [{"start_ms": 0, "end_ms": 2_000}],
+        }
+
+    return {
+        "profile_id": "short-video-script",
+        "title": "脚本",
+        "sections": [
+            {"kind": kind, "title": kind, "blocks": [block(text, str(index))]}
+            for index, (kind, text) in enumerate(
+                [
+                    ("hook", hook),
+                    ("context", "背景只有一句，说清对象和场景就够了。"),
+                    ("core_point", "核心判断只有一句，后面所有内容都在为它服务。"),
+                    ("evidence", "证据是 3 个具体数字，不是形容词堆出来的感觉。"),
+                    ("payoff", payoff or "观众带走一句可复用的判断，而不是口号。"),
+                    ("closing", closing),
+                ],
+                start=1,
+            )
+        ],
+    }
+
+
+def test_short_video_script_rejects_an_announcement_hook() -> None:
+    errors = validate_document_quality(
+        _script_document("大家好，今天我们来聊聊这个按钮为什么卡住。", "回到这个按钮本身。")
+    )
+
+    assert any("must start mid-conversation" in error for error in errors)
+
+
+def test_short_video_script_rejects_a_lesson_ending() -> None:
+    errors = validate_document_quality(
+        _script_document("镜头一开始，直接看这个按钮为什么会卡住。", "希望对你有所帮助，我们下期再见。")
+    )
+
+    assert any("must end on the thought" in error for error in errors)
+
+
+def test_short_video_script_rejects_written_connectives() -> None:
+    errors = validate_document_quality(
+        _script_document(
+            "镜头一开始，直接看这个按钮为什么会卡住。",
+            "回到这个按钮本身。",
+            payoff="因此，我们应当优先拆解动作，再讨论价值。",
+        )
+    )
+
+    assert any("must sound spoken, not written" in error for error in errors)
+
+
+def test_short_video_script_accepts_a_spoken_script() -> None:
+    document = _script_document(
+        "三年，少卖十个亿。这个数字背后是一个被换掉的货架。",
+        "他们问的不是谁才是真品牌，而是我为什么还要买它。",
+    )
+
+    assert validate_document_quality(document) == []
+
+
 def test_document_gate_rejects_a_conflicting_selected_profile() -> None:
     errors = validate_document_quality(
         {"profile_id": "course-notes", "title": "Interview", "sections": []},
