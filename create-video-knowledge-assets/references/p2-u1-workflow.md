@@ -24,6 +24,7 @@ input. They inspect or prepare an input; they do not authorize a full render.
 ```powershell
 vka preflight --commands ffmpeg ffprobe
 vka normalize-bilibili-url --url "$PUBLIC_URL"
+vka create-asset --assets-root assets --input "$NORMALIZED_INPUT_JSON" --config "$RUN_CONFIG_JSON"
 vka describe-local-video --input "$LOCAL_VIDEO"
 vka cleanup-l2 --asset "$ASSET_DIR" --dry-run
 ```
@@ -34,6 +35,9 @@ the selected work actually requires it. Read `acquisition-recipes.md` before
 downloading subtitles, cover images, audio, video, or candidate frames. Its
 direct commands write acquisition artifacts into the existing asset structure;
 they do not replace input identity, evidence validation, or stage manifests.
+`create-asset` builds the asset directory and manifest from a normalized input
+descriptor; pass the selected profile and ASR choice through `--config` and
+`--tool-version` so the manifest records them instead of leaving them implied.
 
 ## Stop, Degrade, And Recovery
 

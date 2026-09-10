@@ -86,6 +86,27 @@ def _build_parser() -> argparse.ArgumentParser:
     preflight.add_argument("--commands", nargs="+", required=True)
     preflight.set_defaults(func=_run_preflight)
 
+    create_asset = subparsers.add_parser(
+        "create-asset",
+        help="create an asset directory and manifest from a normalized input descriptor",
+    )
+    create_asset.add_argument("--assets-root", required=True)
+    create_asset.add_argument(
+        "--input",
+        required=True,
+        help="normalized input descriptor JSON, for example the output of normalize-bilibili-url",
+    )
+    create_asset.add_argument("--asset-id", help="defaults to the descriptor asset_id")
+    create_asset.add_argument("--config", help="optional JSON object of run configuration")
+    create_asset.add_argument(
+        "--tool-version",
+        action="append",
+        default=[],
+        dest="tool_versions",
+        help="repeat as name=value, for example asr_backend=faster-whisper",
+    )
+    create_asset.set_defaults(func=_run_create_asset)
+
     describe_local = subparsers.add_parser("describe-local-video")
     describe_local.add_argument("--input", required=True)
     describe_local.add_argument(
@@ -333,6 +354,35 @@ def _build_parser() -> argparse.ArgumentParser:
 def _run_preflight(args: argparse.Namespace) -> None:
     report = inspect_commands(args.commands)
     print(json.dumps(report, ensure_ascii=False))
+
+
+def _run_create_asset(args: argparse.Namespace) -> int:
+    try:
+        descriptor = _read_json_object(Path(args.input), "input descriptor")
+        asset_id = args.asset_id or descriptor.get("asset_id")
+        if not isinstance(asset_id, str) or not asset_id:
+            raise ValueError("asset id must come from --asset-id or the input descriptor")
+        config = (
+            _read_json_object(Path(args.config), "config") if args.config else {}
+        )
+        tool_versions: dict[str, str] = {}
+        for item in args.tool_versions:
+            name, separator, value = item.partition("=")
+            if not separator or not name or not value:
+                raise ValueError(f"tool version must use name=value: {item}")
+            tool_versions[name] = value
+        store = AssetStore.create(
+            Path(args.assets_root),
+            asset_id,
+            descriptor,
+            config=config,
+            tool_versions=tool_versions,
+        )
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        sys.stderr.write(f"error: failed to create asset: {exc}\n")
+        return 1
+    print(json.dumps({"asset_id": asset_id, "asset_root": str(store.root)}, ensure_ascii=False))
+    return 0
 
 
 def _run_describe_local_video(args: argparse.Namespace) -> None:
@@ -1211,6 +1261,13 @@ def _read_jsonl(path: Path) -> list[dict[str, object]]:
             raise ValueError(f"{path}:{line_number} must contain a JSON object")
         rows.append(row)
     return rows
+
+
+def _read_json_object(path: Path, label: str) -> dict[str, object]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError(f"{label} must be a JSON object")
+    return payload
 
 
 if __name__ == "__main__":
