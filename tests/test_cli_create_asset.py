@@ -139,3 +139,26 @@ def test_create_asset_requires_an_asset_id(tmp_path: Path, capsys: pytest.Captur
 
     assert exit_code == 1
     assert "asset id must come from" in capsys.readouterr().err
+
+
+def test_create_asset_accepts_a_utf8_bom_written_by_powershell(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Windows shells write BOM-prefixed JSON; the CLI must read them."""
+    descriptor_path = tmp_path / "input.json"
+    descriptor_path.write_bytes(
+        b"\xef\xbb\xbf" + json.dumps(DESCRIPTOR, ensure_ascii=False).encode("utf-8")
+    )
+
+    exit_code = main(
+        [
+            "create-asset",
+            "--assets-root",
+            str(tmp_path / "assets"),
+            "--input",
+            str(descriptor_path),
+        ]
+    )
+
+    assert exit_code == 0
+    assert json.loads(capsys.readouterr().out)["asset_id"] == "bili-BV1hwtB6YEzo"

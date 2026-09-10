@@ -254,7 +254,7 @@ def _topology(
 
 def _read_topology(path: Path) -> dict[str, object] | None:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
+        value = json.loads(path.read_text(encoding="utf-8-sig"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError):
         return None
     return dict(value) if isinstance(value, Mapping) else None
@@ -360,7 +360,7 @@ def _validated_relation(record: Mapping[str, object], label: str) -> KnowledgeRe
 
 def _jsonl_objects(path: Path, label: str) -> list[tuple[int, Mapping[str, object]]]:
     try:
-        text = path.read_text(encoding="utf-8")
+        text = path.read_text(encoding="utf-8-sig")
     except (OSError, UnicodeDecodeError) as exc:
         raise ValueError(f"{label} records are not valid JSONL") from exc
     records: list[tuple[int, Mapping[str, object]]] = []

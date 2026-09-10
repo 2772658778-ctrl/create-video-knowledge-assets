@@ -16,6 +16,15 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 from vka.acquire import metadata_command, subtitle_command
+from vka.asr import (
+    DEFAULT_BEAM_SIZE,
+    DEFAULT_COMPUTE_TYPE,
+    DEFAULT_CPU_THREADS,
+    DEFAULT_DEVICE,
+    DEFAULT_LANGUAGE,
+    DEFAULT_MODEL,
+    transcribe_to_srt,
+)
 from vka.digest import DEFAULT_WINDOW_MS, build_timeline_digest
 from vka.frames import plan_candidate_timestamps
 from vka.inputs import (
@@ -184,6 +193,21 @@ def _build_parser() -> argparse.ArgumentParser:
     acquire_subs.add_argument("--cookie-file")
     acquire_subs.add_argument("--output-template", required=True)
     acquire_subs.set_defaults(func=_run_acquire_subs)
+
+    transcribe_asr = subparsers.add_parser(
+        "transcribe-asr",
+        help="transcribe audio with faster-whisper into a raw SRT",
+    )
+    transcribe_asr.add_argument("--audio", required=True)
+    transcribe_asr.add_argument("--output", required=True)
+    transcribe_asr.add_argument("--model", default=DEFAULT_MODEL)
+    transcribe_asr.add_argument("--device", default=DEFAULT_DEVICE)
+    transcribe_asr.add_argument("--compute-type", default=DEFAULT_COMPUTE_TYPE)
+    transcribe_asr.add_argument("--language", default=DEFAULT_LANGUAGE)
+    transcribe_asr.add_argument("--cpu-threads", type=int, default=DEFAULT_CPU_THREADS)
+    transcribe_asr.add_argument("--beam-size", type=int, default=DEFAULT_BEAM_SIZE)
+    transcribe_asr.add_argument("--download-root")
+    transcribe_asr.set_defaults(func=_run_transcribe_asr)
 
     plan_frames = subparsers.add_parser("plan-frames")
     plan_frames.add_argument("--start-ms", type=int, required=True)
@@ -388,7 +412,7 @@ def _run_create_asset(args: argparse.Namespace) -> int:
 def _run_describe_local_video(args: argparse.Namespace) -> None:
     existing_identity = None
     if args.existing_identity:
-        existing_identity = json.loads(Path(args.existing_identity).read_text(encoding="utf-8"))
+        existing_identity = json.loads(Path(args.existing_identity).read_text(encoding="utf-8-sig"))
         if not isinstance(existing_identity, dict):
             raise ValueError("existing asset identity must be a JSON object")
     if existing_identity is None:
@@ -416,7 +440,7 @@ def _run_normalize_srt(args: argparse.Namespace) -> None:
     input_path = Path(args.input)
     output_path = Path(args.output)
     rows = parse_srt_as_evidence(
-        input_path.read_text(encoding="utf-8"),
+        input_path.read_text(encoding="utf-8-sig"),
         acquisition=args.acquisition,
         id_prefix=args.id_prefix,
     )
@@ -481,7 +505,7 @@ def _run_suggest_repairs(args: argparse.Namespace) -> int:
 def _run_apply_transcript_repairs(args: argparse.Namespace) -> int:
     try:
         rows = _read_jsonl(Path(args.timeline))
-        repairs = json.loads(Path(args.repairs).read_text(encoding="utf-8"))
+        repairs = json.loads(Path(args.repairs).read_text(encoding="utf-8-sig"))
         repaired_rows = apply_transcript_repairs(
             rows,
             repairs,
@@ -623,6 +647,26 @@ def _validate_unselected_bilibili_source(
     return True
 
 
+def _run_transcribe_asr(args: argparse.Namespace) -> int:
+    try:
+        report = transcribe_to_srt(
+            args.audio,
+            args.output,
+            model_name=args.model,
+            device=args.device,
+            compute_type=args.compute_type,
+            language=args.language,
+            cpu_threads=args.cpu_threads,
+            beam_size=args.beam_size,
+            download_root=args.download_root,
+        )
+    except (OSError, ValueError, RuntimeError) as exc:
+        sys.stderr.write(f"error: transcription failed: {exc}\n")
+        return 1
+    print(json.dumps(report, ensure_ascii=False))
+    return 0
+
+
 def _run_plan_frames(args: argparse.Namespace) -> None:
     timestamps = plan_candidate_timestamps(
         args.start_ms,
@@ -666,7 +710,7 @@ def _run_complete_stage(args: argparse.Namespace) -> int:
             store.complete_stage(stage, args.outputs)
         else:
             store.complete_stage(stage, args.outputs, schema_version=args.schema_version)
-        manifest = json.loads((asset_root / "manifest.json").read_text(encoding="utf-8"))
+        manifest = json.loads((asset_root / "manifest.json").read_text(encoding="utf-8-sig"))
         record = manifest["stages"][stage]
     except (OSError, ValueError, KeyError, json.JSONDecodeError) as exc:
         sys.stderr.write(f"error: failed to complete stage {stage}: {exc}\n")
@@ -718,7 +762,7 @@ def _run_retrieve_qa(args: argparse.Namespace) -> int:
 
 def _run_plan_qa(args: argparse.Namespace) -> int:
     try:
-        pack = json.loads(Path(args.input).read_text(encoding="utf-8"))
+        pack = json.loads(Path(args.input).read_text(encoding="utf-8-sig"))
         if not isinstance(pack, Mapping):
             raise ValueError("grounding pack is not an object")
         if "answer" in pack or "claims" in pack:
@@ -736,7 +780,7 @@ def _run_plan_qa(args: argparse.Namespace) -> int:
 
 def _run_validate_answer(args: argparse.Namespace) -> int:
     try:
-        payload = json.loads(Path(args.input).read_text(encoding="utf-8"))
+        payload = json.loads(Path(args.input).read_text(encoding="utf-8-sig"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError):
         _write_answer_validation_errors(["answer input must be a valid JSON object"])
         return 1
@@ -805,7 +849,7 @@ def _run_select_profile(args: argparse.Namespace) -> int:
 def _run_reproject_profile(args: argparse.Namespace) -> int:
     """Project one supplied authored document without a generation pathway."""
     try:
-        document = json.loads(Path(args.document).read_text(encoding="utf-8"))
+        document = json.loads(Path(args.document).read_text(encoding="utf-8-sig"))
         if not isinstance(document, Mapping):
             raise ValueError("supplied authored document must be an object")
         output = reproject_profile_documents(
@@ -823,7 +867,7 @@ def _run_reproject_profile(args: argparse.Namespace) -> int:
 
 def _run_validate_projection_plan(args: argparse.Namespace) -> int:
     try:
-        plan = json.loads(Path(args.input).read_text(encoding="utf-8"))
+        plan = json.loads(Path(args.input).read_text(encoding="utf-8-sig"))
         spec = get_profile(args.profile)
     except (OSError, json.JSONDecodeError, ValueError) as exc:
         sys.stderr.write(f"error: failed to read projection plan: {exc}\n")
@@ -842,7 +886,7 @@ def _run_validate_projection_plan(args: argparse.Namespace) -> int:
 
 def _run_write_projection_plan(args: argparse.Namespace) -> int:
     try:
-        plan = json.loads(Path(args.input).read_text(encoding="utf-8"))
+        plan = json.loads(Path(args.input).read_text(encoding="utf-8-sig"))
         if not isinstance(plan, Mapping):
             raise ValueError("projection plan must be an object")
         path = write_projection_plan(
@@ -859,7 +903,7 @@ def _run_render_course(args: argparse.Namespace) -> int:
     input_path = Path(args.input)
     output_path = Path(args.output)
     try:
-        document = json.loads(input_path.read_text(encoding="utf-8"))
+        document = json.loads(input_path.read_text(encoding="utf-8-sig"))
         if args.quality_floor == "p1":
             quality_errors = validate_course_document_quality(document)
             if quality_errors:
@@ -896,7 +940,7 @@ def _run_render_markdown(args: argparse.Namespace) -> int:
     input_path = Path(args.input)
     output_path = Path(args.output)
     try:
-        document = json.loads(input_path.read_text(encoding="utf-8"))
+        document = json.loads(input_path.read_text(encoding="utf-8-sig"))
         if args.quality_floor == "p1":
             quality_errors = validate_course_document_quality(document)
             if quality_errors:
@@ -933,7 +977,7 @@ def _run_render_html(args: argparse.Namespace) -> int:
     input_path = Path(args.input)
     output_path = Path(args.output)
     try:
-        document = json.loads(input_path.read_text(encoding="utf-8"))
+        document = json.loads(input_path.read_text(encoding="utf-8-sig"))
         if args.quality_floor == "p1":
             quality_errors = validate_course_document_quality(document)
             if quality_errors:
@@ -968,7 +1012,7 @@ def _run_render_html(args: argparse.Namespace) -> int:
 
 def _run_validate_document(args: argparse.Namespace) -> int:
     try:
-        document = json.loads(Path(args.input).read_text(encoding="utf-8"))
+        document = json.loads(Path(args.input).read_text(encoding="utf-8-sig"))
     except (OSError, json.JSONDecodeError) as exc:
         sys.stderr.write(f"error: failed to read course document: {exc}\n")
         return 1
@@ -989,7 +1033,7 @@ def _run_render_document(args: argparse.Namespace) -> int:
     input_path = Path(args.input)
     output_path = Path(args.output)
     try:
-        document = json.loads(input_path.read_text(encoding="utf-8"))
+        document = json.loads(input_path.read_text(encoding="utf-8-sig"))
         if not isinstance(document, Mapping):
             raise ValueError("document must be an object")
         declared_profile = document.get("profile_id")
@@ -1091,7 +1135,7 @@ def _document_asset_root(document_path: Path) -> Path:
 
 def _run_validate_teaching_outline(args: argparse.Namespace) -> int:
     try:
-        outline = json.loads(Path(args.input).read_text(encoding="utf-8"))
+        outline = json.loads(Path(args.input).read_text(encoding="utf-8-sig"))
     except (OSError, json.JSONDecodeError) as exc:
         sys.stderr.write(f"error: failed to read teaching outline: {exc}\n")
         return 1
@@ -1253,7 +1297,7 @@ def _srt_files(directory: Path) -> set[Path]:
 
 def _read_jsonl(path: Path) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
-    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+    for line_number, line in enumerate(path.read_text(encoding="utf-8-sig").splitlines(), start=1):
         if not line.strip():
             continue
         row = json.loads(line)
@@ -1264,7 +1308,7 @@ def _read_jsonl(path: Path) -> list[dict[str, object]]:
 
 
 def _read_json_object(path: Path, label: str) -> dict[str, object]:
-    payload = json.loads(path.read_text(encoding="utf-8"))
+    payload = json.loads(path.read_text(encoding="utf-8-sig"))
     if not isinstance(payload, dict):
         raise ValueError(f"{label} must be a JSON object")
     return payload

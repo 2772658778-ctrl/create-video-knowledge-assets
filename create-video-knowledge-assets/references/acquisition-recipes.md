@@ -51,7 +51,7 @@ When review finds no repair is necessary, retain identical content as
 `evidence/timeline.jsonl`. When repair is necessary, use the transcript-repair
 workflow rather than editing normalized evidence in place.
 
-## Whisper Fallback
+## ASR Fallback
 
 For Bilibili, extract audio into the asset before transcription:
 
@@ -60,12 +60,21 @@ yt-dlp -x --audio-format wav `
   -o "$ASSET/source/asr/audio.%(ext)s" `
   "$URL"
 
-whisper "$ASSET/source/asr/audio.wav" `
-  --model medium `
-  --language zh `
-  --output_format srt `
-  --output_dir "$ASSET/source/asr"
+ffmpeg -y -i "$ASSET/source/asr/audio.wav" -vn -ac 1 -ar 16000 `
+  "$ASSET/source/asr/audio.16k.wav"
+
+python $VKA transcribe-asr `
+  --audio "$ASSET/source/asr/audio.16k.wav" `
+  --output "$ASSET/source/asr/audio-faster-base.srt" `
+  --model base --device cpu --compute-type int8 --language zh `
+  --download-root "$REPO/.cache/hf/faster-whisper"
 ```
+
+`faster-whisper base` on CPU is the ASR of record for this pipeline: it fits a
+CPU-only machine, and its SRT is still a raw artifact that must go through the
+repair workflow. The OpenAI `whisper` CLI (`--model medium`) remains an option
+only when a GPU or a very long CPU budget is available; record which backend
+produced the SRT in the manifest `config.selected_asr` either way.
 
 For a local video, use the supplied file without copying it unless L1 retention
 was explicitly requested:
@@ -74,9 +83,14 @@ was explicitly requested:
 ffmpeg -y -i "$LOCAL_VIDEO" -vn -ac 1 -ar 16000 "$ASSET/source/asr/audio.wav"
 ```
 
-Normalize Whisper SRT with `--acquisition asr`, then run:
+Normalize the SRT into the raw timeline with a raw id prefix, then repair:
 
 ```powershell
+python $VKA normalize-srt `
+  --input "$ASSET/source/asr/audio-faster-base.srt" `
+  --output "$ASSET/evidence/timeline.raw.jsonl" `
+  --acquisition asr --id-prefix raw-
+
 python $VKA build-repair-prompt `
   --timeline "$ASSET/evidence/timeline.raw.jsonl" `
   --output "$ASSET/evidence/asr-repair-prompt.md" `
@@ -85,7 +99,12 @@ python $VKA build-repair-prompt `
 python $VKA apply-transcript-repairs `
   --timeline "$ASSET/evidence/timeline.raw.jsonl" `
   --repairs "$ASSET/evidence/asr-repairs.json" `
+  --parent-prefix raw- `
   --output "$ASSET/evidence/timeline.jsonl"
+
+python $VKA timeline-digest `
+  --timeline "$ASSET/evidence/timeline.jsonl" `
+  --output "$ASSET/logs/timeline-digest.md"
 ```
 
 Use visual-only acquisition only as a last resort for inherently visual

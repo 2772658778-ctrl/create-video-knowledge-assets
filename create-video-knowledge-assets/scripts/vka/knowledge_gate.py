@@ -219,7 +219,7 @@ def _read_graph(
     synthesis_path = root / "knowledge" / "synthesis.json"
     if synthesis_path.is_file():
         try:
-            synthesis = json.loads(synthesis_path.read_text(encoding="utf-8"))
+            synthesis = json.loads(synthesis_path.read_text(encoding="utf-8-sig"))
         except (OSError, ValueError) as exc:
             errors.append(f"knowledge/synthesis.json cannot be read: {exc}")
     else:
@@ -230,7 +230,7 @@ def _read_graph(
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+    for line_number, line in enumerate(path.read_text(encoding="utf-8-sig").splitlines(), start=1):
         if not line.strip():
             continue
         row = json.loads(line)

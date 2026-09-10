@@ -610,7 +610,7 @@ def _existing_or_default_profile_selection(
     parsed_view: Mapping[str, object] | None = None
     if view_path.exists():
         try:
-            parsed_view = json.loads(view_path.read_text(encoding="utf-8"))
+            parsed_view = json.loads(view_path.read_text(encoding="utf-8-sig"))
         except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
             raise ValueError("profile selection view manifest is invalid") from exc
         if not isinstance(parsed_view, Mapping) or parsed_view.get("profile_id") != profile_id:
@@ -856,7 +856,7 @@ def _validate_course_teaching_outline(
     if not outline_path.is_file():
         raise ValueError("course-notes teaching outline is missing")
     try:
-        outline = json.loads(outline_path.read_text(encoding="utf-8"))
+        outline = json.loads(outline_path.read_text(encoding="utf-8-sig"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError("course-notes teaching outline is invalid") from exc
     from vka.teaching_outline import validate_teaching_outline
@@ -942,7 +942,7 @@ def _validate_projection_plan_binding(
     if not path.is_file():
         raise ValueError("document projection plan is missing")
     try:
-        plan = json.loads(path.read_text(encoding="utf-8"))
+        plan = json.loads(path.read_text(encoding="utf-8-sig"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError("document projection plan is invalid") from exc
     spec = get_profile(profile_id)

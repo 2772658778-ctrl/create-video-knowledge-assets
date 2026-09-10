@@ -236,7 +236,7 @@ def _document_image_errors(store: AssetStore) -> list[str]:
     for document_path in _document_paths(store.root):
         relative_document = document_path.relative_to(store.root).as_posix()
         try:
-            document = json.loads(document_path.read_text(encoding="utf-8"))
+            document = json.loads(document_path.read_text(encoding="utf-8-sig"))
         except (OSError, UnicodeDecodeError, json.JSONDecodeError):
             errors.append(f"{relative_document} is not valid JSON")
             continue
@@ -309,7 +309,7 @@ def _document_blocks(document: Mapping[str, object]) -> list[object]:
 def _referenced_document_images(store: AssetStore) -> set[str]:
     paths: set[str] = set()
     for document_path in _document_paths(store.root):
-        document = json.loads(document_path.read_text(encoding="utf-8"))
+        document = json.loads(document_path.read_text(encoding="utf-8-sig"))
         for image_path in _image_paths(document):
             try:
                 relative_image, _ = _normalized_asset_relative_path(store, image_path)

@@ -449,7 +449,7 @@ def _validated_unit(record: Mapping[str, object], label: str) -> KnowledgeUnit:
 
 def _jsonl_objects(path: Path, label: str) -> list[tuple[int, Mapping[str, object]]]:
     try:
-        text = path.read_text(encoding="utf-8")
+        text = path.read_text(encoding="utf-8-sig")
     except (OSError, UnicodeDecodeError) as exc:
         raise ValueError(f"{label} records are not valid JSONL") from exc
     records: list[tuple[int, Mapping[str, object]]] = []

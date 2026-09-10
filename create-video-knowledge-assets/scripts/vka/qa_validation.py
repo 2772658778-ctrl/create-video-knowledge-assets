@@ -321,7 +321,7 @@ def _retained_topology_errors(
     path: Path, revision_id: str | None, revision_sha256: str | None
 ) -> list[str]:
     try:
-        topology = json.loads(path.read_text(encoding="utf-8"))
+        topology = json.loads(path.read_text(encoding="utf-8-sig"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError):
         return ["retained QA topology cannot be verified"]
     if not isinstance(topology, Mapping):

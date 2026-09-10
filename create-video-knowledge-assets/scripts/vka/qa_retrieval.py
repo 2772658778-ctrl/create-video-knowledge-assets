@@ -293,7 +293,7 @@ def _read_relations_records(records: Sequence[Mapping[str, object]]) -> list[Map
 
 def _jsonl_records(path: Path, label: str) -> list[tuple[int, Mapping[str, object]]]:
     try:
-        text = path.read_text(encoding="utf-8")
+        text = path.read_text(encoding="utf-8-sig")
     except (OSError, UnicodeDecodeError) as exc:
         raise ValueError(f"{label} records are not valid JSONL") from exc
     records: list[tuple[int, Mapping[str, object]]] = []

@@ -75,7 +75,7 @@ def read_external_evidence(
     records: dict[str, ExternalEvidence] = {}
     errors: list[str] = []
     try:
-        lines = path.read_text(encoding="utf-8").splitlines()
+        lines = path.read_text(encoding="utf-8-sig").splitlines()
     except FileNotFoundError:
         return records, ["external evidence artifact is missing"] if required else errors
     except (OSError, UnicodeDecodeError) as exc:
@@ -101,7 +101,7 @@ def read_external_evidence(
 def register_external_evidence(asset: Path, source: Path) -> Path:
     """Validate structured local input and atomically replace the external artifact."""
 
-    raw = source.read_text(encoding="utf-8")
+    raw = source.read_text(encoding="utf-8-sig")
     try:
         value = json.loads(raw)
         rows = value if isinstance(value, list) else [value]
@@ -121,7 +121,7 @@ def register_external_evidence(asset: Path, source: Path) -> Path:
         try:
             video_ids = {
                 value.get("evidence_id")
-                for line in video_path.read_text(encoding="utf-8").splitlines()
+                for line in video_path.read_text(encoding="utf-8-sig").splitlines()
                 if line.strip()
                 for value in [json.loads(line)]
                 if isinstance(value, Mapping) and isinstance(value.get("evidence_id"), str)

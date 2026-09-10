@@ -467,7 +467,7 @@ def _course_locations(root: Path, profile_id: str) -> dict[str, list[dict[str, o
         return {}
     document_path = root / "views" / "course-notes" / "document.json"
     try:
-        document = json.loads(document_path.read_text(encoding="utf-8"))
+        document = json.loads(document_path.read_text(encoding="utf-8-sig"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError("course-notes document is invalid") from exc
     if not isinstance(document, Mapping):

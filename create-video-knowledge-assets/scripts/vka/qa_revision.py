@@ -241,7 +241,7 @@ def _read_synthesis(
     path: Path, units: list[dict[str, object]], evidence: Mapping[str, Evidence]
 ) -> dict[str, object]:
     try:
-        raw = json.loads(path.read_text(encoding="utf-8"))
+        raw = json.loads(path.read_text(encoding="utf-8-sig"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError("synthesis file is not valid JSON") from exc
     if not isinstance(raw, Mapping):
@@ -292,7 +292,7 @@ def _nonblank_id(value: str, label: str) -> None:
 
 def _jsonl_objects(path: Path, label: str) -> list[tuple[int, Mapping[str, object]]]:
     try:
-        lines = path.read_text(encoding="utf-8").splitlines()
+        lines = path.read_text(encoding="utf-8-sig").splitlines()
     except (OSError, UnicodeDecodeError) as exc:
         raise ValueError(f"{label} file is not valid JSONL") from exc
     values: list[tuple[int, Mapping[str, object]]] = []
@@ -325,7 +325,7 @@ def _revision_document(
 
 def _read_revision_document(path: Path) -> dict[str, object]:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
+        value = json.loads(path.read_text(encoding="utf-8-sig"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError("revision metadata is not valid JSON") from exc
     if not isinstance(value, Mapping):
