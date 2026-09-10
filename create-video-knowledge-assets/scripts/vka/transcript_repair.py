@@ -111,18 +111,7 @@ def suggest_asr_repairs(
         if not isinstance(content, str):
             continue
 
-        repaired = content
-        reasons: list[str] = []
-        for wrong, right in replacements:
-            if wrong in repaired:
-                repaired = repaired.replace(wrong, right)
-                reasons.append(f"{wrong} -> {right}")
-
-        if simplified:
-            converted = to_simplified(repaired)
-            if converted != repaired:
-                repaired = converted
-                reasons.append("繁体转简体")
+        repaired, reasons = _apply_replacements(content, replacements, simplified=simplified)
 
         repaired = _normalize_technical_spacing(repaired)
         if repaired != content:
@@ -137,6 +126,34 @@ def suggest_asr_repairs(
                 }
             )
     return repairs
+
+
+def _apply_replacements(
+    content: str,
+    replacements: Sequence[tuple[str, str]],
+    *,
+    simplified: bool,
+) -> tuple[str, list[str]]:
+    """Apply the term table and script normalization until they stop changing text.
+
+    A glossary mixes Simplified and Traditional keys while the transcript mixes
+    both scripts, so one pass is not enough: "引讓使" only matches after the
+    Traditional form is normalized, and a Traditional key only matches before
+    it is. Two passes settle both directions without guessing intent.
+    """
+    repaired = content
+    reasons: list[str] = []
+    for _ in range(2):
+        for wrong, right in replacements:
+            if wrong in repaired:
+                repaired = repaired.replace(wrong, right)
+                reasons.append(f"{wrong} -> {right}")
+        if simplified:
+            converted = to_simplified(repaired)
+            if converted != repaired:
+                repaired = converted
+                reasons.append("繁体转简体")
+    return repaired, list(dict.fromkeys(reasons))
 
 
 def load_glossary(payload: object) -> dict[str, str]:
@@ -155,6 +172,9 @@ def load_glossary(payload: object) -> dict[str, str]:
 
 def to_simplified(value: str) -> str:
     try:
+        import warnings  # noqa: PLC0415 - scoped to the optional import
+
+        warnings.filterwarnings("ignore", message="pkg_resources is deprecated")
         from zhconv import convert  # noqa: PLC0415 - optional dependency
     except ImportError as exc:
         raise ValueError(
@@ -179,6 +199,7 @@ def apply_transcript_repairs(
     *,
     uncertain_ids: Sequence[str] | None = None,
     reviewed_ids: Sequence[str] | None = None,
+    assume_reviewed: bool = False,
     parent_prefix: str | None = None,
 ) -> list[dict[str, object]]:
     """Turn a raw transcript timeline into the canonical timeline.
@@ -193,7 +214,8 @@ def apply_transcript_repairs(
     Rows are labeled honestly: `repaired` (the reviewer changed the text),
     `raw_preserved` (the reviewer read it and kept it), or `unreviewed` (nobody
     looked at it). Review cost then tracks what the run actually cites instead
-    of the length of the transcript.
+    of the length of the transcript. Set `assume_reviewed` only when the
+    reviewer genuinely read the whole transcript.
     """
     repair_entries, payload_uncertain, payload_reviewed = split_repair_payload(repairs)
     repair_by_id = {_repair_id(repair): repair for repair in repair_entries}
@@ -224,7 +246,7 @@ def apply_transcript_repairs(
         if repair is None:
             quality["repair_status"] = (
                 "raw_preserved"
-                if raw_id in reviewed or canonical_id in reviewed
+                if assume_reviewed or raw_id in reviewed or canonical_id in reviewed
                 else "unreviewed"
             )
         else:

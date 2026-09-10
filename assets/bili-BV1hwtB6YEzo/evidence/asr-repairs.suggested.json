@@ -1,0 +1,1570 @@
+[
+  {
+    "evidence_id": "raw-tr-000001",
+    "original_content": "三年少賣10億元",
+    "repaired_content": "三年少卖10亿元",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000002",
+    "original_content": "從國民飲料到被年輕人抛棄",
+    "repaired_content": "从国民饮料到被年轻人抛弃",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000003",
+    "original_content": "王老吉涼茶",
+    "repaired_content": "王老吉凉茶",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000004",
+    "original_content": "為什麼喝得人越來越少",
+    "repaired_content": "为什幺喝得人越来越少",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000005",
+    "original_content": "做起來了茶",
+    "repaired_content": "做起来了茶",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000006",
+    "original_content": "你上次喝王老吉是殺手",
+    "repaired_content": "你上次喝王老吉是杀手",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000007",
+    "original_content": "我至少都有一兩年沒喝過了",
+    "repaired_content": "我至少都有一两年没喝过了",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000008",
+    "original_content": "廣前推十幾年",
+    "repaired_content": "广前推十几年",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000009",
+    "original_content": "這罐涼茶有多火呢",
+    "repaired_content": "这罐凉茶有多火呢",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000011",
+    "original_content": "王老吉年銷售偷破200個億",
+    "repaired_content": "王老吉年销售额突破200个亿",
+    "confidence": "medium",
+    "reason": "繁体转简体; 年销售偷破 -> 年销售额突破",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000012",
+    "original_content": "我們按三塊為官來計算的話",
+    "repaired_content": "我们按三块为官来计算的话",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000013",
+    "original_content": "相當於一年賣了57億罐",
+    "repaired_content": "相当于一年卖了57亿罐",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000014",
+    "original_content": "平均每個中國人喝了4罐",
+    "repaired_content": "平均每个中国人喝了4罐",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000015",
+    "original_content": "但那有句廣告辭職這麼說的",
+    "repaired_content": "但那有句广告辞职这么说的",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000016",
+    "original_content": "中國美賣10罐涼茶",
+    "repaired_content": "中国美卖10罐凉茶",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000017",
+    "original_content": "七罐王老奇是脱脱的国民两查",
+    "repaired_content": "七罐王老吉是脱脱的国民凉茶",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉; 两查 -> 凉茶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000020",
+    "original_content": "2013年王老奇大政看公司引售100个亿",
+    "repaired_content": "2013年王老吉大健康公司营收100个亿",
+    "confidence": "medium",
+    "reason": "大政看公司 -> 大健康公司; 王老奇 -> 王老吉; 引售 -> 营收",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000022",
+    "original_content": "两查业务就占了90%",
+    "repaired_content": "凉茶业务就占了90%",
+    "confidence": "medium",
+    "reason": "两查 -> 凉茶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000023",
+    "original_content": "相当于这一年王老奇两查卖了90亿元左右",
+    "repaired_content": "相当于这一年王老吉凉茶卖了90亿元左右",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉; 两查 -> 凉茶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000033",
+    "original_content": "选择王老级作为截可首选的比例",
+    "repaired_content": "选择王老吉作为截可首选的比例",
+    "confidence": "medium",
+    "reason": "王老级 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000038",
+    "original_content": "喝过的鱼鸭类紧张中",
+    "repaired_content": "喝过的饮料类紧张中",
+    "confidence": "medium",
+    "reason": "鱼鸭类 -> 饮料类",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000039",
+    "original_content": "两茶只占了10%",
+    "repaired_content": "凉茶只占了10%",
+    "confidence": "medium",
+    "reason": "两茶 -> 凉茶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000041",
+    "original_content": "两茶就个品类是怎么活起来的",
+    "repaired_content": "凉茶就个品类是怎么活起来的",
+    "confidence": "medium",
+    "reason": "两茶 -> 凉茶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000043",
+    "original_content": "中国鱼鸭市场发生着什么样的变化呢",
+    "repaired_content": "中国饮料市场发生着什么样的变化呢",
+    "confidence": "medium",
+    "reason": "鱼鸭市场 -> 饮料市场",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000047",
+    "original_content": "我們現在講王老奇的來時錄",
+    "repaired_content": "我们现在讲王老吉的来时录",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000048",
+    "original_content": "他的歷史最早可以追溯到一般二八年",
+    "repaired_content": "他的历史最早可以追溯到一般二八年",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000049",
+    "original_content": "清朝到廣林縣",
+    "repaired_content": "清朝到广林县",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000050",
+    "original_content": "當時廣州人王澤邦在街頭賣糧茶",
+    "repaired_content": "当时广州人王泽邦在街头卖凉茶",
+    "confidence": "medium",
+    "reason": "糧茶 -> 凉茶; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000051",
+    "original_content": "因為製好了不少人的污液",
+    "repaired_content": "因为制好了不少人的污液",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000052",
+    "original_content": "名聲大噪",
+    "repaired_content": "名声大噪",
+    "confidence": "medium",
+    "reason": "名聲大噪 -> 名声大噪",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000053",
+    "original_content": "王澤邦的辱名叫阿奇",
+    "repaired_content": "王泽邦的乳名叫阿奇",
+    "confidence": "medium",
+    "reason": "辱名 -> 乳名; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000054",
+    "original_content": "所以大家就把他的糧茶稱為王老吉糧茶",
+    "repaired_content": "所以大家就把他的凉茶称为王老吉凉茶",
+    "confidence": "medium",
+    "reason": "糧茶 -> 凉茶; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000055",
+    "original_content": "後來幾斤展轉",
+    "repaired_content": "后来几斤展转",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000056",
+    "original_content": "被輸歸國有",
+    "repaired_content": "被收归国有",
+    "confidence": "medium",
+    "reason": "被輸歸國有 -> 被收归国有",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000057",
+    "original_content": "山標歸屬於廣藥集團",
+    "repaired_content": "商标归属于广药集团",
+    "confidence": "medium",
+    "reason": "山標 -> 商标; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000058",
+    "original_content": "但真正把王老奇從理南街頭推向全國神壇的",
+    "repaired_content": "但真正把王老吉从理南街头推向全国神坛的",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000059",
+    "original_content": "是香港紅道集團",
+    "repaired_content": "是香港鸿道集团",
+    "confidence": "medium",
+    "reason": "紅道集團 -> 鸿道集团",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000060",
+    "original_content": "或者說現在加多保母公司的老闆陳鴻道",
+    "repaired_content": "或者说现在加多宝母公司的老板陈鸿道",
+    "confidence": "medium",
+    "reason": "加多保 -> 加多宝; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000061",
+    "original_content": "1995年陳鴻道從廣藥集團手裡",
+    "repaired_content": "1995年陈鸿道从广药集团手里",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000062",
+    "original_content": "租下了王老集紅冠商標的使用權",
+    "repaired_content": "租下了王老吉红罐商标的使用权",
+    "confidence": "medium",
+    "reason": "王老集 -> 王老吉; 繁体转简体; 红冠 -> 红罐",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000063",
+    "original_content": "對呀這花錢租下了使用權",
+    "repaired_content": "对呀这花钱租下了使用权",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000064",
+    "original_content": "所有權還是廣藥集團的",
+    "repaired_content": "所有权还是广药集团的",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000065",
+    "original_content": "那時候的王老集",
+    "repaired_content": "那时候的王老吉",
+    "confidence": "medium",
+    "reason": "王老集 -> 王老吉; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000066",
+    "original_content": "只是一個在廣東地區有點名氣的區域性品牌",
+    "repaired_content": "只是一个在广东地区有点名气的区域性品牌",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000067",
+    "original_content": "連銷售了不過幾千萬",
+    "repaired_content": "连销售了不过几千万",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000068",
+    "original_content": "之後陳鴻道就請了一家資群公司做定位",
+    "repaired_content": "之后陈鸿道就请了一家咨询公司做定位",
+    "confidence": "medium",
+    "reason": "繁体转简体; 资群公司 -> 咨询公司",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000069",
+    "original_content": "結果很出了那句改變中國引讓使的廣告語",
+    "repaired_content": "结果很出了那句改变中国饮料史的广告语",
+    "confidence": "medium",
+    "reason": "繁体转简体; 引让使 -> 饮料史",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000070",
+    "original_content": "怕上火和王老集",
+    "repaired_content": "怕上火喝王老吉",
+    "confidence": "medium",
+    "reason": "怕上火和王老集 -> 怕上火喝王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000071",
+    "original_content": "這句廣告語牛在哪呢",
+    "repaired_content": "这句广告语牛在哪呢",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000072",
+    "original_content": "他把良茶從中央的飲品",
+    "repaired_content": "他把凉茶从中央的饮品",
+    "confidence": "medium",
+    "reason": "良茶 -> 凉茶; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000073",
+    "original_content": "變成了預防上火的功能飲料",
+    "repaired_content": "变成了预防上火的功能饮料",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000074",
+    "original_content": "這一下子受眾就多起來了",
+    "repaired_content": "这一下子受众就多起来了",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000075",
+    "original_content": "就拿廣東來說",
+    "repaired_content": "就拿广东来说",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000076",
+    "original_content": "胡籠痛、嗓子雅、口臭、施民等各種這狀",
+    "repaired_content": "喉咙痛、嗓子哑、口臭、失眠等各种这状",
+    "confidence": "medium",
+    "reason": "胡籠痛 -> 喉咙痛; 嗓子雅 -> 嗓子哑; 施民 -> 失眠; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000077",
+    "original_content": "都可以規界維俱",
+    "repaired_content": "都可以规界维俱",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000078",
+    "original_content": "你熱氣我哦",
+    "repaired_content": "你热气我哦",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000079",
+    "original_content": "上火又是全中國人都能聽懂的概念",
+    "repaired_content": "上火又是全中国人都能听懂的概念",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000080",
+    "original_content": "吃火鍋、熬夜、吃燒烤都可能會上火",
+    "repaired_content": "吃火锅、熬夜、吃烧烤都可能会上火",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000081",
+    "original_content": "那怕上火嗎?",
+    "repaired_content": "那怕上火吗?",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000082",
+    "original_content": "那就來一罐《華老集》吧",
+    "repaired_content": "那就来一罐《王老吉》吧",
+    "confidence": "medium",
+    "reason": "華老集 -> 王老吉; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000083",
+    "original_content": "這時候眾一下次就變成了《十幾中國人》",
+    "repaired_content": "这时候众一下次就变成了《十几中国人》",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000084",
+    "original_content": "更關鍵的是",
+    "repaired_content": "更关键的是",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000085",
+    "original_content": "在21世紀出中國廣告市場中",
+    "repaired_content": "在21世纪出中国广告市场中",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000086",
+    "original_content": "電視廣告還是王者",
+    "repaired_content": "电视广告还是王者",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000087",
+    "original_content": "王老奇就抓住了机会2007年",
+    "repaired_content": "王老吉就抓住了机会2007年",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000088",
+    "original_content": "砸下了4.2亿天界广告费",
+    "repaired_content": "砸下了4.2亿天价广告费",
+    "confidence": "medium",
+    "reason": "天界广告费 -> 天价广告费",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000089",
+    "original_content": "一局成为央视广告标亡",
+    "repaired_content": "一局成为央视广告标王",
+    "confidence": "medium",
+    "reason": "广告标亡 -> 广告标王",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000091",
+    "original_content": "2007年王老奇销售额是50亿左右",
+    "repaired_content": "2007年王老吉销售额是50亿左右",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000092",
+    "original_content": "到2008年就直接犯了一番",
+    "repaired_content": "到2008年就直接翻了一番",
+    "confidence": "medium",
+    "reason": "犯了一番 -> 翻了一番",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000094",
+    "original_content": "2001年王老奇商标被估值1080个亿",
+    "repaired_content": "2001年王老吉商标被估值1080个亿",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000095",
+    "original_content": "但是就在王老奇最疯关的时候",
+    "repaired_content": "但是就在王老吉最风光的时候",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉; 疯关 -> 风光",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000096",
+    "original_content": "一场矿正19的伤战爆发了",
+    "repaired_content": "一场矿正19的商战爆发了",
+    "confidence": "medium",
+    "reason": "伤战 -> 商战",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000098",
+    "original_content": "王老奇商标的所有者是管要集团",
+    "repaired_content": "王老吉商标的所有者是广药集团",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉; 管要 -> 广药",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000100",
+    "original_content": "对于和玩老机有广要体系经营",
+    "repaired_content": "对于和王老吉有广药体系经营",
+    "confidence": "medium",
+    "reason": "玩老机 -> 王老吉; 广要 -> 广药",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000101",
+    "original_content": "红贯玩老机则授权给红道集团",
+    "repaired_content": "红罐王老吉则授权给鸿道集团",
+    "confidence": "medium",
+    "reason": "红道集团 -> 鸿道集团; 玩老机 -> 王老吉; 红贯 -> 红罐",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000102",
+    "original_content": "尤其下加多保负责生产",
+    "repaired_content": "尤其下加多宝负责生产",
+    "confidence": "medium",
+    "reason": "加多保 -> 加多宝",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000105",
+    "original_content": "2008年红贯玩老机销售额突破了100个亿",
+    "repaired_content": "2008年红罐王老吉销售额突破了100个亿",
+    "confidence": "medium",
+    "reason": "玩老机 -> 王老吉; 红贯 -> 红罐",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000106",
+    "original_content": "广要当年收到的商标使用费事多少呢",
+    "repaired_content": "广药当年收到的商标使用费事多少呢",
+    "confidence": "medium",
+    "reason": "广要 -> 广药",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000109",
+    "original_content": "而按照国际管理品牌租领费用是2%到8%",
+    "repaired_content": "而按照国际惯例品牌租赁费用是2%到8%",
+    "confidence": "medium",
+    "reason": "国际管理品牌 -> 国际惯例品牌; 品牌租领费用 -> 品牌租赁费用",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000110",
+    "original_content": "广要一看",
+    "repaired_content": "广药一看",
+    "confidence": "medium",
+    "reason": "广要 -> 广药",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000114",
+    "original_content": "原先的商票许可和同在2010年就到期了",
+    "repaired_content": "原先的商标许可合同在2010年就到期了",
+    "confidence": "medium",
+    "reason": "商票许可和同 -> 商标许可合同",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000118",
+    "original_content": "所以黄耀就认为",
+    "repaired_content": "所以广药就认为",
+    "confidence": "medium",
+    "reason": "黄耀 -> 广药",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000121",
+    "original_content": "加多保也急了",
+    "repaired_content": "加多宝也急了",
+    "confidence": "medium",
+    "reason": "加多保 -> 加多宝",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000126",
+    "original_content": "黄耀就提起重裁",
+    "repaired_content": "广药就提起仲裁",
+    "confidence": "medium",
+    "reason": "黄耀 -> 广药; 重裁 -> 仲裁",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000129",
+    "original_content": "主要的质力有三个",
+    "repaired_content": "主要的争议有三个",
+    "confidence": "medium",
+    "reason": "质力 -> 争议",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000132",
+    "original_content": "这次决定了加多保能不能继续用广老级商标",
+    "repaired_content": "这次决定了加多宝能不能继续用王老吉商标",
+    "confidence": "medium",
+    "reason": "广老级 -> 王老吉; 加多保 -> 加多宝",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000134",
+    "original_content": "无效 加多保",
+    "repaired_content": "无效 加多宝",
+    "confidence": "medium",
+    "reason": "加多保 -> 加多宝",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000135",
+    "original_content": "进一用广老级商标",
+    "repaired_content": "进一用王老吉商标",
+    "confidence": "medium",
+    "reason": "广老级 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000136",
+    "original_content": "预杀 贵文奈",
+    "repaired_content": "败诉 贵文奈",
+    "confidence": "medium",
+    "reason": "预杀 -> 败诉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000137",
+    "original_content": "加多保就改名为加多保量查",
+    "repaired_content": "加多宝就改名为加多宝凉茶",
+    "confidence": "medium",
+    "reason": "加多保 -> 加多宝; 量查 -> 凉茶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000139",
+    "original_content": "也从商标变成了红广玩老级过去激烈的山爷价值",
+    "repaired_content": "也从商标变成了红罐玩老级过去激烈的商业价值",
+    "confidence": "medium",
+    "reason": "红广 -> 红罐; 山爷 -> 商业",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000143",
+    "original_content": "加多保改名之后",
+    "repaired_content": "加多宝改名之后",
+    "confidence": "medium",
+    "reason": "加多保 -> 加多宝",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000144",
+    "original_content": "广告企业改成了全国下辆领先的红广量查",
+    "repaired_content": "广告企业改成了全国下辆领先的红罐凉茶",
+    "confidence": "medium",
+    "reason": "量查 -> 凉茶; 红广 -> 红罐",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000145",
+    "original_content": "改名加多保",
+    "repaired_content": "改名加多宝",
+    "confidence": "medium",
+    "reason": "加多保 -> 加多宝",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000146",
+    "original_content": "但广要不干了",
+    "repaired_content": "但广药不干了",
+    "confidence": "medium",
+    "reason": "广要 -> 广药",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000147",
+    "original_content": "小两里现在的产品叫王老级啊",
+    "repaired_content": "小两里现在的产品叫王老吉啊",
+    "confidence": "medium",
+    "reason": "王老级 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000148",
+    "original_content": "关点加多保啥设",
+    "repaired_content": "关点加多宝啥设",
+    "confidence": "medium",
+    "reason": "加多保 -> 加多宝",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000153",
+    "original_content": "最终2019年最高法院财定",
+    "repaired_content": "最终2019年最高法院裁定",
+    "confidence": "medium",
+    "reason": "财定 -> 裁定",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000154",
+    "original_content": "这表述符合客官事实",
+    "repaired_content": "这表述符合客观事实",
+    "confidence": "medium",
+    "reason": "客官事实 -> 客观事实",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000155",
+    "original_content": "不够成虚假宣传",
+    "repaired_content": "不构成虚假宣传",
+    "confidence": "medium",
+    "reason": "不够成 -> 不构成",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000157",
+    "original_content": "谁可以用经典的红贯包装呢",
+    "repaired_content": "谁可以用经典的红罐包装呢",
+    "confidence": "medium",
+    "reason": "红贯 -> 红罐",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000160",
+    "original_content": "再不损害他人合法权益的亲戚下",
+    "repaired_content": "再不损害他人合法权益的前提下",
+    "confidence": "medium",
+    "reason": "亲戚下 -> 前提下",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000164",
+    "original_content": "王老级的加多保",
+    "repaired_content": "王老吉的加多宝",
+    "confidence": "medium",
+    "reason": "王老级 -> 王老吉; 加多保 -> 加多宝",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000166",
+    "original_content": "索配金額從幾個億到十幾個億不等",
+    "repaired_content": "索赔金额从几个亿到十几个亿不等",
+    "confidence": "medium",
+    "reason": "索配 -> 索赔; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000167",
+    "original_content": "從市場出現來看",
+    "repaired_content": "从市场出现来看",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000168",
+    "original_content": "王老吉是更省一籌",
+    "repaired_content": "王老吉是更胜一筹",
+    "confidence": "medium",
+    "reason": "更省一籌 -> 更胜一筹",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000169",
+    "original_content": "出於顯示",
+    "repaired_content": "出于显示",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000171",
+    "original_content": "兩茶市場下手額約為450億元",
+    "repaired_content": "凉茶市场销售额约为450亿元",
+    "confidence": "medium",
+    "reason": "下手額 -> 销售额; 兩茶 -> 凉茶; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000173",
+    "original_content": "王老吉占比約44%",
+    "repaired_content": "王老吉占比约44%",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000174",
+    "original_content": "加多保是25%",
+    "repaired_content": "加多宝是25%",
+    "confidence": "medium",
+    "reason": "加多保 -> 加多宝",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000175",
+    "original_content": "但你以為加多保是最大數價嗎",
+    "repaired_content": "但你以为加多宝是最大数价吗",
+    "confidence": "medium",
+    "reason": "加多保 -> 加多宝; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000177",
+    "original_content": "最慘的其實是老三和提振",
+    "repaired_content": "最惨的其实是老三和其正",
+    "confidence": "medium",
+    "reason": "和提振 -> 和其正; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000178",
+    "original_content": "在2010年那會",
+    "repaired_content": "在2010年那会",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000179",
+    "original_content": "和其證年下手額突破20億元",
+    "repaired_content": "和其正年销售额突破20亿元",
+    "confidence": "medium",
+    "reason": "和其證 -> 和其正; 下手額 -> 销售额; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000180",
+    "original_content": "穩居行業第二",
+    "repaired_content": "稳居行业第二",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000181",
+    "original_content": "僅次於王老吉",
+    "repaired_content": "仅次于王老吉",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000182",
+    "original_content": "但在王老吉的加多保",
+    "repaired_content": "但在王老吉的加多宝",
+    "confidence": "medium",
+    "reason": "加多保 -> 加多宝",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000186",
+    "original_content": "合习振",
+    "repaired_content": "和其正",
+    "confidence": "medium",
+    "reason": "合习振 -> 和其正",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000188",
+    "original_content": "这场持续十多年的伤战",
+    "repaired_content": "这场持续十多年的商战",
+    "confidence": "medium",
+    "reason": "伤战 -> 商战",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000191",
+    "original_content": "云其大昌",
+    "repaired_content": "元气大伤",
+    "confidence": "medium",
+    "reason": "云其大昌 -> 元气大伤",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000192",
+    "original_content": "王老奇虽然拿回了商标",
+    "repaired_content": "王老吉虽然拿回了商标",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000198",
+    "original_content": "为什么年轻人不爱喝两茶了呢",
+    "repaired_content": "为什么年轻人不爱喝凉茶了呢",
+    "confidence": "medium",
+    "reason": "两茶 -> 凉茶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000199",
+    "original_content": "專於有3個",
+    "repaired_content": "专于有3个",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000200",
+    "original_content": "首先是糖份抬高和健康趨勢背道而馳",
+    "repaired_content": "首先是糖分抬高和健康趋势背道而驰",
+    "confidence": "medium",
+    "reason": "糖份 -> 糖分; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000201",
+    "original_content": "一萬480毫升的娃娃姆吉良茶",
+    "repaired_content": "一万480毫升的王老吉凉茶",
+    "confidence": "medium",
+    "reason": "娃娃姆吉 -> 王老吉; 良茶 -> 凉茶; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000202",
+    "original_content": "韓唐亮有多少呢",
+    "repaired_content": "含糖量有多少呢",
+    "confidence": "medium",
+    "reason": "韓唐亮 -> 含糖量",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000204",
+    "original_content": "而一塊方糖大概是4克",
+    "repaired_content": "而一块方糖大概是4克",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000205",
+    "original_content": "相當於一瓶娃娃吉裡面有10塊方糖",
+    "repaired_content": "相当于一瓶王老吉里面有10块方糖",
+    "confidence": "medium",
+    "reason": "娃娃吉 -> 王老吉; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000207",
+    "original_content": "現在被列店冰櫃裡面",
+    "repaired_content": "现在被列店冰柜里面",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000208",
+    "original_content": "實行啥飲料呢",
+    "repaired_content": "实行啥饮料呢",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000209",
+    "original_content": "東方說業",
+    "repaired_content": "东方树叶",
+    "confidence": "medium",
+    "reason": "東方說業 -> 东方树叶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000210",
+    "original_content": "3.0烏龍茶",
+    "repaired_content": "三得利乌龙茶",
+    "confidence": "medium",
+    "reason": "3.0烏龍茶 -> 三得利乌龙茶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000211",
+    "original_content": "氣泡水",
+    "repaired_content": "气泡水",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000213",
+    "original_content": "王老吉這個含糖量就有點各各不入了",
+    "repaired_content": "王老吉这个含糖量就有点各各不入了",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000214",
+    "original_content": "那為了迎合趨勢",
+    "repaired_content": "那为了迎合趋势",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000215",
+    "original_content": "王老吉也退出過無糖版的原味良茶",
+    "repaired_content": "王老吉也退出过无糖版的原味凉茶",
+    "confidence": "medium",
+    "reason": "原味良茶 -> 原味凉茶; 無糖版 -> 无糖版; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000216",
+    "original_content": "但是反饋是兩極分化",
+    "repaired_content": "但是反馈是两极分化",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000217",
+    "original_content": "有些非主材說",
+    "repaired_content": "有些非主材说",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000218",
+    "original_content": "沒有糖的口感喝起來苦澀",
+    "repaired_content": "没有糖的口感喝起来苦涩",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000219",
+    "original_content": "茶要為過於濃烈了",
+    "repaired_content": "茶要为过于浓烈了",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000220",
+    "original_content": "而且價格還更貴",
+    "repaired_content": "而且价格还更贵",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000221",
+    "original_content": "這就很嚴格了",
+    "repaired_content": "这就很严格了",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000223",
+    "original_content": "不加糖又太難喝了",
+    "repaired_content": "不加糖又太难喝了",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000224",
+    "original_content": "再來說",
+    "repaired_content": "再来说",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000225",
+    "original_content": "這樣火這個點",
+    "repaired_content": "这样火这个点",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000226",
+    "original_content": "王老吉量茶的配料表裡面有橘花",
+    "repaired_content": "王老吉量茶的配料表里面有菊花",
+    "confidence": "medium",
+    "reason": "橘花 -> 菊花; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000227",
+    "original_content": "金銀花",
+    "repaired_content": "金银花",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000228",
+    "original_content": "甘草等重要材",
+    "repaired_content": "甘草等中药材",
+    "confidence": "medium",
+    "reason": "重要材 -> 中药材",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000229",
+    "original_content": "這其實在中意裡確實有清熱解讀的功效",
+    "repaired_content": "这其实在中医里确实有清热解毒的功效",
+    "confidence": "medium",
+    "reason": "清熱解讀 -> 清热解毒; 中意裡 -> 中医里; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000230",
+    "original_content": "但别忘了,它本质上是一罐加了大量白沙糖的饮料",
+    "repaired_content": "但别忘了,它本质上是一罐加了大量白砂糖的饮料",
+    "confidence": "medium",
+    "reason": "白沙糖 -> 白砂糖",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000231",
+    "original_content": "只望一罐高糖饮料来降火",
+    "repaired_content": "指望一罐高糖饮料来降火",
+    "confidence": "medium",
+    "reason": "只望一罐 -> 指望一罐",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000235",
+    "original_content": "比如说苦瓜和半沙两茶",
+    "repaired_content": "比如说苦瓜和半沙凉茶",
+    "confidence": "medium",
+    "reason": "两茶 -> 凉茶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000237",
+    "original_content": "黄红烧排的两茶店",
+    "repaired_content": "黄红烧排的凉茶店",
+    "confidence": "medium",
+    "reason": "两茶 -> 凉茶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000240",
+    "original_content": "两茶直接被年轻人抛弃的第二大原因是",
+    "repaired_content": "凉茶直接被年轻人抛弃的第二大原因是",
+    "confidence": "medium",
+    "reason": "两茶 -> 凉茶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000242",
+    "original_content": "大家啥时候会买王老媳呢",
+    "repaired_content": "大家啥时候会买王老吉呢",
+    "confidence": "medium",
+    "reason": "王老媳 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000245",
+    "original_content": "名字王老祭又带个极字",
+    "repaired_content": "名字王老吉又带个极字",
+    "confidence": "medium",
+    "reason": "王老祭 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000247",
+    "original_content": "所以我们看到王老祭的销量其实有明显的继节性波动",
+    "repaired_content": "所以我们看到王老吉的销量其实有明显的季节性波动",
+    "confidence": "medium",
+    "reason": "继节性波动 -> 季节性波动; 王老祭 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000248",
+    "original_content": "在2023年才爆里面提到了这一点",
+    "repaired_content": "在2023年财报里面提到了这一点",
+    "confidence": "medium",
+    "reason": "才爆里面 -> 财报里面",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000249",
+    "original_content": "天气颜色时销量会有所增长",
+    "repaired_content": "天气炎热时销量会有所增长",
+    "confidence": "medium",
+    "reason": "天气颜色时 -> 天气炎热时",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000253",
+    "original_content": "去吃火锅吧 酸梅汤 叶汁 洞奶 多能喝",
+    "repaired_content": "去吃火锅吧 酸梅汤 椰汁 豆奶 多能喝",
+    "confidence": "medium",
+    "reason": "叶汁 -> 椰汁; 洞奶 -> 豆奶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000254",
+    "original_content": "王老师并不是必选项",
+    "repaired_content": "王老吉并不是必选项",
+    "confidence": "medium",
+    "reason": "王老师 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000255",
+    "original_content": "再来看李品市场",
+    "repaired_content": "再来看礼品市场",
+    "confidence": "medium",
+    "reason": "李品市场 -> 礼品市场",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000256",
+    "original_content": "现在年货李品的选择也越来越多了",
+    "repaired_content": "现在年货礼品的选择也越来越多了",
+    "confidence": "medium",
+    "reason": "年货李品 -> 年货礼品",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000257",
+    "original_content": "什么牛奶里和 鸡锅里和 高端水果都在分是这款蛋糕",
+    "repaired_content": "什么牛奶里和 鸡锅里和 高端水果都在分食这块蛋糕",
+    "confidence": "medium",
+    "reason": "分是这款蛋糕 -> 分食这块蛋糕",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000258",
+    "original_content": "王老师现在越来越少人喝",
+    "repaired_content": "王老吉现在越来越少人喝",
+    "confidence": "medium",
+    "reason": "王老师 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000259",
+    "original_content": "还有第三代原因是品牌老化",
+    "repaired_content": "还有第三个原因是品牌老化",
+    "confidence": "medium",
+    "reason": "第三代原因 -> 第三个原因",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000262",
+    "original_content": "品牙市场是发生了翻天腹地的变化",
+    "repaired_content": "饮料市场是发生了翻天覆地的变化",
+    "confidence": "medium",
+    "reason": "品牙市场 -> 饮料市场; 翻天腹地 -> 翻天覆地",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000265",
+    "original_content": "概念是层数不穷",
+    "repaired_content": "概念是层出不穷",
+    "confidence": "medium",
+    "reason": "层数不穷 -> 层出不穷",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000266",
+    "original_content": "反光王老师呢",
+    "repaired_content": "反光王老吉呢",
+    "confidence": "medium",
+    "reason": "王老师 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000268",
+    "original_content": "王老奇自己也不是没努力过",
+    "repaired_content": "王老吉自己也不是没努力过",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000269",
+    "original_content": "但好像越努力越新酸",
+    "repaired_content": "但好像越努力越心酸",
+    "confidence": "medium",
+    "reason": "越新酸 -> 越心酸",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000270",
+    "original_content": "2015年他关名了奔跑814",
+    "repaired_content": "2015年他关名了奔跑吧兄弟",
+    "confidence": "medium",
+    "reason": "奔跑814 -> 奔跑吧兄弟",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000273",
+    "original_content": "前脚签下佔领后后脚又光轩哈岚的",
+    "repaired_content": "前脚签下占领后后脚又光轩哈岚的",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000276",
+    "original_content": "2015年王老奇大健康公司",
+    "repaired_content": "2015年王老吉大健康公司",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000277",
+    "original_content": "应收87.86亿元",
+    "repaired_content": "营收87.86亿元",
+    "confidence": "medium",
+    "reason": "应收87.86亿元 -> 营收87.86亿元",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000278",
+    "original_content": "同比只威增了0.23%",
+    "repaired_content": "同比只微增了0.23%",
+    "confidence": "medium",
+    "reason": "同比只威增 -> 同比只微增",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000279",
+    "original_content": "王老奇还尝试过口味创新",
+    "repaired_content": "王老吉还尝试过口味创新",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000287",
+    "original_content": "南赫的吐槽是不在少数",
+    "repaired_content": "难喝的吐槽是不在少数",
+    "confidence": "medium",
+    "reason": "南赫的吐槽 -> 难喝的吐槽",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000290",
+    "original_content": "居然向南策所小便吃清潔球",
+    "repaired_content": "居然向南策所小便吃清洁球",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000295",
+    "original_content": "其实王老奇的困境",
+    "repaired_content": "其实王老吉的困境",
+    "confidence": "medium",
+    "reason": "王老奇 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000299",
+    "original_content": "无摊查市场规模",
+    "repaired_content": "无糖茶市场规模",
+    "confidence": "medium",
+    "reason": "无摊查 -> 无糖茶",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000301",
+    "original_content": "東方水源們是殺風了",
+    "repaired_content": "东方树叶们是杀风了",
+    "confidence": "medium",
+    "reason": "東方水源 -> 东方树叶; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000303",
+    "original_content": "過能飲料也在崛起",
+    "repaired_content": "功能饮料也在崛起",
+    "confidence": "medium",
+    "reason": "過能飲料 -> 功能饮料",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000304",
+    "original_content": "市場規模突破2,000億",
+    "repaired_content": "市场规模突破2,000亿",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000305",
+    "original_content": "電解置水成為民心產品",
+    "repaired_content": "电解质水成为民心产品",
+    "confidence": "medium",
+    "reason": "電解置水 -> 电解质水; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000306",
+    "original_content": "而兩岔這邊",
+    "repaired_content": "而凉茶这边",
+    "confidence": "medium",
+    "reason": "兩岔 -> 凉茶; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000307",
+    "original_content": "不只是王老基",
+    "repaired_content": "不只是王老吉",
+    "confidence": "medium",
+    "reason": "王老基 -> 王老吉",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000308",
+    "original_content": "整個品類都在踩沙車",
+    "repaired_content": "整个品类都在踩刹车",
+    "confidence": "medium",
+    "reason": "整個品類 -> 整个品类; 踩沙車 -> 踩刹车",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000309",
+    "original_content": "前瞻產業就願允許於顯示",
+    "repaired_content": "前瞻产业就愿允许于显示",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000311",
+    "original_content": "兩岔市場增速是逐年下滑",
+    "repaired_content": "凉茶市场增速是逐年下滑",
+    "confidence": "medium",
+    "reason": "兩岔 -> 凉茶; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000312",
+    "original_content": "回過頭來看",
+    "repaired_content": "回过头来看",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000313",
+    "original_content": "王老基和加多保真的十幾年",
+    "repaired_content": "王老吉和加多宝真的十几年",
+    "confidence": "medium",
+    "reason": "王老基 -> 王老吉; 加多保 -> 加多宝; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000314",
+    "original_content": "真的是一個名字",
+    "repaired_content": "真的是一个名字",
+    "confidence": "medium",
+    "reason": "繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000315",
+    "original_content": "一隻紅貫和過去積累的消費者認知",
+    "repaired_content": "一只红罐和过去积累的消费者认知",
+    "confidence": "medium",
+    "reason": "紅貫 -> 红罐; 繁体转简体",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000316",
+    "original_content": "但就在他們為了舊賬死科的時候",
+    "repaired_content": "但就在他们为了旧账死磕的时候",
+    "confidence": "medium",
+    "reason": "繁体转简体; 旧账死科 -> 旧账死磕",
+    "uncertain": false
+  },
+  {
+    "evidence_id": "raw-tr-000320",
+    "original_content": "这才是山爷世界最让人吸叙的地方",
+    "repaired_content": "这才是商业世界最让人唏嘘的地方",
+    "confidence": "medium",
+    "reason": "山爷 -> 商业; 吸叙 -> 唏嘘",
+    "uncertain": false
+  }
+]

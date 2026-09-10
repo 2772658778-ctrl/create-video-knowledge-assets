@@ -130,6 +130,20 @@ def test_uncertain_ids_imply_the_row_was_reviewed() -> None:
     assert repaired_rows[1]["quality"]["uncertain"] == "true"
 
 
+def test_assume_reviewed_marks_every_remaining_row_as_read() -> None:
+    repaired_rows = apply_transcript_repairs(
+        ROWS,
+        {"repairs": [], "uncertain_ids": ["tr-000002"]},
+        assume_reviewed=True,
+    )
+
+    assert [row["quality"]["repair_status"] for row in repaired_rows] == [
+        "raw_preserved",
+        "raw_preserved",
+    ]
+    assert repaired_rows[1]["quality"]["uncertain"] == "true"
+
+
 def test_uncertain_ids_flag_rows_without_rewriting_them() -> None:
     repaired_rows = apply_transcript_repairs(
         ROWS,
@@ -305,3 +319,38 @@ def test_simplified_normalization_reports_a_missing_dependency(monkeypatch) -> N
 
     with pytest.raises(ValueError, match="zhconv is required"):
         to_simplified("繁體")
+
+
+def test_glossary_and_simplified_normalization_converge(monkeypatch) -> None:
+    """A Simplified key must still match after the Traditional text is converted."""
+    rows = [
+        {
+            "evidence_id": "tr-000001",
+            "origin": "video",
+            "modality": "transcript",
+            "spans": [{"start_ms": 0, "end_ms": 2_000}],
+            "content": "改變中國引讓使的廣告語",  # Traditional "引讓使"
+            "acquisition": "asr",
+        }
+    ]
+    monkeypatch.setitem(
+        __import__("sys").modules,
+        "zhconv",
+        type(
+            "zhconv",
+            (),
+            {
+                "convert": staticmethod(
+                    lambda value, target: value.replace("讓", "让")
+                    .replace("國", "国")
+                    .replace("廣", "广")
+                    .replace("語", "语")
+                    .replace("變", "变")
+                )
+            },
+        ),
+    )
+
+    repairs = suggest_asr_repairs(rows, glossary={"引让使": "饮料史"}, simplified=True)
+
+    assert repairs[0]["repaired_content"] == "改变中国饮料史的广告语"

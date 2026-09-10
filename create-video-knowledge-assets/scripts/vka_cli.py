@@ -183,12 +183,21 @@ def _build_parser() -> argparse.ArgumentParser:
     apply_repairs.add_argument("--repairs", required=True)
     apply_repairs.add_argument("--output", required=True)
     apply_repairs.add_argument(
+        "--uncertain-ids",
+        help="optional JSON array of evidence ids the reviewer read but could not verify",
+    )
+    apply_repairs.add_argument(
         "--parent-prefix",
         default=None,
         help=(
             "strip this prefix from input ids and record the raw id in parent_ids; "
             "use the same value passed to normalize-srt --id-prefix"
         ),
+    )
+    apply_repairs.add_argument(
+        "--assume-reviewed",
+        action="store_true",
+        help="mark unrepaired rows raw_preserved instead of unreviewed; only when the whole transcript was read",
     )
     apply_repairs.set_defaults(func=_run_apply_transcript_repairs)
 
@@ -525,10 +534,19 @@ def _run_apply_transcript_repairs(args: argparse.Namespace) -> int:
     try:
         rows = _read_jsonl(Path(args.timeline))
         repairs = json.loads(Path(args.repairs).read_text(encoding="utf-8-sig"))
+        uncertain_ids = (
+            json.loads(Path(args.uncertain_ids).read_text(encoding="utf-8-sig"))
+            if args.uncertain_ids
+            else None
+        )
+        if uncertain_ids is not None and not isinstance(uncertain_ids, list):
+            raise ValueError("uncertain ids must be a JSON array")
         repaired_rows = apply_transcript_repairs(
             rows,
             repairs,
+            uncertain_ids=uncertain_ids,
             parent_prefix=args.parent_prefix,
+            assume_reviewed=args.assume_reviewed,
         )
         output_path = Path(args.output)
         output_path.parent.mkdir(parents=True, exist_ok=True)

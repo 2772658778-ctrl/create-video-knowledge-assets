@@ -182,7 +182,7 @@
       ]
     },
     "knowledge": {
-      "completed_at": "2026-09-10T09:10:02.616179+00:00",
+      "completed_at": "2026-09-10T13:29:46.955693+00:00",
       "schema_version": "1.1",
       "outputs": [
         {
@@ -203,7 +203,7 @@
         },
         {
           "path": "content/units.jsonl",
-          "sha256": "908e83d63d12a701a44008b84eab7a83cb9aa8b17c01708664fb9f34b1156a2e"
+          "sha256": "6b0b6de645936ddb04270a39008081fab3872f8a68a4639e397bb9e421a9f21f"
         },
         {
           "path": "content/index.json",
