@@ -1,0 +1,56 @@
+{
+  "asset_id": "bili-BV1hwtB6YEzo",
+  "schema_version": "1.1",
+  "source": {
+    "kind": "bilibili",
+    "bvid": "BV1hwtB6YEzo",
+    "selection_required": true,
+    "canonical_url": "https://www.bilibili.com/video/BV1hwtB6YEzo",
+    "asset_id": "bili-BV1hwtB6YEzo"
+  },
+  "input": {
+    "kind": "bilibili",
+    "bvid": "BV1hwtB6YEzo",
+    "selection_required": true,
+    "canonical_url": "https://www.bilibili.com/video/BV1hwtB6YEzo",
+    "asset_id": "bili-BV1hwtB6YEzo"
+  },
+  "config": {
+    "profile": "short-video-script"
+  },
+  "tool_versions": {
+    "asr_backend": "faster-whisper",
+    "asr_model": "base",
+    "asr_device": "cpu",
+    "asr_compute_type": "int8"
+  },
+  "created_at": "2026-09-10T12:59:36.222638+00:00",
+  "stages": {
+    "source": {
+      "completed_at": "2026-09-10T13:05:10.444426+00:00",
+      "schema_version": "1.1",
+      "outputs": [
+        {
+          "path": "source/metadata.json",
+          "sha256": "9770be0d2c0cb76799c29d34b75a1abc992bc36ad18d7ed6bbbc6de4d7f9e8a1"
+        },
+        {
+          "path": "source/cover/BV1hwtB6YEzo.jpg",
+          "sha256": "1dce10fe38b0114edbaf4bdcc796d2cae1f3b82f4ffc4d4462540e85303de880"
+        },
+        {
+          "path": "source/video/BV1hwtB6YEzo.mp4",
+          "sha256": "c15e4d002a4cc593debf8b003b00a08d176a41a35755cdd909a5d9c9183d2ab4"
+        },
+        {
+          "path": "source/asr/audio.16k.wav",
+          "sha256": "757a076093dbd51a06bc8d57cafebbc96bde440c8fc93aca38f4fedfee253ec8"
+        },
+        {
+          "path": "source/asr/audio-faster-base.srt",
+          "sha256": "33e1d03d92f8ed8448a44535ae6c21677d61dd39fd0ed422fa6b2e71a8071a3a"
+        }
+      ]
+    }
+  }
+}

@@ -23,6 +23,11 @@ UNCERTAIN_QUALITY_KEY = "uncertain"
 # says. Citing them cannot make a claim `video_explicit`.
 PROVENANCE_ONLY_MODALITIES = frozenset({"metadata", "audio"})
 
+# A transcript row can ground a `video_explicit` claim only after a reviewer
+# looked at it. `unreviewed` rows are still usable as context, but nobody has
+# vouched for them.
+REVIEWED_STATUSES = frozenset({"repaired", "raw_preserved"})
+
 
 def validate_asset_knowledge(asset: Path | str) -> dict[str, Any]:
     """Return contract and honesty errors for one asset's knowledge layer."""
@@ -41,6 +46,10 @@ def validate_asset_knowledge(asset: Path | str) -> dict[str, Any]:
         for evidence_id, record in evidence.items()
         if evidence_id not in uncertain_ids
         and record["modality"] not in PROVENANCE_ONLY_MODALITIES
+        and (
+            record["modality"] != "transcript"
+            or record["quality"].get("repair_status") in REVIEWED_STATUSES
+        )
     }
 
     units, unit_errors = _read_units(root)

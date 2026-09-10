@@ -89,8 +89,22 @@ def build_asr_repair_prompt(
 
 def suggest_asr_repairs(
     timeline_rows: Sequence[Mapping[str, Any]],
+    *,
+    glossary: Mapping[str, str] | None = None,
+    simplified: bool = False,
 ) -> list[dict[str, object]]:
-    """Return deterministic repair candidates for common ASR mistakes."""
+    """Return deterministic repair candidates for common ASR mistakes.
+
+    `glossary` carries the domain vocabulary of one video. ASR tends to
+    mis-hear the same proper noun over and over ("王老吉" arriving as
+    "王老奇", "王老级", "王老集"), so a small per-run glossary removes most
+    of the repair work without turning it into an opinion about the content.
+
+    `simplified` also normalizes Simplified Chinese. Whisper-class models
+    switch between Traditional and Simplified inside one Chinese transcript,
+    which is a rendering artifact rather than a transcription error.
+    """
+    replacements = _merge_glossary(glossary)
     repairs: list[dict[str, object]] = []
     for row in timeline_rows:
         content = row.get("content")
@@ -99,10 +113,16 @@ def suggest_asr_repairs(
 
         repaired = content
         reasons: list[str] = []
-        for wrong, right in COMMON_ASR_REPAIRS.items():
+        for wrong, right in replacements:
             if wrong in repaired:
                 repaired = repaired.replace(wrong, right)
                 reasons.append(f"{wrong} -> {right}")
+
+        if simplified:
+            converted = to_simplified(repaired)
+            if converted != repaired:
+                repaired = converted
+                reasons.append("繁体转简体")
 
         repaired = _normalize_technical_spacing(repaired)
         if repaired != content:
@@ -119,11 +139,46 @@ def suggest_asr_repairs(
     return repairs
 
 
+def load_glossary(payload: object) -> dict[str, str]:
+    """Validate a per-run ASR glossary."""
+    if not isinstance(payload, Mapping):
+        raise ValueError("glossary must be an object mapping wrong text to right text")
+    glossary: dict[str, str] = {}
+    for wrong, right in payload.items():
+        if not isinstance(wrong, str) or not wrong.strip():
+            raise ValueError("glossary keys must be non-empty strings")
+        if not isinstance(right, str) or not right.strip():
+            raise ValueError(f"glossary value for {wrong!r} must be a non-empty string")
+        glossary[wrong] = right
+    return glossary
+
+
+def to_simplified(value: str) -> str:
+    try:
+        from zhconv import convert  # noqa: PLC0415 - optional dependency
+    except ImportError as exc:
+        raise ValueError(
+            "zhconv is required for simplified normalization; install it in the workspace environment"
+        ) from exc
+    return convert(value, "zh-cn")
+
+
+def _merge_glossary(
+    glossary: Mapping[str, str] | None,
+) -> list[tuple[str, str]]:
+    merged = dict(COMMON_ASR_REPAIRS)
+    if glossary:
+        merged.update(glossary)
+    # Longer keys first so "王老吉凉茶" is applied before "王老吉".
+    return sorted(merged.items(), key=lambda item: len(item[0]), reverse=True)
+
+
 def apply_transcript_repairs(
     timeline_rows: Sequence[Mapping[str, Any]],
     repairs: Sequence[Mapping[str, Any]] | Mapping[str, Any],
     *,
     uncertain_ids: Sequence[str] | None = None,
+    reviewed_ids: Sequence[str] | None = None,
     parent_prefix: str | None = None,
 ) -> list[dict[str, object]]:
     """Turn a raw transcript timeline into the canonical timeline.
@@ -134,12 +189,22 @@ def apply_transcript_repairs(
     `vka normalize-srt --id-prefix`, canonical rows drop the prefix and record
     the raw identifier in `parent_ids`; without it the canonical row would cite
     itself and the provenance chain would be meaningless.
+
+    Rows are labeled honestly: `repaired` (the reviewer changed the text),
+    `raw_preserved` (the reviewer read it and kept it), or `unreviewed` (nobody
+    looked at it). Review cost then tracks what the run actually cites instead
+    of the length of the transcript.
     """
-    repair_entries, payload_uncertain = split_repair_payload(repairs)
+    repair_entries, payload_uncertain, payload_reviewed = split_repair_payload(repairs)
     repair_by_id = {_repair_id(repair): repair for repair in repair_entries}
     uncertain = set(payload_uncertain)
     for value in uncertain_ids or ():
         uncertain.add(_required_id(value, "uncertain id"))
+    reviewed = set(payload_reviewed)
+    for value in reviewed_ids or ():
+        reviewed.add(_required_id(value, "reviewed id"))
+    reviewed.update(repair_by_id)
+    reviewed.update(uncertain)
 
     output: list[dict[str, object]] = []
     canonical_ids: set[str] = set()
@@ -157,7 +222,11 @@ def apply_transcript_repairs(
         repair = repair_by_id.get(raw_id) or repair_by_id.get(canonical_id)
         quality = dict(copied.get("quality") or {})
         if repair is None:
-            quality["repair_status"] = "raw_preserved"
+            quality["repair_status"] = (
+                "raw_preserved"
+                if raw_id in reviewed or canonical_id in reviewed
+                else "unreviewed"
+            )
         else:
             original = copied.get("content")
             repaired = repair.get("repaired_content")
@@ -183,10 +252,11 @@ def apply_transcript_repairs(
     missing_ids = set(repair_by_id) - known_ids
     if missing_ids:
         raise ValueError(f"repairs reference missing evidence ids: {', '.join(sorted(missing_ids))}")
-    unknown_uncertain = uncertain - known_ids
-    if unknown_uncertain:
+    unknown_ids = (uncertain | reviewed) - known_ids
+    if unknown_ids:
         raise ValueError(
-            f"uncertain ids reference missing evidence ids: {', '.join(sorted(unknown_uncertain))}"
+            f"reviewed or uncertain ids reference missing evidence ids: "
+            f"{', '.join(sorted(unknown_ids))}"
         )
 
     return output
@@ -194,17 +264,20 @@ def apply_transcript_repairs(
 
 def split_repair_payload(
     payload: object,
-) -> tuple[list[Mapping[str, Any]], list[str]]:
-    """Accept either a repairs array or ``{"repairs": [], "uncertain_ids": []}``.
+) -> tuple[list[Mapping[str, Any]], list[str], list[str]]:
+    """Accept either a repairs array or an object payload.
 
     The object form lets a reviewer flag rows it cannot verify without
-    inventing a rewrite for every one of them.
+    inventing a rewrite for every one of them:
+
+    ``{"repairs": [...], "reviewed_ids": [...], "uncertain_ids": [...]}``
     """
     if isinstance(payload, Mapping):
         entries = payload.get("repairs", [])
         uncertain = payload.get("uncertain_ids", [])
+        reviewed = payload.get("reviewed_ids", [])
     elif isinstance(payload, Sequence) and not isinstance(payload, (str, bytes)):
-        entries, uncertain = payload, []
+        entries, uncertain, reviewed = payload, [], []
     else:
         raise ValueError("repairs must be an array or an object with a repairs array")
 
@@ -212,9 +285,15 @@ def split_repair_payload(
         raise ValueError("repairs must be an array")
     if not isinstance(uncertain, Sequence) or isinstance(uncertain, (str, bytes)):
         raise ValueError("uncertain_ids must be an array")
+    if not isinstance(reviewed, Sequence) or isinstance(reviewed, (str, bytes)):
+        raise ValueError("reviewed_ids must be an array")
     if any(not isinstance(entry, Mapping) for entry in entries):
         raise ValueError("each repair must be an object")
-    return list(entries), [_required_id(value, "uncertain id") for value in uncertain]
+    return (
+        list(entries),
+        [_required_id(value, "uncertain id") for value in uncertain],
+        [_required_id(value, "reviewed id") for value in reviewed],
+    )
 
 
 def _canonical_id(raw_id: str, parent_prefix: str | None) -> str:

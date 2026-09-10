@@ -96,6 +96,12 @@ python $VKA build-repair-prompt `
   --output "$ASSET/evidence/asr-repair-prompt.md" `
   --title "$VIDEO_TITLE"
 
+python $VKA suggest-repairs `
+  --timeline "$ASSET/evidence/timeline.raw.jsonl" `
+  --glossary "$ASSET/evidence/asr-glossary.json" `
+  --simplified `
+  --output "$ASSET/evidence/asr-repairs.suggested.json"
+
 python $VKA apply-transcript-repairs `
   --timeline "$ASSET/evidence/timeline.raw.jsonl" `
   --repairs "$ASSET/evidence/asr-repairs.json" `

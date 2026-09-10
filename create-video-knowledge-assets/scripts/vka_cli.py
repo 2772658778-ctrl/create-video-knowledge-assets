@@ -66,6 +66,7 @@ from vka.transcript import parse_srt_as_evidence
 from vka.transcript_repair import (
     apply_transcript_repairs,
     build_asr_repair_prompt,
+    load_glossary,
     suggest_asr_repairs,
 )
 
@@ -166,6 +167,15 @@ def _build_parser() -> argparse.ArgumentParser:
     suggest_repairs = subparsers.add_parser("suggest-repairs")
     suggest_repairs.add_argument("--timeline", required=True)
     suggest_repairs.add_argument("--output", required=True)
+    suggest_repairs.add_argument(
+        "--glossary",
+        help="optional JSON object of per-video terms: {\"错写\": \"正确写法\"}",
+    )
+    suggest_repairs.add_argument(
+        "--simplified",
+        action="store_true",
+        help="also normalize Traditional Chinese characters to Simplified",
+    )
     suggest_repairs.set_defaults(func=_run_suggest_repairs)
 
     apply_repairs = subparsers.add_parser("apply-transcript-repairs")
@@ -492,7 +502,16 @@ def _run_timeline_digest(args: argparse.Namespace) -> int:
 def _run_suggest_repairs(args: argparse.Namespace) -> int:
     try:
         rows = _read_jsonl(Path(args.timeline))
-        repairs = suggest_asr_repairs(rows)
+        glossary = (
+            load_glossary(json.loads(Path(args.glossary).read_text(encoding="utf-8-sig")))
+            if args.glossary
+            else None
+        )
+        repairs = suggest_asr_repairs(
+            rows,
+            glossary=glossary,
+            simplified=args.simplified,
+        )
         output_path = Path(args.output)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(json.dumps(repairs, ensure_ascii=False, indent=2), encoding="utf-8")

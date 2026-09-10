@@ -5,7 +5,9 @@ import pytest
 from vka.transcript_repair import (
     apply_transcript_repairs,
     build_asr_repair_prompt,
+    load_glossary,
     suggest_asr_repairs,
+    to_simplified,
 )
 from vka_cli import main
 
@@ -99,7 +101,10 @@ def test_cli_repair_roundtrip(tmp_path, capsys) -> None:
 
 
 def test_unrepaired_rows_record_that_they_were_preserved() -> None:
-    repaired_rows = apply_transcript_repairs(ROWS, [])
+    repaired_rows = apply_transcript_repairs(
+        ROWS,
+        {"repairs": [], "reviewed_ids": ["tr-000001", "tr-000002"]},
+    )
 
     assert [row["quality"]["repair_status"] for row in repaired_rows] == [
         "raw_preserved",
@@ -108,13 +113,30 @@ def test_unrepaired_rows_record_that_they_were_preserved() -> None:
     assert all("uncertain" not in row["quality"] for row in repaired_rows)
 
 
+def test_rows_nobody_reviewed_are_labeled_unreviewed() -> None:
+    repaired_rows = apply_transcript_repairs(ROWS, {"repairs": [], "reviewed_ids": ["tr-000001"]})
+
+    assert repaired_rows[0]["quality"]["repair_status"] == "raw_preserved"
+    assert repaired_rows[1]["quality"]["repair_status"] == "unreviewed"
+
+
+def test_uncertain_ids_imply_the_row_was_reviewed() -> None:
+    repaired_rows = apply_transcript_repairs(
+        ROWS,
+        {"repairs": [], "uncertain_ids": ["tr-000002"]},
+    )
+
+    assert repaired_rows[1]["quality"]["repair_status"] == "raw_preserved"
+    assert repaired_rows[1]["quality"]["uncertain"] == "true"
+
+
 def test_uncertain_ids_flag_rows_without_rewriting_them() -> None:
     repaired_rows = apply_transcript_repairs(
         ROWS,
         {"repairs": [], "uncertain_ids": ["tr-000002"]},
     )
 
-    assert repaired_rows[0]["quality"]["repair_status"] == "raw_preserved"
+    assert repaired_rows[0]["quality"]["repair_status"] == "unreviewed"
     assert "uncertain" not in repaired_rows[0]["quality"]
     assert repaired_rows[1]["quality"]["uncertain"] == "true"
     assert repaired_rows[1]["content"] == ROWS[1]["content"]
@@ -149,3 +171,137 @@ def test_parent_prefix_turns_raw_ids_into_explicit_provenance() -> None:
 def test_parent_prefix_rejects_ids_without_the_prefix() -> None:
     with pytest.raises(ValueError, match="does not start with parent prefix"):
         apply_transcript_repairs(ROWS, [], parent_prefix="raw-")
+
+
+def test_glossary_repairs_domain_proper_nouns() -> None:
+    rows = [
+        {
+            "evidence_id": "tr-000001",
+            "origin": "video",
+            "modality": "transcript",
+            "spans": [{"start_ms": 0, "end_ms": 2_000}],
+            "content": "王老奇两查和加多保的黄耀集团之争",
+            "acquisition": "asr",
+        }
+    ]
+
+    repairs = suggest_asr_repairs(
+        rows,
+        glossary={"王老奇": "王老吉", "两查": "凉茶", "加多保": "加多宝", "黄耀": "广药"},
+    )
+
+    assert repairs[0]["repaired_content"] == "王老吉凉茶和加多宝的广药集团之争"
+
+
+def test_glossary_prefers_the_longest_key() -> None:
+    rows = [
+        {
+            "evidence_id": "tr-000001",
+            "origin": "video",
+            "modality": "transcript",
+            "spans": [{"start_ms": 0, "end_ms": 2_000}],
+            "content": "王老奇两查很好喝",
+            "acquisition": "asr",
+        }
+    ]
+
+    repairs = suggest_asr_repairs(
+        rows,
+        glossary={"王老奇两查": "王老吉凉茶", "王老奇": "王老吉"},
+    )
+
+    assert repairs[0]["repaired_content"] == "王老吉凉茶很好喝"
+
+
+def test_cli_suggest_repairs_accepts_a_glossary_file(tmp_path, capsys) -> None:
+    timeline = tmp_path / "timeline.raw.jsonl"
+    glossary = tmp_path / "glossary.json"
+    output = tmp_path / "repairs.json"
+    timeline.write_text(
+        json.dumps(
+            {
+                "evidence_id": "raw-tr-000001",
+                "origin": "video",
+                "modality": "transcript",
+                "spans": [{"start_ms": 0, "end_ms": 2_000}],
+                "content": "王老奇的兩查",
+                "acquisition": "asr",
+            },
+            ensure_ascii=False,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    glossary.write_text(
+        json.dumps({"王老奇": "王老吉", "兩查": "凉茶"}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    exit_code = main(
+        [
+            "suggest-repairs",
+            "--timeline",
+            str(timeline),
+            "--glossary",
+            str(glossary),
+            "--output",
+            str(output),
+        ]
+    )
+
+    assert exit_code == 0
+    repairs = json.loads(output.read_text(encoding="utf-8"))
+    assert repairs[0]["repaired_content"] == "王老吉的凉茶"
+    assert repairs[0]["evidence_id"] == "raw-tr-000001"
+
+
+def test_load_glossary_rejects_invalid_entries() -> None:
+    with pytest.raises(ValueError, match="glossary must be an object"):
+        load_glossary(["not", "an", "object"])
+    with pytest.raises(ValueError, match="must be a non-empty string"):
+        load_glossary({"王老奇": ""})
+
+
+def test_simplified_normalization_converts_traditional_rows(monkeypatch) -> None:
+    rows = [
+        {
+            "evidence_id": "tr-000001",
+            "origin": "video",
+            "modality": "transcript",
+            "spans": [{"start_ms": 0, "end_ms": 2_000}],
+            "content": "從國民飲料到被年輕人抛棄",
+            "acquisition": "asr",
+        }
+    ]
+    fake = type("zhconv", (), {"convert": staticmethod(lambda value, target: value.replace("國", "国"))})
+    monkeypatch.setitem(__import__("sys").modules, "zhconv", fake)
+
+    repairs = suggest_asr_repairs(rows, simplified=True)
+
+    assert repairs[0]["repaired_content"] == "從国民飲料到被年輕人抛棄"
+    assert "繁体转简体" in repairs[0]["reason"]
+
+
+def test_simplified_normalization_with_the_real_converter() -> None:
+    pytest.importorskip("zhconv")
+    rows = [
+        {
+            "evidence_id": "tr-000001",
+            "origin": "video",
+            "modality": "transcript",
+            "spans": [{"start_ms": 0, "end_ms": 2_000}],
+            "content": "從國民飲料到被年輕人抛棄",
+            "acquisition": "asr",
+        }
+    ]
+
+    repairs = suggest_asr_repairs(rows, simplified=True)
+
+    assert repairs[0]["repaired_content"] == "从国民饮料到被年轻人抛弃"
+
+
+def test_simplified_normalization_reports_a_missing_dependency(monkeypatch) -> None:
+    monkeypatch.setitem(__import__("sys").modules, "zhconv", None)
+
+    with pytest.raises(ValueError, match="zhconv is required"):
+        to_simplified("繁體")
