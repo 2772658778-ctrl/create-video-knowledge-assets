@@ -39,6 +39,7 @@ from vka.lifecycle import execute_l2_cleanup, plan_l2_cleanup, verify_asset
 from vka.preflight import inspect_commands
 from vka.preflight import find_command
 from vka.profiles import (
+    canonical_hash_tree,
     get_profile,
     reproject_profile_documents,
     write_profile_selection,
@@ -220,6 +221,13 @@ def _build_parser() -> argparse.ArgumentParser:
     verify_asset_parser = subparsers.add_parser("verify-asset")
     verify_asset_parser.add_argument("--asset", required=True)
     verify_asset_parser.set_defaults(func=_run_verify_asset)
+
+    asset_hashes = subparsers.add_parser(
+        "asset-hashes",
+        help="print the canonical source/evidence/knowledge hash tree for a projection plan",
+    )
+    asset_hashes.add_argument("--asset", required=True)
+    asset_hashes.set_defaults(func=_run_asset_hashes)
 
     validate_knowledge = subparsers.add_parser(
         "validate-knowledge",
@@ -671,6 +679,11 @@ def _run_verify_asset(args: argparse.Namespace) -> int:
     report = verify_asset(Path(args.asset))
     print(json.dumps(report, ensure_ascii=False))
     return 0 if report["valid"] else 1
+
+
+def _run_asset_hashes(args: argparse.Namespace) -> int:
+    print(json.dumps(canonical_hash_tree(Path(args.asset)), ensure_ascii=False))
+    return 0
 
 
 def _run_validate_knowledge(args: argparse.Namespace) -> int:
