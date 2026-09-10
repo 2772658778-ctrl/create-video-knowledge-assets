@@ -53,6 +53,7 @@ python -m pip install "pydantic>=2.7,<3" "srt>=3.5,<4"
 | 猫为什么把幼崽叼给主人（深度总结） | [PDF](../../demos/BV1idEL6REd3/summary.pdf) · [HTML](../../demos/BV1idEL6REd3/summary.html) · [Markdown](../../demos/BV1idEL6REd3/summary.md) |
 | 国民凉茶为什么卖不动了（短视频脚本） | [PDF](../../demos/bili-BV1hwtB6YEzo/summary.pdf) · [HTML](../../demos/bili-BV1hwtB6YEzo/summary.html) · [Markdown](../../demos/bili-BV1hwtB6YEzo/summary.md) |
 | 为什么很少有国家吃笋（深度总结） | [PDF](../../demos/bili-BV1tHdoYnEGm/summary.pdf) · [HTML](../../demos/bili-BV1tHdoYnEGm/summary.html) · [Markdown](../../demos/bili-BV1tHdoYnEGm/summary.md) |
+| Harness 实践：把文字变成精美文章（公众号长文） | [PDF](../../demos/bili-BV1ayLD6uERL/summary.pdf) · [HTML](../../demos/bili-BV1ayLD6uERL/summary.html) · [Markdown](../../demos/bili-BV1ayLD6uERL/summary.md) |
 
 ## 验证环境
 

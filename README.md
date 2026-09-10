@@ -82,6 +82,7 @@
 | 猫为什么把幼崽叼给主人 | 深度总结（含证据边界与视频导航） | [PDF](./demos/BV1idEL6REd3/summary.pdf) · [HTML](./demos/BV1idEL6REd3/summary.html) · [Markdown](./demos/BV1idEL6REd3/summary.md) |
 | 国民凉茶为什么卖不动了 | 短视频脚本（数据图表型素材，含画面证据与判断清单） | [PDF](./demos/bili-BV1hwtB6YEzo/summary.pdf) · [HTML](./demos/bili-BV1hwtB6YEzo/summary.html) · [Markdown](./demos/bili-BV1hwtB6YEzo/summary.md) |
 | 为什么很少有国家吃笋 | 深度总结（三道食用门槛 + 证据边界，逐行审校转录） | [PDF](./demos/bili-BV1tHdoYnEGm/summary.pdf) · [HTML](./demos/bili-BV1tHdoYnEGm/summary.html) · [Markdown](./demos/bili-BV1tHdoYnEGm/summary.md) |
+| Harness 实践：把文字变成精美文章 | 公众号长文（20 分钟技术视频 → 长文，含检查点与流程证据） | [PDF](./demos/bili-BV1ayLD6uERL/summary.pdf) · [HTML](./demos/bili-BV1ayLD6uERL/summary.html) · [Markdown](./demos/bili-BV1ayLD6uERL/summary.md) |
 
 这两份 Demo 走完了从 URL、字幕/转录、抽帧检查、知识建模、写作到 PDF/HTML/Markdown 的完整链路。第二份尤其能体现产品理念：正文明确区分"视频如何解释"与"本 demo 是否独立证实"，并附可回看复核的时间窗表——**这就是证据优先的产品化表达。**
 
