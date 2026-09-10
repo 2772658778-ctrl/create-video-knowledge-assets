@@ -35,6 +35,7 @@ from vka.inputs import (
     validate_bilibili_part_selection,
 )
 from vka.knowledge_gate import validate_asset_knowledge
+from vka.package_demo import package_demo
 from vka.lifecycle import execute_l2_cleanup, plan_l2_cleanup, verify_asset
 from vka.preflight import inspect_commands
 from vka.preflight import find_command
@@ -341,6 +342,16 @@ def _build_parser() -> argparse.ArgumentParser:
     compile_pdf.add_argument("--tex", required=True)
     compile_pdf.add_argument("--output-directory", required=True)
     compile_pdf.set_defaults(func=_run_compile_pdf)
+
+    package = subparsers.add_parser(
+        "package-demo",
+        help="publish one rendered profile into a demo directory with local images",
+    )
+    package.add_argument("--asset", required=True)
+    package.add_argument("--profile", required=True)
+    package.add_argument("--demo-root", default="demos")
+    package.add_argument("--name", default="summary")
+    package.set_defaults(func=_run_package_demo)
 
     build_qa_index_parser = subparsers.add_parser("build-qa-index")
     build_qa_index_parser.add_argument("--asset", required=True)
@@ -1193,6 +1204,21 @@ def _run_compile_pdf(args: argparse.Namespace) -> int:
         sys.stderr.write(f"error: failed to run xelatex: {exc}\n")
         return 1
 
+    return 0
+
+
+def _run_package_demo(args: argparse.Namespace) -> int:
+    try:
+        report = package_demo(
+            Path(args.asset),
+            args.profile,
+            demo_root=Path(args.demo_root),
+            name=args.name,
+        )
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        sys.stderr.write(f"error: failed to package demo: {exc}\n")
+        return 1
+    print(json.dumps(report, ensure_ascii=False))
     return 0
 
 
