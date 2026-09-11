@@ -256,7 +256,7 @@ def test_short_video_script_hides_source_footnotes_but_keeps_them_elsewhere(
     assert "来源时间" not in script_tex
     assert "00:00:00--00:00:01" not in script_tex
     assert "开场" in script_tex
-    assert r"\footnote{来源时间：" in deep_tex
+    assert r"\footnote{00:00:00--00:00:01}" in deep_tex
 
 
 def test_renderer_writes_section_with_bottom_time_footnote() -> None:
@@ -278,7 +278,7 @@ def test_renderer_writes_section_with_bottom_time_footnote() -> None:
     assert "\\section{核心概念}" in tex
     assert "\\documentclass[UTF8,a4paper]{ctexart}" in tex
     assert "00:00:12--00:00:16" in tex
-    assert r"\footnote{来源时间：" in tex
+    assert r"\footnote{" in tex
 
 
 def test_renderer_writes_cover_image_and_subtitle() -> None:
@@ -304,7 +304,7 @@ def test_renderer_writes_cover_image_and_subtitle() -> None:
     assert "视频名称" in tex
     assert "原视频标题" in tex
     assert "字幕来源" in tex
-    assert r"\includegraphics[width=0.86\linewidth,height=0.38\textheight,keepaspectratio]{source/cover.jpg}" in tex
+    assert r"\includegraphics[width=0.62\linewidth,height=0.26\textheight,keepaspectratio]{source/cover.jpg}" in tex
     assert tex.index(r"\end{titlepage}") < tex.index(r"\tableofcontents")
 
 
@@ -360,7 +360,7 @@ def test_renderer_validates_and_renders_multiple_source_spans() -> None:
 
     assert "00:00:12--00:00:16" in tex
     assert "00:00:20--00:00:24" in tex
-    assert r"\footnote{来源时间：" in tex
+    assert r"\footnote{" in tex
 
 
 def test_renderer_writes_image_block_with_caption_and_source() -> None:
@@ -384,11 +384,11 @@ def test_renderer_writes_image_block_with_caption_and_source() -> None:
     assert r"\usepackage{graphicx}" in tex
     assert r"\begin{figure}[H]" in tex
     assert (
-        r"\includegraphics[width=0.86\linewidth,height=0.30\textheight,keepaspectratio]"
+        r"\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]"
         r"{evidence/frames/frame-001.jpg}"
     ) in tex
     assert r"\caption{A directly inspected frame.\protect\footnotemark}" in tex
-    assert r"\footnotetext{来源时间：" in tex
+    assert r"\footnotetext{00:00:12--00:00:16}" in tex
     assert "00:00:12--00:00:16" in tex
 
 

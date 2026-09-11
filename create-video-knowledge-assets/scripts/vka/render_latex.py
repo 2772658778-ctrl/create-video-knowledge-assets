@@ -57,10 +57,13 @@ def render_course_tex(
         r"\usepackage{listings}",
         r"\usepackage[bottom]{footmisc}",
         r"\usepackage{caption}",
+        r"\usepackage{enumitem}",
         r"\usepackage{needspace}",
         r"\usepackage{hyperref}",
-        r"\captionsetup{font=small,labelfont=bf,skip=5pt,singlelinecheck=false}",
-        r"\hypersetup{unicode=true,colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black}",
+        r"\captionsetup{width=.92\linewidth,font=small,labelfont=bf,justification=raggedright,singlelinecheck=false,skip=6pt}",
+        r"\hypersetup{unicode=true,hidelinks}",
+        r"\ctexset{section={format=\Large\bfseries\raggedright,beforeskip=1.6em,afterskip=.7em},subsection={format=\large\bfseries\raggedright,beforeskip=1.1em,afterskip=.45em}}",
+        r"\pagestyle{plain}",
         r"\setcounter{tocdepth}{2}",
         r"\setcounter{secnumdepth}{2}",
         r"\setlength{\parskip}{0.42em}",
@@ -72,8 +75,9 @@ def render_course_tex(
         r"\renewcommand{\bottomfraction}{0.6}",
         r"\renewcommand{\textfraction}{0.06}",
         r"\renewcommand{\floatpagefraction}{0.72}",
-        r"\renewcommand{\footnotesize}{\scriptsize}",
-        r"\setlength{\skip\footins}{0.85\baselineskip}",
+        r"\renewcommand{\footnotesize}{\fontsize{8.5}{11}\selectfont}",
+        r"\setlength{\skip\footins}{1.1em plus .3em}",
+        r"\interfootnotelinepenalty=10000",
         r"\definecolor{vkaBlue}{HTML}{245B7D}",
         r"\definecolor{vkaGreen}{HTML}{3B6B4F}",
         r"\definecolor{vkaAmber}{HTML}{8A5A00}",
@@ -82,26 +86,36 @@ def render_course_tex(
         "",
         r"\begin{document}",
         r"\begin{titlepage}",
+        r"\thispagestyle{empty}",
         r"\centering",
-        r"\vspace*{0.06\textheight}",
+        r"\vspace*{0.03\textheight}",
         rf"{{\Huge\bfseries {_escape_latex(title)}\par}}",
     ]
 
     if theme:
-        lines.extend([r"\vspace{0.45cm}", rf"{{\Large\bfseries {_escape_latex(theme)}\par}}"])
+        lines.extend([r"\vspace{0.4cm}", rf"{{\Large\bfseries {_escape_latex(theme)}\par}}"])
     if one_sentence_summary:
-        lines.extend([r"\vspace{0.35cm}", rf"{{\large {_escape_latex(one_sentence_summary)}\par}}"])
+        lines.extend(
+            [
+                r"\vspace{0.35cm}",
+                r"\begin{center}",
+                r"\begin{minipage}{0.82\textwidth}",
+                r"\centering\large",
+                rf"{_escape_latex(one_sentence_summary)}\par",
+                r"\end{minipage}",
+                r"\end{center}",
+            ]
+        )
     if subtitle:
-        lines.extend([r"\vspace{0.55cm}", rf"{{\normalsize {_escape_latex(subtitle)}\par}}"])
+        lines.extend([r"\vspace{0.4cm}", rf"{{\normalsize {_escape_latex(subtitle)}\par}}"])
 
     if cover_image and show_cover:
         lines.extend(
             [
-                r"\vspace{0.9cm}",
+                r"\vfill",
                 r"\begin{center}",
-                rf"\includegraphics[width=0.86\linewidth,height=0.38\textheight,keepaspectratio]{{{_latex_path(cover_image)}}}",
+                rf"\includegraphics[width=0.62\linewidth,height=0.26\textheight,keepaspectratio]{{{_latex_path(cover_image)}}}",
                 r"\end{center}",
-                "",
             ]
         )
 
@@ -109,9 +123,9 @@ def render_course_tex(
     if metadata_lines:
         lines.extend(
             [
-                r"\vspace{0.45cm}",
+                r"\vfill",
                 r"\begin{center}",
-                r"\begin{tabularx}{0.94\textwidth}{>{\bfseries}r>{\raggedright\arraybackslash}X}",
+                r"\begin{tabularx}{0.88\textwidth}{>{\bfseries}r>{\raggedright\arraybackslash}X}",
                 *metadata_lines,
                 r"\end{tabularx}",
                 r"\end{center}",
@@ -121,12 +135,24 @@ def render_course_tex(
     lines.extend(
         [
             r"\vfill",
-            rf"{{\large {_escape_latex(title_page_label)}\par}}",
+            rf"{{\small\color{{black!55}} {_escape_latex(title_page_label)}\par}}",
             r"\end{titlepage}",
         ]
     )
     if show_toc:
-        lines.extend([r"\tableofcontents", r"\newpage", ""])
+        lines.extend(
+            [
+                r"\pagenumbering{roman}",
+                r"\tableofcontents",
+                r"\vspace{1.2em}",
+                r"\begin{center}",
+                r"{\small\color{black!55} 脚注标注该段内容在视频中的时间位置。\par}",
+                r"\end{center}",
+                r"\newpage",
+                r"\pagenumbering{arabic}",
+                "",
+            ]
+        )
     else:
         lines.append("")
 
@@ -299,7 +325,7 @@ def _render_image_block(block: Mapping[str, Any]) -> list[str]:
     return [
         r"\begin{figure}[H]",
         r"\centering",
-        rf"\includegraphics[width=0.86\linewidth,height=0.30\textheight,keepaspectratio]{{{latex_path}}}",
+        rf"\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{{{latex_path}}}",
         (
             rf"\caption{{{_escape_latex(caption)}\protect\footnotemark}}"
             if footnote
@@ -316,8 +342,9 @@ def _render_list_block(block: Mapping[str, Any], *, ordered: bool) -> list[str]:
         raise ValueError("list items must be a non-empty list")
 
     env = "enumerate" if ordered else "itemize"
-    lines = [rf"\begin{{{env}}}"]
-    lines.append(r"\setlength{\itemsep}{0.18em}\setlength{\parskip}{0.12em}")
+    lines = [
+        rf"\begin{{{env}}}[leftmargin=1.6em,labelsep=.5em,itemsep=3pt,topsep=3pt,parsep=2pt]"
+    ]
     for index, item in enumerate(items):
         if not isinstance(item, str) or not item.strip():
             raise ValueError("list item must be a non-empty string")
@@ -412,13 +439,22 @@ def _source_footnote(block: Mapping[str, Any]) -> str:
 
 
 def _source_note_text(block: Mapping[str, Any]) -> str:
+    """Compact the source times: merge overlaps, drop the repeated prefix.
+
+    The reader is told once, under the table of contents, that footnotes carry
+    video times; repeating "来源时间：" on every line only adds noise.
+    """
     spans = _source_spans(block)
-    ranges = []
-    for span in spans:
+    merged: list[list[int]] = []
+    for span in sorted(spans, key=lambda item: item["start_ms"]):
         start_ms = span["start_ms"]
         end_ms = span["end_ms"]
-        ranges.append(f"{_format_time(start_ms)}--{_format_time(end_ms)}")
-    return f"来源时间：{_escape_latex('，'.join(ranges))}。"
+        if merged and start_ms <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], end_ms)
+        else:
+            merged.append([start_ms, end_ms])
+    ranges = [f"{_format_time(start)}--{_format_time(end)}" for start, end in merged]
+    return _escape_latex("，".join(ranges))
 
 
 def _paragraph_text(block: Any) -> str:

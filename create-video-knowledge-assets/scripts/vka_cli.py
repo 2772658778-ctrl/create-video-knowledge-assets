@@ -1200,6 +1200,13 @@ def _run_compile_pdf(args: argparse.Namespace) -> int:
     tex_path = Path(args.tex)
     output_directory = Path(args.output_directory)
     output_directory.mkdir(parents=True, exist_ok=True)
+    # A stale .toc/.aux from an earlier template can abort the first pass, so
+    # every build starts from regenerable state. These files are pure LaTeX
+    # byproducts and are rewritten by the run itself.
+    for suffix in (".aux", ".toc", ".out"):
+        byproduct = output_directory / f"{tex_path.stem}{suffix}"
+        if byproduct.is_file():
+            byproduct.unlink()
     command = [
         str(xelatex),
         "-interaction=nonstopmode",
