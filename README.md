@@ -42,11 +42,9 @@
 
 `general-deep` 和 `creator-article` 仍保留为兼容别名。
 
-三种格式，来自同一份底稿：
+正文与证据边界分成两份 PDF 交付：正文只讲视频内容，边界说明单独成册。
 
-- **PDF** —— 主交付物，适合阅读与存档；
-- **HTML** —— 适合在线浏览与分享；
-- **Markdown** —— 适合继续编辑与二次创作。
+- **PDF** —— 唯一交付格式，适合阅读与存档；
 
 ## 怎么做到的：核心设计决策
 
@@ -78,15 +76,15 @@
 
 | Demo | 场景 | 直接查看 |
 | --- | --- | --- |
-| Transformer 的 QKV | 课程笔记（Whisper 无字幕转录 + 312 段时间线 + 8 张已检查画面） | [PDF](./demos/BV1uPMA62E8e/summary.pdf) · [HTML](./demos/BV1uPMA62E8e/summary.html) · [Markdown](./demos/BV1uPMA62E8e/summary.md) |
-| 猫为什么把幼崽叼给主人 | 深度总结（含证据边界与视频导航） | [PDF](./demos/BV1idEL6REd3/summary.pdf) · [HTML](./demos/BV1idEL6REd3/summary.html) · [Markdown](./demos/BV1idEL6REd3/summary.md) |
-| 国民凉茶为什么卖不动了 | 短视频脚本（数据图表型素材，含画面证据与判断清单） | [PDF](./demos/bili-BV1hwtB6YEzo/summary.pdf) · [HTML](./demos/bili-BV1hwtB6YEzo/summary.html) · [Markdown](./demos/bili-BV1hwtB6YEzo/summary.md) |
-| 为什么很少有国家吃笋 | 深度总结（三道食用门槛 + 证据边界，逐行审校转录） | [PDF](./demos/bili-BV1tHdoYnEGm/summary.pdf) · [HTML](./demos/bili-BV1tHdoYnEGm/summary.html) · [Markdown](./demos/bili-BV1tHdoYnEGm/summary.md) |
-| Harness 实践：把文字变成精美文章 | 公众号长文（20 分钟技术视频 → 长文，含检查点与流程证据） | [PDF](./demos/bili-BV1ayLD6uERL/summary.pdf) · [HTML](./demos/bili-BV1ayLD6uERL/summary.html) · [Markdown](./demos/bili-BV1ayLD6uERL/summary.md) |
+| Transformer 的 QKV | 课程笔记（Whisper 无字幕转录 + 312 段时间线 + 8 张已检查画面） | [PDF](./demos/BV1uPMA62E8e/summary.pdf) |
+| 猫为什么把幼崽叼给主人 | 深度总结 | [PDF](./demos/BV1idEL6REd3/summary.pdf) |
+| 国民凉茶为什么卖不动了 | 短视频脚本（数据图表型素材，含画面证据与判断清单） | [PDF](./demos/bili-BV1hwtB6YEzo/summary.pdf) |
+| 为什么很少有国家吃笋 | 深度总结（三道食用门槛，逐行审校转录） | [PDF](./demos/bili-BV1tHdoYnEGm/summary.pdf) · [边界与来源](./demos/bili-BV1tHdoYnEGm/notes.pdf) |
+| Harness 实践：把文字变成精美文章 | 公众号长文（20 分钟技术视频 → 长文，含检查点与流程证据） | [PDF](./demos/bili-BV1ayLD6uERL/summary.pdf) · [边界与来源](./demos/bili-BV1ayLD6uERL/notes.pdf) |
 
-这两份 Demo 走完了从 URL、字幕/转录、抽帧检查、知识建模、写作到 PDF/HTML/Markdown 的完整链路。第二份尤其能体现产品理念：正文明确区分"视频如何解释"与"本 demo 是否独立证实"，并附可回看复核的时间窗表——**这就是证据优先的产品化表达。**
+这些 Demo 走完了从 URL、字幕/转录、抽帧检查、知识建模、写作到 PDF 的完整链路。第二份尤其能体现产品理念：正文明确区分"视频如何解释"与"本 demo 是否独立证实"，并附可回看复核的时间窗表——**这就是证据优先的产品化表达。**
 
-**当前验证范围**：这两份 Demo 验证了 Codex、单 P Bilibili 视频、CPU ASR 和 PDF/HTML/Markdown 路径。GPU、平台字幕、多 P 完整处理和本地视频尚未由 Demo 覆盖。
+**当前验证范围**：这些 Demo 验证了 Codex、单 P Bilibili 视频、CPU ASR 和 PDF 交付路径。GPU、平台字幕、多 P 完整处理和本地视频尚未由 Demo 覆盖。
 
 ## 架构与数据流（概览）
 
@@ -102,7 +100,7 @@
         ▼                                    ▼
         │
         ▼
- 与渲染器无关的文档 ──► PDF / HTML / Markdown
+ 与渲染器无关的文档 ──► 正文 PDF + 边界说明 PDF
         │
         ▼
  学习 · 创作 · 归档 · 发布
@@ -118,14 +116,14 @@
 
 ```text
 使用 $create-video-knowledge-assets 深度总结这个视频：<Bilibili URL>。
-整理核心问题、机制、例子、关键画面、限制和来源导航，并生成 PDF、HTML 和 Markdown。
+整理核心问题、机制、例子和关键画面，生成一份正文 PDF 和一份边界说明 PDF。
 ```
 
 **课程笔记：**
 
 ```text
 使用 $create-video-knowledge-assets，把这个视频制作成适合学习和复习的中文课程笔记：<Bilibili URL>。
-保留关键画面、教学结构和来源时间脚注，并生成 PDF、HTML 和 Markdown。
+保留关键画面和教学结构，生成一份课程笔记 PDF。
 ```
 
 **本地视频：**
@@ -154,7 +152,7 @@
 ```text
 ├── create-video-knowledge-assets/   # Skill 本体（SKILL.md、scripts/、references/、assets/）
 ├── docs/                            # 产品与工程文档（架构、能力地图、快速上手）
-├── demos/                           # 端到端 Demo 成果（PDF / HTML / Markdown）
+├── demos/                           # 端到端 Demo 成果（正文 PDF + 边界说明 PDF）
 ├── tests/                           # 稳定测试 + 实验性测试
 └── CHANGELOG.md / LICENSE / SECURITY.md / CONTRIBUTING.md
 ```
@@ -165,7 +163,7 @@
 
 | 阶段 | 目标 | 状态 |
 | --- | --- | --- |
-| 第一阶段：可用 | 单视频、深度总结 / 课程笔记、PDF / HTML / Markdown、证据追溯 | ✅ v0.1 已交付 |
+| 第一阶段：可用 | 单视频、深度总结 / 课程笔记、PDF 交付、证据追溯 | ✅ v0.1 已交付 |
 | 第二阶段：可复用 | 深度文章、短视频脚本、更多内容 profile | 🧪 初步实现，待更多真实业务验收 |
 | 第三阶段：可产品化 | 质量门、发布审核、异常恢复、规模化复用 | 🔜 规划中 |
 

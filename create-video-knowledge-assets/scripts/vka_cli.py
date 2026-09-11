@@ -258,6 +258,14 @@ def _build_parser() -> argparse.ArgumentParser:
     complete_stage.add_argument("--schema-version", default=None)
     complete_stage.set_defaults(func=_run_complete_stage)
 
+    reopen_stage = subparsers.add_parser(
+        "reopen-stage",
+        help="drop a completed stage so it can be rebuilt",
+    )
+    reopen_stage.add_argument("--asset", required=True)
+    reopen_stage.add_argument("--stage", required=True)
+    reopen_stage.set_defaults(func=_run_reopen_stage)
+
     cleanup_l2 = subparsers.add_parser("cleanup-l2")
     cleanup_l2.add_argument("--asset", required=True)
     cleanup_mode = cleanup_l2.add_mutually_exclusive_group(required=True)
@@ -332,6 +340,7 @@ def _build_parser() -> argparse.ArgumentParser:
     render_document.add_argument("--output", required=True)
     render_document.add_argument("--profile", required=True)
     render_document.add_argument("--format", required=True, choices=("md", "html", "tex"))
+    render_document.add_argument("--part", choices=("main", "notes"), default="main")
     render_document.set_defaults(func=_run_render_document)
 
     validate_outline = subparsers.add_parser("validate-teaching-outline")
@@ -741,6 +750,20 @@ def _run_complete_stage(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_reopen_stage(args: argparse.Namespace) -> int:
+    stage = args.stage
+    if not _STAGE_NAME_PATTERN.match(stage):
+        sys.stderr.write(f"error: unsupported stage name: {stage}\n")
+        return 1
+    try:
+        AssetStore(root=Path(args.asset)).reopen_stage(stage)
+    except (OSError, ValueError) as exc:
+        sys.stderr.write(f"error: failed to reopen stage {stage}: {exc}\n")
+        return 1
+    print(json.dumps({"stage": stage, "status": "reopened"}, ensure_ascii=False))
+    return 0
+
+
 def _run_cleanup_l2(args: argparse.Namespace) -> int:
     asset = Path(args.asset)
     plan = plan_l2_cleanup(asset)
@@ -1067,6 +1090,7 @@ def _run_render_document(args: argparse.Namespace) -> int:
             args.format,
             asset_root=_document_asset_root(input_path),
             output_directory=output_path.parent,
+            part=args.part,
         )
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(rendered, encoding="utf-8")
@@ -1119,10 +1143,12 @@ def _render_document_format(
     *,
     asset_root: str | Path | None = None,
     output_directory: str | Path | None = None,
+    part: str = "main",
 ) -> str:
     shared = {
         "asset_root": str(asset_root) if asset_root is not None else None,
         "output_directory": str(output_directory) if output_directory is not None else None,
+        "part": part,
         "source_navigation": bool(
             renderer_options_for(document.get("profile_id")).get("source_navigation", True)
         ),

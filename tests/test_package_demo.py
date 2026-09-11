@@ -26,16 +26,8 @@ def _asset(tmp_path: Path) -> Path:
         ),
         encoding="utf-8",
     )
-    (asset / "outputs" / "deep-article" / "document.md").write_text(
-        "# 文章\n\n![视频封面](../../source/cover/BVtest.jpg)\n\n"
-        "![用来说明边界的画面。](../../evidence/frames/inspected/01-used.jpg)\n",
-        encoding="utf-8",
-    )
-    (asset / "outputs" / "deep-article" / "document.html").write_text(
-        '<img src="../../evidence/frames/inspected/01-used.jpg" alt="已用">',
-        encoding="utf-8",
-    )
     (asset / "outputs" / "deep-article" / "document.pdf").write_bytes(b"%PDF-fake")
+    (asset / "outputs" / "deep-article" / "notes.pdf").write_bytes(b"%PDF-notes")
     (asset / "source" / "cover" / "BVtest.jpg").write_bytes(b"cover")
     (asset / "evidence" / "frames" / "inspected" / "01-used.jpg").write_bytes(b"used")
     (asset / "evidence" / "frames" / "inspected" / "02-unused.jpg").write_bytes(b"unused")
@@ -44,23 +36,63 @@ def _asset(tmp_path: Path) -> Path:
 
 def test_package_demo_copies_referenced_images_and_rewrites_paths(tmp_path: Path) -> None:
     asset = _asset(tmp_path)
+    document = json.loads(
+        (asset / "views" / "deep-article" / "document.json").read_text(encoding="utf-8")
+    )
+    document["sections"] = [
+        {
+            "kind": "overview",
+            "title": "总览",
+            "blocks": [
+                {
+                    "kind": "image",
+                    "path": "evidence/frames/inspected/01-used.jpg",
+                    "caption": "用来说明边界的画面。",
+                    "knowledge_refs": ["ku-1"],
+                    "evidence_refs": ["ev-1"],
+                    "source_spans": [{"start_ms": 0, "end_ms": 1000}],
+                }
+            ],
+        }
+    ]
+    (asset / "views" / "deep-article" / "document.json").write_text(
+        json.dumps(document, ensure_ascii=False), encoding="utf-8"
+    )
 
     report = package_demo(asset, "deep-article", demo_root=tmp_path / "demos")
 
     demo = tmp_path / "demos" / "bili-BVtest"
-    markdown = (demo / "summary.md").read_text(encoding="utf-8")
     assert report["demo"] == str(demo)
-    assert "![视频封面](cover.jpg)" in markdown
-    assert "(figures/01-used.jpg)" in markdown
-    assert "../../" not in markdown
     assert (demo / "cover.jpg").read_bytes() == b"cover"
     assert (demo / "figures" / "01-used.jpg").is_file()
     assert (demo / "summary.pdf").read_bytes() == b"%PDF-fake"
-    assert "figures/01-used.jpg" in (demo / "summary.html").read_text(encoding="utf-8")
+    assert (demo / "notes.pdf").read_bytes() == b"%PDF-notes"
 
 
 def test_package_demo_drops_frames_the_document_never_cites(tmp_path: Path) -> None:
     asset = _asset(tmp_path)
+    document = json.loads(
+        (asset / "views" / "deep-article" / "document.json").read_text(encoding="utf-8")
+    )
+    document["sections"] = [
+        {
+            "kind": "overview",
+            "title": "总览",
+            "blocks": [
+                {
+                    "kind": "image",
+                    "path": "evidence/frames/inspected/01-used.jpg",
+                    "caption": "用来说明边界的画面。",
+                    "knowledge_refs": ["ku-1"],
+                    "evidence_refs": ["ev-1"],
+                    "source_spans": [{"start_ms": 0, "end_ms": 1000}],
+                }
+            ],
+        }
+    ]
+    (asset / "views" / "deep-article" / "document.json").write_text(
+        json.dumps(document, ensure_ascii=False), encoding="utf-8"
+    )
 
     package_demo(asset, "deep-article", demo_root=tmp_path / "demos")
 

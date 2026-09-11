@@ -97,6 +97,29 @@ class AssetStore:
 
     def verify_stage(self, stage: str, *, schema_version: str) -> list[str]:
         """Return integrity errors for a completed stage without changing its manifest."""
+        return self._stage_errors(stage, schema_version)
+
+    def reopen_stage(self, stage: str) -> None:
+        """Drop a completed stage so it can be rebuilt.
+
+        A completed view is immutable by default; re-authoring one has to be an
+        explicit act, so the stage record is removed first and every downstream
+        reader sees the stage as unfinished until it is completed again.
+        """
+        manifest = self._read_manifest()
+        if not isinstance(manifest, dict):
+            raise ValueError("manifest must be an object")
+        if manifest.get("schema_version") != SCHEMA_VERSION:
+            raise ValueError(f"only {SCHEMA_VERSION} manifests can be modified")
+        stages = manifest.get("stages")
+        if not isinstance(stages, dict):
+            raise ValueError("manifest stages must be an object")
+        if stage not in stages:
+            raise ValueError(f"{stage} stage is not completed")
+        del stages[stage]
+        self._write_manifest(manifest)
+
+    def _stage_errors(self, stage: str, schema_version: str) -> list[str]:
         manifest, manifest_error = self._manifest_for_verification()
         if manifest_error is not None:
             return [manifest_error]

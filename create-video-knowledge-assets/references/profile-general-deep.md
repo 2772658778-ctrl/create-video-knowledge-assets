@@ -15,11 +15,15 @@ A valid general outline has:
 
 - an `overview` section that states the central subject and scope;
 - at least two `logical_body` sections that develop the source's actual
-  reasoning, chronology, or practical flow;
-- a `limitations` or `uncertainty` section that distinguishes unresolved,
-  contested, conditional, or missing evidence from settled claims; and
-- a `source_navigation` section that tells readers where the main claims,
-  demonstrations, quotations, or disagreements came from.
+  reasoning, chronology, or practical flow.
+
+Section titles are reader-facing claims, not structural labels: a reader should
+be able to reconstruct the video's argument from the table of contents alone.
+Write "第一道门槛：不是所有竹笋都能吃", not "背景介绍" or "第三部分".
+
+Boundary and source material is **not** a chapter here. It belongs in the
+document's `notes` part, which ships as its own PDF and is described in
+`document-schema.md`.
 
 Each section has a natural reader-facing title. The internal `kind` remains in
 the outline only and must not be exposed as a visible heading.

@@ -112,3 +112,46 @@ def test_complete_stage_reports_a_missing_output_without_a_traceback(
 
     assert exit_code == 1
     assert "failed to complete stage evidence" in capsys.readouterr().err
+
+
+def test_reopen_stage_allows_the_stage_to_be_rebuilt(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    asset_root = _asset(tmp_path)
+    timeline = asset_root / "evidence" / "timeline.jsonl"
+    timeline.write_text('{"evidence_id": "tr-000001"}\n', encoding="utf-8")
+    assert (
+        main(
+            [
+                "complete-stage",
+                "--asset",
+                str(asset_root),
+                "--stage",
+                "evidence",
+                "--output",
+                "evidence/timeline.jsonl",
+            ]
+        )
+        == 0
+    )
+    capsys.readouterr()
+
+    exit_code = main(["reopen-stage", "--asset", str(asset_root), "--stage", "evidence"])
+
+    assert exit_code == 0
+    assert json.loads(capsys.readouterr().out)["status"] == "reopened"
+    manifest = json.loads((asset_root / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["stages"] == {}
+    assert asset_root.joinpath("evidence", "timeline.jsonl").is_file()
+
+
+def test_reopen_stage_rejects_an_unknown_stage_and_a_stage_that_is_not_completed(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    asset_root = _asset(tmp_path)
+
+    assert main(["reopen-stage", "--asset", str(asset_root), "--stage", "../escape"]) == 1
+    assert "unsupported stage name" in capsys.readouterr().err
+
+    assert main(["reopen-stage", "--asset", str(asset_root), "--stage", "evidence"]) == 1
+    assert "is not completed" in capsys.readouterr().err

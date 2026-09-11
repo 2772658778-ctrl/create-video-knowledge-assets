@@ -1,7 +1,7 @@
 from vka.general_deep import validate_general_outline
 
 
-def test_general_outline_requires_body_and_source_navigation_sections() -> None:
+def test_general_outline_requires_two_body_sections() -> None:
     outline = {
         "title": "Interview with a database engineer",
         "sections": [
@@ -12,7 +12,6 @@ def test_general_outline_requires_body_and_source_navigation_sections() -> None:
 
     assert validate_general_outline(outline) == [
         "general outline needs at least two logical-body sections",
-        "general outline needs a source-navigation section",
     ]
 
 
@@ -31,7 +30,7 @@ def test_general_outline_accepts_a_general_reader_structure() -> None:
     assert validate_general_outline(outline) == []
 
 
-def test_general_outline_requires_overview_and_limits_or_uncertainty() -> None:
+def test_general_outline_requires_an_overview() -> None:
     outline = {
         "title": "Interview with a database engineer",
         "sections": [
@@ -43,7 +42,6 @@ def test_general_outline_requires_overview_and_limits_or_uncertainty() -> None:
 
     assert validate_general_outline(outline) == [
         "general outline needs an overview section",
-        "general outline needs a limitations-or-uncertainty section",
     ]
 
 

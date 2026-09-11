@@ -41,16 +41,20 @@ def _asset_with_canonical_profile_records(
     evidence_records: dict[str, dict[str, object]] | None = None,
 ) -> AssetStore:
     asset = AssetStore.create(tmp_path / "assets", "asset-001", {"kind": "local_video"})
+    notes = document.get("notes")
+    sections = list(document["sections"]) + (  # type: ignore[index]
+        list(notes["sections"]) if isinstance(notes, dict) else []  # type: ignore[index]
+    )
     knowledge_ids = sorted({
         reference
-        for section in document["sections"]  # type: ignore[index]
-        for block in section["blocks"]  # type: ignore[index]
+        for section in sections
+        for block in section["blocks"]
         for reference in block["knowledge_refs"]
     })
     evidence_ids = sorted({
         reference
-        for section in document["sections"]  # type: ignore[index]
-        for block in section["blocks"]  # type: ignore[index]
+        for section in sections
+        for block in section["blocks"]
         for reference in block["evidence_refs"]
     })
     evidence = asset.write_jsonl(
@@ -85,16 +89,24 @@ def _completed_general_asset_for_reprojection(tmp_path: Path) -> AssetStore:
     """Create a completed canonical asset shared by multiple authored views."""
     creator = _profile_fixture("creator-article-document.json")
     research = _profile_fixture("research-brief-document.json")
+    def _documents() -> list[dict]:
+        documents = [creator, research]
+        for document in list(documents):
+            notes = document.get("notes")
+            if isinstance(notes, dict):
+                documents.append({"sections": notes["sections"]})
+        return documents
+
     knowledge_ids = sorted({
         reference
-        for document in (creator, research)
+        for document in _documents()
         for section in document["sections"]
         for block in section["blocks"]
         for reference in block["knowledge_refs"]
     })
     evidence_ids = sorted({
         reference
-        for document in (creator, research)
+        for document in _documents()
         for section in document["sections"]
         for block in section["blocks"]
         for reference in block["evidence_refs"]
@@ -379,8 +391,6 @@ def test_new_profile_specs_are_registered_with_approved_contracts() -> None:
     assert deep_summary.required_sections == (
         "overview",
         "logical_body",
-        "limitations",
-        "source_navigation",
     )
     assert deep_summary.reference_path == "references/profile-general-deep.md"
 
@@ -391,7 +401,6 @@ def test_new_profile_specs_are_registered_with_approved_contracts() -> None:
         "narrative",
         "video_evidence",
         "actionable_takeaway",
-        "limitations_sources",
     )
     assert deep_article.reference_path == "references/profile-creator-article.md"
 
@@ -506,7 +515,6 @@ def test_profile_specs_keep_formats_immutable() -> None:
                 "narrative",
                 "video_evidence",
                 "actionable_takeaway",
-                "limitations_sources",
             ),
         ),
         (
@@ -554,6 +562,24 @@ def test_registered_non_p1_profiles_enforce_required_sections(
             }
             for section_kind in section_kinds
         ],
+        "notes": {
+            "title": "Boundary and source notes",
+            "sections": [
+                {
+                    "kind": "limitations",
+                    "title": "Boundary",
+                    "blocks": [
+                        {
+                            "kind": "paragraph",
+                            "text": "The scope stays inside the source material.",
+                            "knowledge_refs": ["ku-1"],
+                            "evidence_refs": ["ev-1"],
+                            "source_spans": [{"start_ms": 0, "end_ms": 1_000}],
+                        }
+                    ],
+                }
+            ],
+        },
     }
 
     if profile_id == "research-brief":

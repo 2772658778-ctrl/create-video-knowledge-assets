@@ -26,7 +26,11 @@ The article must contain these semantic sections in order:
 3. `narrative`: a coherent problem-to-method explanation.
 4. `video_evidence`: concrete video evidence with source spans.
 5. `actionable_takeaway`: actions faithfully derived from the source.
-6. `limitations_sources`: scope, uncertainty, and source navigation.
+
+Scope, uncertainty, and source navigation do **not** belong in the article.
+They go in the document's `notes` part and ship as a separate PDF, so the
+article's table of contents stays a description of the video rather than a
+description of the pipeline. See `document-schema.md`.
 
 ## Long-Form Craft
 

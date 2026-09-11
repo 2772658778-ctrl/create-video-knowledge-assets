@@ -40,8 +40,6 @@ def validate_general_outline(outline: object) -> list[str]:
         errors.append("general outline needs an overview section")
     if section_kinds.count("logical_body") < 2:
         errors.append("general outline needs at least two logical-body sections")
-    if not ({"limitations", "uncertainty"} & set(section_kinds)):
-        errors.append("general outline needs a limitations-or-uncertainty section")
-    if "source_navigation" not in section_kinds:
-        errors.append("general outline needs a source-navigation section")
+    # Boundary and source material is delivered as its own document part, so
+    # the authoring plan describes the reader's content and nothing else.
     return errors

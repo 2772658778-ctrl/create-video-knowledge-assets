@@ -287,12 +287,21 @@ def _article_document(reader_promise: str, *, takeaway: str | None = None) -> di
                         "actionable_takeaway",
                         takeaway or "你可以按三步照做：先看对象，再看条件，最后看结果。",
                     ),
-                    ("limitations_sources", "边界是：结论只在这段素材的范围内成立。"),
                 ],
                 start=1,
             )
         ],
         "evidence_origins": {},
+        "notes": {
+            "title": "证据边界与来源说明",
+            "sections": [
+                {
+                    "kind": "limitations",
+                    "title": "边界",
+                    "blocks": [block("边界是：结论只在这段素材的范围内成立。", "notes")],
+                }
+            ],
+        },
     }
 
 
@@ -451,8 +460,6 @@ def test_general_deep_accepts_canonical_top_level_blocks_and_cli_renders_them(tm
         ("overview", "Overview"),
         ("logical_body", "First reason"),
         ("logical_body", "Second reason"),
-        ("limitations", "Limits"),
-        ("source_navigation", "Source navigation"),
     ]
     blocks = []
     for index, (section_kind, title) in enumerate(section_kinds, start=1):
@@ -483,6 +490,24 @@ def test_general_deep_accepts_canonical_top_level_blocks_and_cli_renders_them(tm
             "author": "Speaker", "publish_date": "2026-07-12",
         },
         "blocks": blocks,
+        "notes": {
+            "title": "Boundary and source notes",
+            "sections": [
+                {
+                    "kind": "limitations",
+                    "title": "Limits",
+                    "blocks": [
+                        {
+                            "kind": "paragraph",
+                            "text": prose,
+                            "knowledge_refs": ["ku-h1"],
+                            "evidence_refs": ["tr-h1"],
+                            "source_spans": [{"start_ms": 10_000, "end_ms": 12_000}],
+                        }
+                    ],
+                }
+            ],
+        },
     }
     input_path.write_text(json.dumps(document), encoding="utf-8")
 
@@ -579,8 +604,6 @@ def test_cli_validate_and_render_document_use_the_selected_profile(tmp_path, cap
         ("overview", "Overview"),
         ("logical_body", "First reason"),
         ("logical_body", "Second reason"),
-        ("limitations", "Limits"),
-        ("source_navigation", "Source navigation"),
     ]
     document = {
         "profile_id": "general-deep",
@@ -607,6 +630,24 @@ def test_cli_validate_and_render_document_use_the_selected_profile(tmp_path, cap
             }
             for index, (kind, title) in enumerate(section_kinds, start=1)
         ],
+        "notes": {
+            "title": "Boundary and source notes",
+            "sections": [
+                {
+                    "kind": "limitations",
+                    "title": "Limits",
+                    "blocks": [
+                        {
+                            "kind": "paragraph",
+                            "text": prose,
+                            "knowledge_refs": ["ku-limits"],
+                            "evidence_refs": ["tr-limits"],
+                            "source_spans": [{"start_ms": 90_000, "end_ms": 98_000}],
+                        }
+                    ],
+                }
+            ],
+        },
     }
     input_path.write_text(json.dumps(document), encoding="utf-8")
 

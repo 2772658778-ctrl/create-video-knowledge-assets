@@ -6,7 +6,7 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-from vka.quality import document_sections_for_render, rebase_document_image_paths
+from vka.quality import document_sections_for_part, rebase_document_image_paths
 
 
 def render_course_html(
@@ -80,6 +80,7 @@ def render_document_html(
     asset_root: str | None = None,
     output_directory: str | None = None,
     source_navigation: bool = True,
+    part: str = "main",
 ) -> str:
     """Render a neutral document while keeping provenance out of reader copy."""
     if not isinstance(document, Mapping):
@@ -89,8 +90,9 @@ def render_document_html(
     rebased_image_paths = asset_root is not None and output_directory is not None
     if rebased_image_paths:
         document = rebase_document_image_paths(document, asset_root, output_directory)
-    title, sections = document_sections_for_render(
+    title, sections = document_sections_for_part(
         document,
+        part=part,
         allow_rebased_image_paths=rebased_image_paths,
         source_navigation=source_navigation,
     )
@@ -98,7 +100,7 @@ def render_document_html(
     return render_course_html(
         title,
         sections,
-        cover_image=_optional_string(document, "cover_image"),
+        cover_image=_optional_string(document, "cover_image") if part == "main" else None,
         subtitle=_profile_optional_string(document, "subtitle", profile_id),
         theme=_profile_optional_string(document, "theme", profile_id),
         one_sentence_summary=_profile_optional_string(

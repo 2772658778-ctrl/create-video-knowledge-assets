@@ -383,7 +383,10 @@ def test_renderer_writes_image_block_with_caption_and_source() -> None:
 
     assert r"\usepackage{graphicx}" in tex
     assert r"\begin{figure}[H]" in tex
-    assert r"\includegraphics[width=\linewidth,height=0.48\textheight,keepaspectratio]{evidence/frames/frame-001.jpg}" in tex
+    assert (
+        r"\includegraphics[width=0.86\linewidth,height=0.30\textheight,keepaspectratio]"
+        r"{evidence/frames/frame-001.jpg}"
+    ) in tex
     assert r"\caption{A directly inspected frame.\protect\footnotemark}" in tex
     assert r"\footnotetext{来源时间：" in tex
     assert "00:00:12--00:00:16" in tex

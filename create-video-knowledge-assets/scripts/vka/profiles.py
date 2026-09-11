@@ -84,7 +84,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
     {
         "general-deep": ProfileSpec(
             profile_id="general-deep",
-            required_sections=("overview", "logical_body", "limitations", "source_navigation"),
+            required_sections=("overview", "logical_body"),
             formats=("pdf",),
             validator=_validate_general_deep,
             renderer_options=_options(source_navigation=True),
@@ -92,7 +92,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
         ),
         "deep-summary": ProfileSpec(
             profile_id="deep-summary",
-            required_sections=("overview", "logical_body", "limitations", "source_navigation"),
+            required_sections=("overview", "logical_body"),
             formats=("pdf",),
             validator=_validate_general_deep,
             renderer_options=_options(source_navigation=True),
@@ -122,7 +122,6 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "narrative",
                 "video_evidence",
                 "actionable_takeaway",
-                "limitations_sources",
             ),
             formats=("pdf",),
             validator=_validate_creator_article,
@@ -137,7 +136,6 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "narrative",
                 "video_evidence",
                 "actionable_takeaway",
-                "limitations_sources",
             ),
             formats=("pdf",),
             validator=_validate_creator_article,
@@ -990,7 +988,7 @@ def _validate_document_canonical_refs(
 
     referenced_knowledge: set[str] = set()
     referenced_evidence: set[str] = set()
-    for block in _profile_document_blocks(document):
+    for block in _profile_blocks_including_notes(document):
         knowledge_refs = block.get("knowledge_refs")
         evidence_refs = block.get("evidence_refs")
         if isinstance(knowledge_refs, list):
@@ -1004,7 +1002,7 @@ def _validate_document_canonical_refs(
     missing_evidence = sorted(referenced_evidence - evidence_ids)
     if missing_evidence:
         raise ValueError("unknown canonical evidence IDs: " + ", ".join(missing_evidence))
-    for block in _profile_document_blocks(document):
+    for block in _profile_blocks_including_notes(document):
         evidence_refs = block.get("evidence_refs")
         if isinstance(evidence_refs, list) and any(
             isinstance(ref, str) and evidence_records[ref].get("origin") == "video"
@@ -1012,7 +1010,7 @@ def _validate_document_canonical_refs(
         ) and not _has_valid_source_spans(block.get("source_spans")):
             raise ValueError("canonical video evidence requires document source_spans")
     if profile_id == "creator-article":
-        for block in _profile_document_blocks(document):
+        for block in _profile_blocks_including_notes(document):
             if block.get("kind") != "quote":
                 continue
             refs = block.get("knowledge_refs")
@@ -1031,7 +1029,7 @@ def _validate_document_canonical_refs(
             ):
                 raise ValueError("creator-article quotes require canonical video evidence")
     if profile_id == "enterprise-knowledge":
-        for block in _profile_document_blocks(document):
+        for block in _profile_blocks_including_notes(document):
             evidence_refs = block.get("evidence_refs")
             if not isinstance(evidence_refs, list) or any(
                 not isinstance(ref, str) or evidence_records[ref].get("origin") != "video"
@@ -1477,6 +1475,15 @@ def _profile_document_blocks(document: Mapping[str, object]) -> list[Mapping[str
         return blocks
     raw_blocks = document.get("blocks")
     return [block for block in raw_blocks if isinstance(block, Mapping)] if isinstance(raw_blocks, list) else []
+
+
+def _profile_blocks_including_notes(
+    document: Mapping[str, object],
+) -> list[Mapping[str, object]]:
+    """Reader blocks plus the separately delivered boundary notes."""
+    from vka.quality import notes_blocks
+
+    return [*_profile_document_blocks(document), *notes_blocks(document)]
 
 
 def _has_valid_source_spans(value: object) -> bool:

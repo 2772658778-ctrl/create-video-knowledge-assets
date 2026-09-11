@@ -15,8 +15,8 @@ from pathlib import Path
 from typing import Any
 
 
-TEXT_SUFFIXES = ("md", "html")
 IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".webp")
+PARTS = ("main", "notes")
 
 
 def package_demo(
@@ -40,36 +40,17 @@ def package_demo(
     figures = demo / "figures"
     figures.mkdir(parents=True, exist_ok=True)
 
-    rewrites = _copy_artifacts(asset, document, demo, figures)
+    _copy_artifacts(asset, document, demo, figures)
+
     written: list[str] = []
-    for suffix in TEXT_SUFFIXES:
-        source = outputs / f"document.{suffix}"
-        if not source.is_file():
-            continue
-        text = source.read_text(encoding="utf-8")
-        for artifact_ref, local in rewrites:
-            text = text.replace(f"../../{artifact_ref}", local)
-            text = text.replace(artifact_ref, local)
-        text = re.sub(r"!\[[^\]]*\]\((?!#|https?://|figures/|cover\.)[^)]+\)", "", text)
-        text = re.sub(r'<img src="(?!#|https?://|figures/|cover\.)[^"]+"[^>]*>', "", text)
-        target = demo / f"{name}.{suffix}"
-        target.write_text(text, encoding="utf-8")
-        written.append(str(target))
-
-    pdf = outputs / "document.pdf"
-    if pdf.is_file():
-        target = demo / f"{name}.pdf"
-        shutil.copy2(pdf, target)
-        written.append(str(target))
-
-    for figure in sorted(figures.glob("*")):
-        if figure.name not in "".join(
-            (demo / f"{name}.{suffix}").read_text(encoding="utf-8")
-            for suffix in TEXT_SUFFIXES
-            if (demo / f"{name}.{suffix}").is_file()
-        ):
-            figure.unlink()
-
+    for part, filename in (("main", name), ("notes", "notes")):
+        pdf = outputs / ("document.pdf" if part == "main" else "notes.pdf")
+        if pdf.is_file():
+            target = demo / f"{filename}.pdf"
+            shutil.copy2(pdf, target)
+            written.append(str(target))
+    if not written:
+        raise ValueError(f"{profile_id} has no rendered PDF to package")
     return {"asset": asset.name, "profile_id": profile_id, "demo": str(demo), "files": written}
 
 
@@ -88,13 +69,36 @@ def _copy_artifacts(
             shutil.copy2(source, demo / f"cover{source.suffix}")
             rewrites.append((cover_ref, f"cover{source.suffix}"))
 
-    frame_dir = asset / "evidence" / "frames" / "inspected"
-    for frame in sorted(frame_dir.glob("*")) if frame_dir.is_dir() else []:
-        if frame.suffix.lower() not in IMAGE_SUFFIXES:
-            continue
-        shutil.copy2(frame, figures / frame.name)
-        rewrites.append((f"evidence/frames/inspected/{frame.name}", f"figures/{frame.name}"))
+    for figure_ref in _referenced_figures(document):
+        source = _safe_asset_path(asset, figure_ref)
+        if not source.is_file():
+            raise ValueError(f"document references a missing figure: {figure_ref}")
+        shutil.copy2(source, figures / source.name)
+        rewrites.append((figure_ref, f"figures/{source.name}"))
     return rewrites
+
+
+def _referenced_figures(document: Mapping[str, Any]) -> list[str]:
+    """Every image the delivered parts actually show, in document order."""
+    parts: list[object] = [document.get("sections")]
+    notes = document.get("notes")
+    if isinstance(notes, Mapping):
+        parts.append(notes.get("sections"))
+
+    refs: list[str] = []
+    for sections in parts:
+        if not isinstance(sections, list):
+            continue
+        for section in sections:
+            if not isinstance(section, Mapping):
+                continue
+            for block in section.get("blocks") or []:
+                if not isinstance(block, Mapping) or block.get("kind") != "image":
+                    continue
+                path = block.get("path") or block.get("image_path")
+                if isinstance(path, str) and path and path not in refs:
+                    refs.append(path)
+    return refs
 
 
 def _safe_asset_path(asset: Path, relative: str) -> Path:

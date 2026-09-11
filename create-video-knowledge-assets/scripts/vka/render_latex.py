@@ -4,7 +4,7 @@ import re
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from vka.quality import document_sections_for_render, rebase_document_image_paths
+from vka.quality import document_sections_for_part, rebase_document_image_paths
 
 
 URL_RE = re.compile(
@@ -35,6 +35,8 @@ def render_course_tex(
     one_sentence_summary: str | None = None,
     metadata: Mapping[str, Any] | None = None,
     title_page_label: str = "Codex course notes",
+    show_cover: bool = True,
+    show_toc: bool = True,
 ) -> str:
     if not isinstance(title, str):
         raise ValueError("course title must be a string")
@@ -54,12 +56,22 @@ def render_course_tex(
         r"\usepackage{tabularx}",
         r"\usepackage{listings}",
         r"\usepackage[bottom]{footmisc}",
+        r"\usepackage{caption}",
+        r"\usepackage{needspace}",
         r"\usepackage{hyperref}",
+        r"\captionsetup{font=small,labelfont=bf,skip=5pt,singlelinecheck=false}",
         r"\hypersetup{unicode=true,colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black}",
         r"\setcounter{tocdepth}{2}",
         r"\setcounter{secnumdepth}{2}",
         r"\setlength{\parskip}{0.42em}",
         r"\setlength{\parindent}{2em}",
+        r"\raggedbottom",
+        r"\setlength{\intextsep}{0.7em}",
+        r"\setlength{\textfloatsep}{0.7em}",
+        r"\renewcommand{\topfraction}{0.92}",
+        r"\renewcommand{\bottomfraction}{0.6}",
+        r"\renewcommand{\textfraction}{0.06}",
+        r"\renewcommand{\floatpagefraction}{0.72}",
         r"\renewcommand{\footnotesize}{\scriptsize}",
         r"\setlength{\skip\footins}{0.85\baselineskip}",
         r"\definecolor{vkaBlue}{HTML}{245B7D}",
@@ -82,7 +94,7 @@ def render_course_tex(
     if subtitle:
         lines.extend([r"\vspace{0.55cm}", rf"{{\normalsize {_escape_latex(subtitle)}\par}}"])
 
-    if cover_image:
+    if cover_image and show_cover:
         lines.extend(
             [
                 r"\vspace{0.9cm}",
@@ -111,16 +123,18 @@ def render_course_tex(
             r"\vfill",
             rf"{{\large {_escape_latex(title_page_label)}\par}}",
             r"\end{titlepage}",
-            r"\tableofcontents",
-            r"\newpage",
-            "",
         ]
     )
+    if show_toc:
+        lines.extend([r"\tableofcontents", r"\newpage", ""])
+    else:
+        lines.append("")
 
     for section_index, section in enumerate(sections):
         section_title = _section_title(section)
         if section_index:
-            lines.append(r"\par\vspace{0.9\baselineskip}\pagebreak[2]")
+            lines.append(r"\par\vspace{1.15\baselineskip}")
+            lines.append(r"\needspace{4\baselineskip}")
         lines.append(rf"\section{{{_escape_latex(section_title)}}}")
         lines.append("")
 
@@ -139,6 +153,7 @@ def render_document_tex(
     asset_root: str | None = None,
     output_directory: str | None = None,
     source_navigation: bool = True,
+    part: str = "main",
 ) -> str:
     """Render a profile-selected document without applying P1's course gate."""
     if not isinstance(document, Mapping):
@@ -148,8 +163,9 @@ def render_document_tex(
     rebased_image_paths = asset_root is not None and output_directory is not None
     if rebased_image_paths:
         document = rebase_document_image_paths(document, asset_root, output_directory)
-    title, sections = document_sections_for_render(
+    title, sections = document_sections_for_part(
         document,
+        part=part,
         allow_rebased_image_paths=rebased_image_paths,
         source_navigation=source_navigation,
     )
@@ -161,6 +177,8 @@ def render_document_tex(
         "research-brief": "Codex evidence-separated research brief",
         "short-video-script": "Codex short-video script",
     }.get(profile_id, "Codex knowledge document")
+    if part == "notes":
+        title_page_label = "Codex source notes"
     return render_course_tex(
         title,
         sections,
@@ -172,6 +190,8 @@ def render_document_tex(
         ),
         metadata=_profile_optional_mapping(document, "metadata", profile_id),
         title_page_label=title_page_label,
+        show_cover=part == "main",
+        show_toc=part == "main",
     )
 
 
@@ -270,7 +290,7 @@ def _render_image_block(block: Mapping[str, Any]) -> list[str]:
     return [
         r"\begin{figure}[H]",
         r"\centering",
-        rf"\includegraphics[width=\linewidth,height=0.48\textheight,keepaspectratio]{{{latex_path}}}",
+        rf"\includegraphics[width=0.86\linewidth,height=0.30\textheight,keepaspectratio]{{{latex_path}}}",
         (
             rf"\caption{{{_escape_latex(caption)}\protect\footnotemark}}"
             if footnote

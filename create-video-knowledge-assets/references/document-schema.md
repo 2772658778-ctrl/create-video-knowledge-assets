@@ -14,6 +14,25 @@ add facts or alter conclusions. Documents use schema version `1.1`.
 | `evidence_origins` | object mapping evidence ID to `video`, `external`, or `generated` | no | Provenance catalog used to determine whether a cited block can omit video time ranges. |
 | `schema_version` | string | no | Defaults to `1.1`. |
 
+## Two Delivered Parts
+
+A view delivers two PDFs, and the split is part of the contract:
+
+- `sections` is the reader's document. A reader wants the video's content, so
+  every chapter must be about the video. Boundary, uncertainty, and source
+  navigation material must **not** appear here; the table of contents is the
+  first thing a reader uses to decide whether to keep reading, and it has to
+  describe the video rather than the pipeline.
+- `notes` is the separate boundary-and-source document:
+  `{"title": "...", "sections": [...]}` using the same block shape. It carries
+  scope, uncertainty, what the video claims versus what the view inferred, and
+  where each claim came from.
+
+Both parts keep `knowledge_refs` and `evidence_refs` on every block and are
+validated the same way. Render either part with
+`vka render-document --part main|notes`, and publish both with
+`vka package-demo` as `summary.pdf` and `notes.pdf`.
+
 ## P3 Projection Binding
 
 For a new creator, enterprise, or research view authored from a persisted

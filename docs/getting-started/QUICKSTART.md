@@ -22,14 +22,14 @@ python -m pip install "pydantic>=2.7,<3" "srt>=3.5,<4"
 
 ```text
 使用 $create-video-knowledge-assets 深度总结这个视频：<Bilibili URL>。
-整理核心问题、机制、例子、关键画面、限制和来源导航，并生成 PDF、HTML 和 Markdown。
+整理核心问题、机制、例子和关键画面，生成一份正文 PDF 和一份边界说明 PDF。
 ```
 
 ### 课程笔记
 
 ```text
 使用 $create-video-knowledge-assets，把这个视频制作成适合学习和复习的中文课程笔记：<Bilibili URL>。
-保留关键画面、教学结构和来源时间脚注，并生成 PDF、HTML 和 Markdown。
+保留关键画面和教学结构，生成一份课程笔记 PDF。
 ```
 
 ### 本地视频
@@ -45,15 +45,15 @@ python -m pip install "pydantic>=2.7,<3" "srt>=3.5,<4"
 
 ## 看真实结果
 
-不用跑代码也能看效果。`demos/` 下有两份走完完整链路的成果：
+不用跑代码也能看效果。`demos/` 下是走完完整链路、只交付 PDF 的成果：
 
 | Demo | 直接查看 |
 | --- | --- |
-| Transformer 的 QKV（课程笔记） | [PDF](../../demos/BV1uPMA62E8e/summary.pdf) · [HTML](../../demos/BV1uPMA62E8e/summary.html) · [Markdown](../../demos/BV1uPMA62E8e/summary.md) |
-| 猫为什么把幼崽叼给主人（深度总结） | [PDF](../../demos/BV1idEL6REd3/summary.pdf) · [HTML](../../demos/BV1idEL6REd3/summary.html) · [Markdown](../../demos/BV1idEL6REd3/summary.md) |
-| 国民凉茶为什么卖不动了（短视频脚本） | [PDF](../../demos/bili-BV1hwtB6YEzo/summary.pdf) · [HTML](../../demos/bili-BV1hwtB6YEzo/summary.html) · [Markdown](../../demos/bili-BV1hwtB6YEzo/summary.md) |
-| 为什么很少有国家吃笋（深度总结） | [PDF](../../demos/bili-BV1tHdoYnEGm/summary.pdf) · [HTML](../../demos/bili-BV1tHdoYnEGm/summary.html) · [Markdown](../../demos/bili-BV1tHdoYnEGm/summary.md) |
-| Harness 实践：把文字变成精美文章（公众号长文） | [PDF](../../demos/bili-BV1ayLD6uERL/summary.pdf) · [HTML](../../demos/bili-BV1ayLD6uERL/summary.html) · [Markdown](../../demos/bili-BV1ayLD6uERL/summary.md) |
+| Transformer 的 QKV（课程笔记） | [PDF](../../demos/BV1uPMA62E8e/summary.pdf) |
+| 猫为什么把幼崽叼给主人（深度总结） | [PDF](../../demos/BV1idEL6REd3/summary.pdf) |
+| 国民凉茶为什么卖不动了（短视频脚本） | [PDF](../../demos/bili-BV1hwtB6YEzo/summary.pdf) |
+| 为什么很少有国家吃笋（深度总结） | [PDF](../../demos/bili-BV1tHdoYnEGm/summary.pdf) · [边界与来源](../../demos/bili-BV1tHdoYnEGm/notes.pdf) |
+| Harness 实践：把文字变成精美文章（公众号长文） | [PDF](../../demos/bili-BV1ayLD6uERL/summary.pdf) · [边界与来源](../../demos/bili-BV1ayLD6uERL/notes.pdf) |
 
 ## 验证环境
 

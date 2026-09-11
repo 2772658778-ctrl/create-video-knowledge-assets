@@ -414,6 +414,46 @@ def rebase_document_image_paths(
     return rebased
 
 
+def document_sections_for_part(
+    document: object,
+    *,
+    part: str = "main",
+    allow_rebased_image_paths: bool = False,
+    source_navigation: bool = True,
+) -> tuple[str, list[dict[str, Any]]]:
+    """Return the sections of the main document or of the notes part.
+
+    The notes part is authored in the same block shape as the main document, so
+    both go through one validation and normalization path.
+    """
+    if part == "main":
+        return document_sections_for_render(
+            document,
+            allow_rebased_image_paths=allow_rebased_image_paths,
+            source_navigation=source_navigation,
+        )
+    if part != "notes":
+        raise ValueError("document part must be main or notes")
+    if not isinstance(document, Mapping):
+        raise ValueError("document must be an object")
+    notes = document_notes(document)
+    if notes is None:
+        raise ValueError("document has no notes part to render")
+    title = notes.get("title")
+    if not isinstance(title, str) or not title.strip():
+        raise ValueError("document notes need a title")
+    return document_sections_for_render(
+        {
+            "title": title,
+            "sections": notes.get("sections"),
+            "profile_id": document.get("profile_id"),
+            "evidence_origins": document.get("evidence_origins"),
+        },
+        allow_rebased_image_paths=allow_rebased_image_paths,
+        source_navigation=source_navigation,
+    )
+
+
 def document_sections_for_render(
     document: object,
     *,
@@ -504,10 +544,11 @@ def _general_deep_document_errors(document: Mapping[str, Any]) -> list[str]:
         errors.append("general-deep document needs an overview section")
     if kinds.count("logical_body") < 2:
         errors.append("general-deep document needs at least two logical body sections")
-    if not ({"limitations", "uncertainty"} & set(kinds)):
-        errors.append("general-deep document needs a limitations section")
-    if "source_navigation" not in kinds:
-        errors.append("general-deep document needs a source navigation section")
+    if any(kind in {"limitations", "uncertainty", "source_navigation"} for kind in kinds):
+        errors.append(
+            "general-deep must not carry boundary or source chapters; put them in notes"
+        )
+    errors.extend(notes_errors(document))
     prose = sum(
         len(_block_text(block))
         for block in _document_blocks(document)
@@ -653,7 +694,6 @@ def _creator_article_document_errors(document: object) -> list[str]:
         "narrative",
         "video_evidence",
         "actionable_takeaway",
-        "limitations_sources",
     )
     errors = _required_profile_sections(
         document,
@@ -693,6 +733,7 @@ def _creator_article_document_errors(document: object) -> list[str]:
             "creator-article must not use announcement register; replace "
             + "、".join(cliches)
         )
+    errors.extend(notes_errors(document))
     if not _section_has_video_span(document, "video_evidence"):
         errors.append("creator-article video evidence must retain video source spans")
     return errors
@@ -1054,6 +1095,56 @@ def _document_blocks(document: Mapping[str, Any]) -> Sequence[object]:
         return blocks
     blocks = document.get("blocks")
     return blocks if isinstance(blocks, list) else []
+
+
+def document_notes(document: Mapping[str, Any]) -> Mapping[str, Any] | None:
+    """Return the boundary-and-source part that ships beside the main document.
+
+    A reader wants the video's content. Traceability still matters, but it is a
+    different product: shipping it as extra chapters makes the table of
+    contents describe the pipeline instead of the video.
+    """
+    notes = document.get("notes")
+    return notes if isinstance(notes, Mapping) else None
+
+
+def notes_sections(document: Mapping[str, Any]) -> list[Mapping[str, Any]]:
+    notes = document_notes(document)
+    if notes is None:
+        return []
+    sections = notes.get("sections")
+    if not isinstance(sections, list):
+        return []
+    return [section for section in sections if isinstance(section, Mapping)]
+
+
+def notes_blocks(document: Mapping[str, Any]) -> list[Mapping[str, Any]]:
+    blocks: list[Mapping[str, Any]] = []
+    for section in notes_sections(document):
+        section_blocks = section.get("blocks")
+        if isinstance(section_blocks, list):
+            blocks.extend(block for block in section_blocks if isinstance(block, Mapping))
+    return blocks
+
+
+def notes_errors(document: Mapping[str, Any]) -> list[str]:
+    """The boundary part must exist and carry content, but not be a chapter."""
+    notes = document_notes(document)
+    if notes is None:
+        return ["document must deliver boundary and source notes as a separate part"]
+    title = notes.get("title")
+    if not isinstance(title, str) or not title.strip():
+        return ["document notes need a title"]
+    sections = notes_sections(document)
+    if not sections:
+        return ["document notes need at least one section"]
+    for index, section in enumerate(sections, start=1):
+        blocks = section.get("blocks")
+        if not isinstance(blocks, list) or not any(
+            isinstance(block, Mapping) and _block_has_content(block) for block in blocks
+        ):
+            return [f"document notes section {index} must contain non-empty blocks"]
+    return []
 
 
 def _semantic_sections(document: Mapping[str, Any]) -> list[Mapping[str, Any]]:
