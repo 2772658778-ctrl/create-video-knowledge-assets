@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Iterable
 
 
-STANDARD_DIRECTORIES = ("source", "evidence", "knowledge", "views", "index", "outputs", "logs")
+STANDARD_DIRECTORIES = ("source", "evidence", "knowledge", "views", "outputs", "logs")
 SCHEMA_VERSION = "1.1"
 
 

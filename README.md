@@ -8,7 +8,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12%2B-blue)](./pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-546_passed-green)](#工程质量)
+[![Tests](https://img.shields.io/badge/tests-414_passed-green)](#工程质量)
 
 ---
 
@@ -140,10 +140,10 @@
 ## 工程质量
 
 - **语言 / 环境**：Python 3.12+，`pydantic`、`srt`；外部工具 yt-dlp / ffmpeg / Whisper / XeLaTeX 按需调用；
-- **代码规模**：约 1.2 万行 Python，33 个功能模块，37 个测试文件；
-- **测试**：`python -m pytest -q`（全套 546 通过，Python 3.11 / 3.12 / 3.13 均可复现）；
-- **CLI**：`vka` 提供 38 个子命令，覆盖获取、证据、知识、视图、渲染、打包全链路；
-- **契约**：24 份 schema / 工作流 / 安全契约文档，见 [`references/`](./create-video-knowledge-assets/references/)；
+- **代码规模**：约 7.3 万行 Python，23 个功能模块，27 个测试文件；
+- **测试**：`python -m pytest -q`（全套 414 通过，Python 3.11 / 3.12 / 3.13 均可复现）；
+- **CLI**：`vka` 提供 32 个子命令，覆盖获取、证据、知识、视图、渲染、打包全链路；
+- **契约**：18 份 schema / 工作流 / 契约文档，见 [`references/`](./create-video-knowledge-assets/references/)；
 - **CI**：[`.github/workflows/ci.yml`](./.github/workflows/ci.yml)，stable（阻断）+ experimental（不阻断）双任务；
 - **安全边界**：Bilibili 内容需显式 Cookie（Cookie-Editor 导出）；凭据、私有媒体与日志不入库。详见 [SECURITY.md](./SECURITY.md)。
 
@@ -153,7 +153,7 @@
 ├── create-video-knowledge-assets/   # Skill 本体（SKILL.md、scripts/、references/、assets/）
 ├── docs/                            # 产品与工程文档（架构、能力地图、快速上手）
 ├── demos/                           # 端到端 Demo 成果（正文 PDF + 边界说明 PDF）
-├── tests/                           # 稳定测试 + 实验性测试
+├── tests/                           # 离线测试
 └── CHANGELOG.md / LICENSE / SECURITY.md / CONTRIBUTING.md
 ```
 
@@ -175,7 +175,7 @@
 | --- | --- | --- |
 | [快速上手](./docs/getting-started/QUICKSTART.md) | 30 秒开始 + 分场景示例 | 普通用户 |
 | [架构与数据流](./docs/ARCHITECTURE.md) | 资产布局、流水线、数据契约、业务视图 | 工程师 |
-| [能力地图](./docs/SKILLS_CATALOG.md) | 4 类成品输出 + 独立实验能力 + P1–P4 流水线 + 契约索引 | 想理解边界的人 |
+| [能力地图](./docs/SKILLS_CATALOG.md) | 4 类成品输出 + P1–P3 流水线 + 契约索引 | 想理解边界的人 |
 
 ## 隐私、版权与许可
 

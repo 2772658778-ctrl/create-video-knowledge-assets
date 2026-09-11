@@ -154,11 +154,11 @@ def test_p3_profile_projection_navigation_and_acceptance_template() -> None:
         assert required in acceptance
 
 
-def test_p4_qa_is_not_part_of_the_main_skill_workflow() -> None:
+def test_question_answering_is_declared_out_of_scope() -> None:
     skill_text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
     main_text = skill_text.split("## References", maxsplit=1)[0]
 
-    for required in ("Q&A is not part of the main product boundary", "future skill"):
+    for required in ("## Out Of Scope", "does not answer", "separate skill"):
         assert required in skill_text
     for prohibited in (
         "## Grounded Q&A",

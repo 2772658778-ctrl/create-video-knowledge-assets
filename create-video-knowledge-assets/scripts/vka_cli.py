@@ -48,13 +48,6 @@ from vka.profiles import (
     write_projection_plan,
 )
 from vka.projection_plan import validate_projection_plan
-from vka.qa_contract import GroundedAnswer
-from vka.qa_external import EXTERNAL_EVIDENCE_PATH, read_external_evidence, register_external_evidence
-from vka.qa_index import build_qa_index
-from vka.qa_planning import build_answer_plan
-from vka.qa_retrieval import retrieve_question
-from vka.qa_topology import build_qa_topology
-from vka.qa_validation import validate_grounded_answer
 from vka.quality import (
     validate_course_document_quality,
     validate_document_image_files,
@@ -362,46 +355,6 @@ def _build_parser() -> argparse.ArgumentParser:
     package.add_argument("--name", default="summary")
     package.set_defaults(func=_run_package_demo)
 
-    build_qa_index_parser = subparsers.add_parser("build-qa-index")
-    build_qa_index_parser.add_argument("--asset", required=True)
-    build_qa_index_parser.add_argument("--profile", choices=("course-notes",), required=True)
-    build_qa_index_parser.set_defaults(func=_run_build_qa_index)
-
-    build_qa_topology_parser = subparsers.add_parser("build-qa-topology")
-    build_qa_topology_parser.add_argument("--asset", required=True)
-    build_qa_topology_parser.add_argument(
-        "--profile", choices=("course-notes",), required=True
-    )
-    build_qa_topology_parser.set_defaults(func=_run_build_qa_topology)
-
-    retrieve_qa = subparsers.add_parser("retrieve-qa")
-    retrieve_qa.add_argument("--asset", required=True)
-    retrieve_qa.add_argument("--question", required=True)
-    retrieve_qa.add_argument(
-        "--mode",
-        choices=("video_only", "video_plus_context", "explore"),
-        default="video_only",
-    )
-    retrieve_qa.add_argument("--limit", type=int, default=8)
-    retrieve_qa.set_defaults(func=_run_retrieve_qa)
-
-    plan_qa = subparsers.add_parser("plan-qa")
-    plan_qa.add_argument("--input", required=True)
-    plan_qa.set_defaults(func=_run_plan_qa)
-
-    validate_answer = subparsers.add_parser("validate-answer")
-    validate_answer.add_argument("--asset", required=True)
-    validate_answer.add_argument("--input", required=True)
-    validate_answer.set_defaults(func=_run_validate_answer)
-
-    register_external = subparsers.add_parser("register-external-evidence")
-    register_external.add_argument("--asset", required=True)
-    register_external.add_argument("--input", required=True)
-    register_external.set_defaults(func=_run_register_external_evidence)
-
-    validate_external = subparsers.add_parser("validate-external-evidence")
-    validate_external.add_argument("--asset", required=True)
-    validate_external.set_defaults(func=_run_validate_external_evidence)
 
     return parser
 
@@ -771,107 +724,6 @@ def _run_cleanup_l2(args: argparse.Namespace) -> int:
         plan = execute_l2_cleanup(asset, plan)
     print(json.dumps(plan, ensure_ascii=False))
     return 0
-
-
-def _run_build_qa_index(args: argparse.Namespace) -> int:
-    manifest = build_qa_index(Path(args.asset), profile_id=args.profile)
-    print(json.dumps(manifest, ensure_ascii=False))
-    return 0
-
-
-def _run_build_qa_topology(args: argparse.Namespace) -> int:
-    topology = build_qa_topology(Path(args.asset), profile_id=args.profile)
-    print(json.dumps(topology, ensure_ascii=False))
-    return 0
-
-
-def _run_retrieve_qa(args: argparse.Namespace) -> int:
-    pack = retrieve_question(
-        Path(args.asset),
-        args.question,
-        profile_id="course-notes",
-        mode=args.mode,
-        limit=args.limit,
-    )
-    if "answer" in pack:
-        raise ValueError("retrieval pack must not include an answer")
-    print(json.dumps(pack, ensure_ascii=False))
-    return 0
-
-
-def _run_plan_qa(args: argparse.Namespace) -> int:
-    try:
-        pack = json.loads(Path(args.input).read_text(encoding="utf-8-sig"))
-        if not isinstance(pack, Mapping):
-            raise ValueError("grounding pack is not an object")
-        if "answer" in pack or "claims" in pack:
-            raise ValueError("grounding pack contains answer content")
-        plan = build_answer_plan(pack)
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
-        sys.stderr.write("error: grounding pack failed validation\n")
-        return 1
-    if "answer" in plan or "claims" in plan:
-        sys.stderr.write("error: grounding pack failed validation\n")
-        return 1
-    print(json.dumps(plan, ensure_ascii=False))
-    return 0
-
-
-def _run_validate_answer(args: argparse.Namespace) -> int:
-    try:
-        payload = json.loads(Path(args.input).read_text(encoding="utf-8-sig"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
-        _write_answer_validation_errors(["answer input must be a valid JSON object"])
-        return 1
-    if not isinstance(payload, Mapping):
-        _write_answer_validation_errors(["answer input must be a JSON object"])
-        return 1
-
-    try:
-        answer = GroundedAnswer.model_validate(payload)
-    except ValidationError as exc:
-        _write_answer_validation_errors(_answer_contract_errors(exc))
-        return 1
-
-    errors = validate_grounded_answer(Path(args.asset), answer)
-    if errors:
-        _write_answer_validation_errors(errors)
-        return 1
-    print("answer passed validation")
-    return 0
-
-
-def _run_register_external_evidence(args: argparse.Namespace) -> int:
-    path = register_external_evidence(Path(args.asset), Path(args.input))
-    print(json.dumps({"external_evidence_path": str(path)}))
-    return 0
-
-
-def _run_validate_external_evidence(args: argparse.Namespace) -> int:
-    _, errors = read_external_evidence(
-        Path(args.asset) / EXTERNAL_EVIDENCE_PATH, required=True
-    )
-    if errors:
-        _write_answer_validation_errors(errors)
-        return 1
-    print("external evidence passed validation")
-    return 0
-
-
-def _answer_contract_errors(exc: ValidationError) -> list[str]:
-    """Render Pydantic validation messages without echoing submitted values."""
-    return sorted(
-        {
-            f"answer contract error at {'.'.join(str(part) for part in item['loc'])}: {item['msg']}"
-            for item in exc.errors()
-        }
-    )
-
-
-def _write_answer_validation_errors(errors: Sequence[str]) -> None:
-    sys.stderr.write("error: answer failed validation:\n")
-    for error in errors:
-        sys.stderr.write(f"- {error}\n")
 
 
 def _run_select_profile(args: argparse.Namespace) -> int:

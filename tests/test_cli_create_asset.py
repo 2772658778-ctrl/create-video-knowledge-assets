@@ -65,7 +65,7 @@ def test_create_asset_writes_manifest_from_the_input_descriptor(
     assert manifest["stages"] == {}
     assert all(
         (assets_root / "bili-BV1hwtB6YEzo" / name).is_dir()
-        for name in ("source", "evidence", "knowledge", "views", "outputs", "index", "logs")
+        for name in ("source", "evidence", "knowledge", "views", "outputs", "logs")
     )
 
 

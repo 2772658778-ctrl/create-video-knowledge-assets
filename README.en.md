@@ -8,7 +8,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12%2B-blue)](./pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-546_passed-green)](#engineering-quality)
+[![Tests](https://img.shields.io/badge/tests-414_passed-green)](#engineering-quality)
 
 ---
 
@@ -140,7 +140,7 @@ Installation and full examples: [docs/getting-started/QUICKSTART.md](./docs/gett
 
 - **Language / environment**: Python 3.12+, `pydantic`, `srt`; external tools yt-dlp / ffmpeg / Whisper / XeLaTeX invoked as needed;
 - **Scale**: ~11k lines of Python, 28 modules, 31 test files;
-- **Tests**: `python -m pytest -q` (546 passing, reproducible on Python 3.11 / 3.12 / 3.13);
+- **Tests**: `python -m pytest -q` (414 passing, reproducible on Python 3.11 / 3.12 / 3.13);
 - **CLI**: `vka` exposes 31 stage commands covering acquisition, evidence, knowledge, content, views, and rendering;
 - **Contracts**: 23 schema / workflow / security contract documents in [`references/`](./create-video-knowledge-assets/references/);
 - **CI**: [`.github/workflows/ci.yml`](./.github/workflows/ci.yml), stable (blocking) + experimental (non-blocking);
@@ -174,7 +174,7 @@ Changes: [CHANGELOG.md](./CHANGELOG.md).
 | --- | --- | --- |
 | [Quick start](./docs/getting-started/QUICKSTART.md) | Start in 30 seconds + scenario examples | Regular users |
 | [Architecture](./docs/ARCHITECTURE.md) | Asset layout, pipeline, data contracts, product views | Engineers |
-| [Capability map](./docs/SKILLS_CATALOG.md) | 4 production profiles + one experimental path + P1–P4 pipeline + contract index | Anyone exploring boundaries |
+| [Capability map](./docs/SKILLS_CATALOG.md) | 4 production profiles + the P1–P3 pipeline + contract index | Anyone exploring boundaries |
 
 ## Privacy, copyright & license
 

@@ -14,7 +14,7 @@ def test_asset_store_creates_manifest_and_standard_directories(tmp_path: Path) -
     assert (store.root / "manifest.json").is_file()
     assert all(
         (store.root / name).is_dir()
-        for name in ("source", "evidence", "knowledge", "views", "index", "outputs", "logs")
+        for name in ("source", "evidence", "knowledge", "views", "outputs", "logs")
     )
 
 

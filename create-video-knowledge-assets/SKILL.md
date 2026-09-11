@@ -45,8 +45,9 @@ Use this workflow for a Bilibili URL or a local video containing knowledge conte
 - Read `references/p1-workflow.md` before making any gate decision about preflight tools, source quality, multipart selection, ASR quality, frame completeness, evidence references, or PDF compilation.
 - Read `references/transcript-repair.md` before using Whisper ASR output for knowledge extraction or course-note prose.
 
-### Future Q&A
+## Out Of Scope
 
-Q&A is not part of the main product boundary. It may become a separate
-future skill that consumes the same asset protocol after a course-notes asset
-is complete.
+This skill produces reader-facing documents from a video. It does not answer
+questions about an asset, build retrieval indexes, or maintain a queryable
+knowledge base; a question-answering product would be a separate skill built on
+the same asset protocol.

@@ -47,8 +47,7 @@ Bilibili URL 或本地视频
 │   ├── view-manifest.json        # 业务视图选择原因与格式范围
 │   ├── projection-plan.json      # P3 业务场景的知识到文档桥梁
 │   └── document.json             # 渲染器无关文档
-├── index/                        # 独立实验问答的词法索引、拓扑和有界证据窗口
-├── outputs/<profile>/            # Markdown、HTML、LaTeX 和 PDF
+├── outputs/<profile>/            # 正文 PDF 与边界说明 PDF 的 TeX/PDF 产物
 └── logs/                         # 本地运行信息，不得作为公开 Demo 提交
 ```
 
@@ -80,20 +79,6 @@ Bilibili URL 或本地视频
 - `write-projection-plan` + `validate-projection-plan` 生成并校验知识到内容再到文档的桥梁；
 - Agent 只允许写 `views/<profile>/` 和 `outputs/<profile>/`，禁止改动 `source/`、`evidence/`、`knowledge/`（`verify-asset` 校验哈希前后一致）。
 
-### P4 · 证据约束问答（独立实验通道）
-
-围绕已完成且通过验证的 course-notes 资产：
-
-```text
-verify-asset → build-qa-index（原子知识块 + SQLite FTS5 词法索引）
-            → build-qa-topology（知识拓扑 + 有界证据窗口）
-            → retrieve-qa（检索证据包，不生成答案）
-            → plan-qa（生成只含引用结构的回答计划）
-            → Agent 撰写 → validate-answer（校验声明 / 引用 / 时间窗 / 范围 / 状态）
-```
-
-检索与规划**从不直接生成答案**；视频事实只能引用视频证据；上下文模式要求外部材料单独注册（`register-external-evidence`）并分区展示。它不属于默认成品链路。
-
 ## 关键工具边界
 
 | 工具 | 职责 | 边界 |
@@ -110,7 +95,6 @@ verify-asset → build-qa-index（原子知识块 + SQLite FTS5 词法索引）
 - `validate-teaching-outline`：教学大纲结构校验；
 - `validate-document` / `validate-document-quality`：渲染器无关文档与质量门（P1 quality floor）；
 - `validate-projection-plan`：P3 投影契约校验；
-- `validate-answer`：P4 问答声明校验（独立实验）；
 - `verify-asset`：规范资产哈希一致性。
 
 自动校验不能替代人工内容验收；发布前至少抽查关键事实、视觉结论、课程结构和 PDF 页面效果。
