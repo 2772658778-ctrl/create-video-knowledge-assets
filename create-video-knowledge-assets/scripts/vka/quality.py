@@ -472,7 +472,9 @@ def format_source_note(spans: Sequence[Mapping[str, Any]]) -> str:
         text = f"{_format_source_time(start)}--{_format_source_time(end)}"
         if text not in ranges:
             ranges.append(text)
-    return "，".join(ranges)
+    # An ASCII comma keeps the separator breakable inside a monospace run, so a
+    # citation with several windows wraps instead of overrunning its column.
+    return ", ".join(ranges)
 
 
 def assign_source_notes(

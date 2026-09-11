@@ -451,7 +451,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--serif);
-  font-size: 18px;
+  font-size: 19px;
   line-height: 1.85;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -465,8 +465,8 @@ main {
   counter-reset: sec fig;
 }
 h1, h2, h3 { font-family: var(--sans); color: var(--ink); line-height: 1.34; text-wrap: balance; }
-h1 { font-size: 2rem; font-weight: 700; letter-spacing: 0.005em; margin: 0 0 0.5em; }
-h2 { font-size: 1.45rem; font-weight: 700; margin: 3.2rem 0 1.1rem; counter-increment: sec; }
+h1 { font-size: 2.05rem; font-weight: 700; letter-spacing: 0.005em; margin: 0 0 0.5em; }
+h2 { font-size: 1.5rem; font-weight: 700; margin: 3.2rem 0 1.1rem; counter-increment: sec; }
 h2::before {
   content: counter(sec, decimal-leading-zero);
   display: block;
@@ -476,11 +476,11 @@ h2::before {
   color: var(--accent);
   margin-bottom: 0.35em;
 }
-h3 { font-size: 1.12rem; font-weight: 600; margin: 2.1rem 0 0.7em; color: var(--ink-soft); }
+h3 { font-size: 1.18rem; font-weight: 600; margin: 2.1rem 0 0.7em; color: var(--ink-soft); }
 p { margin: 0 0 1.15em; }
 .theme { font-family: var(--sans); font-size: 1.02rem; font-weight: 500; color: var(--accent); margin: 0 0 1rem; }
 .summary { font-size: 1rem; color: var(--ink-soft); margin: 0 0 0.7rem; padding-left: 0.9rem; border-left: 2px solid var(--line); }
-.subtitle, .source, figcaption, .metadata { color: var(--muted); font-size: 0.84rem; }
+.subtitle, .source, figcaption, .metadata { color: var(--muted); font-size: 0.87rem; }
 .subtitle { margin: 0 0 0.8rem; letter-spacing: 0.02em; }
 .metadata { display: block; margin: 0 0 2rem; line-height: 1.95; }
 nav { margin: 2.6rem 0 3.2rem; padding: 1.3rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -510,7 +510,7 @@ figure:not(.cover) figcaption::before {
   letter-spacing: 0.04em;
   color: var(--accent);
 }
-.caption { font-size: 0.84rem; line-height: 1.75; color: var(--muted); margin: -1.6rem 0 2.2rem; }
+.caption { font-size: 0.87rem; line-height: 1.75; color: var(--muted); margin: -1.6rem 0 2.2rem; }
 .cover { margin: 0 0 2.4rem; }
 .cover img { width: 100%; border-radius: 4px; }
 .cite { font-size: 0.6em; vertical-align: super; line-height: 0; margin-left: 0.12em; }
@@ -523,7 +523,7 @@ blockquote { margin: 1.5rem 0; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 2px
 .notes { margin-top: 4.5rem; padding-top: 1.7rem; border-top: 1px solid var(--line); }
 .notes h2 { counter-increment: none; font-family: var(--sans); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.22em; color: var(--accent); margin: 0 0 1.2rem; }
 .notes h2::before { content: none; }
-.notes-list { list-style: none; margin: 0; padding: 0; counter-reset: note; font-size: 0.8rem; line-height: 1.7; color: var(--muted); columns: 2; column-gap: 2.4em; }
+.notes-list { list-style: none; margin: 0; padding: 0; counter-reset: note; font-size: 0.83rem; line-height: 1.7; color: var(--muted); columns: 2; column-gap: 2.4em; }
 .notes-list li { counter-increment: note; display: grid; grid-template-columns: 2.6em 1fr; margin: 0 0 0.3rem; break-inside: avoid; }
 .notes-list li::before { content: counter(note) "."; color: var(--muted); }
 .notes-list .time { font-family: var(--mono); font-size: 0.94em; }
