@@ -24,7 +24,7 @@ Bilibili URL 或本地视频
                               与渲染器无关的文档（document.json）
                                                │
                                                ▼
-                              PDF / HTML / Markdown（同一底稿）
+                        正文 PDF + 边界说明 PDF（同一底稿）
 ```
 
 ## 规范资产布局

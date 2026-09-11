@@ -8,11 +8,11 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12%2B-blue)](./pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-477_passed-green)](#engineering-quality)
+[![Tests](https://img.shields.io/badge/tests-546_passed-green)](#engineering-quality)
 
 ---
 
-`create-video-knowledge-assets` is an AI-driven video content reproduction engine. Give it a **Bilibili URL** or a **local knowledge video**, and it handles source identification, subtitle acquisition or speech transcription, key-frame inspection, evidence organization, knowledge modeling, `content/` unit selection, and business-oriented writing — delivering a clean artifact you can use directly (**PDF / HTML / Markdown**).
+`create-video-knowledge-assets` is an AI-driven video content reproduction engine. Give it a **Bilibili URL** or a **local knowledge video**, and it handles source identification, subtitle acquisition or speech transcription, key-frame inspection, evidence organization, knowledge modeling, and business-oriented writing — delivering a clean artifact you can use directly (**a PDF**).
 
 It is not a "video summarizer." A summary compresses information; it turns a one-time viewing into a **traceable, reviewable, reusable** knowledge asset.
 
@@ -60,11 +60,11 @@ Every knowledge claim lands in an evidence layer first — subtitle time windows
 
 ### 2. Content–format separation: knowledge to content, then formats
 
-The system first builds a renderer-neutral draft, then distills the knowledge layer into reusable `content/` units, and only then generates Markdown, HTML, and LaTeX (PDF is compiled from LaTeX). **Content units, figures, and provenance are shared instead of rewritten per format**, which keeps outputs aligned.
+The system builds a renderer-neutral draft and compiles it to PDF. **Prose, figures, and provenance are written once**, so the deliverable cannot drift.
 
 ### 3. One asset, many views: reusable content units
 
-`source/`, `evidence/`, and `knowledge/` form the canonical fact base. `content/` holds reusable content units derived from that base. Course notes, deep articles, short video scripts, and other product views are **different finished outputs from the same asset**. Views may read the lower layers and write only to their own `views/` and `outputs/` — they cannot pollute the underlying facts.
+`source/`, `evidence/`, and `knowledge/` form the canonical fact base. Course notes, deep articles, short video scripts, and other product views are **different finished outputs from the same asset**. Views may read the lower layers and write only to their own `views/` and `outputs/` — they cannot pollute the underlying facts.
 
 > Effect: a video is not re-understood once per scenario; it is processed once and reused many times.
 
@@ -81,9 +81,9 @@ Staged contracts, quality gates, and human review points govern the process: mul
 | Transformer QKV | Course notes (Whisper transcription + 312-segment timeline + 8 inspected frames) | [PDF](./demos/BV1uPMA62E8e/summary.pdf) · [HTML](./demos/BV1uPMA62E8e/summary.html) · [Markdown](./demos/BV1uPMA62E8e/summary.md) |
 | Why cats bring kittens to their owners | Deep summary (with evidence boundaries & video navigation) | [PDF](./demos/BV1idEL6REd3/summary.pdf) · [HTML](./demos/BV1idEL6REd3/summary.html) · [Markdown](./demos/BV1idEL6REd3/summary.md) |
 
-Both demos completed the full pipeline: URL → subtitles/transcription → frame extraction and inspection → knowledge modeling → writing → PDF/HTML/Markdown. The second demo best embodies the product philosophy: the prose explicitly distinguishes "how the video explains this" from "whether this demo independently confirms it," and provides a time-window table for going back to verify — **this is the evidence-first principle productized.**
+Both demos completed the full pipeline: URL → subtitles/transcription → frame extraction and inspection → knowledge modeling → writing → PDF. The second demo best embodies the product philosophy: the prose explicitly distinguishes "how the video explains this" from "whether this demo independently confirms it," and provides a time-window table for going back to verify — **this is the evidence-first principle productized.**
 
-**Current verification scope**: the two demos validate the Codex, single-part Bilibili, CPU ASR, and PDF/HTML/Markdown path. GPU, platform subtitles, full multi-part handling, and local videos are not yet covered by demos.
+**Current verification scope**: the two demos validate the Codex, single-part Bilibili, CPU ASR, and the PDF delivery path. GPU, platform subtitles, full multi-part handling, and local videos are not yet covered by demos.
 
 ## Architecture at a glance
 
@@ -97,10 +97,9 @@ Input identification & tool preflight ────► Subtitles / audio / video 
   Evidence layer (repaired timeline + inspected frames) ──► Knowledge layer (units / relations / synthesis / limits)
         │                                                    │
         ▼                                                    ▼
-                 `content/` units ───────────────────────► `views/<profile>/`
         │
         ▼
- Renderer-neutral document ──► PDF / HTML / Markdown
+ Renderer-neutral document ──► content PDF + boundary-notes PDF
         │
         ▼
  Learning · Creation · Archival · Publishing
@@ -141,7 +140,7 @@ Installation and full examples: [docs/getting-started/QUICKSTART.md](./docs/gett
 
 - **Language / environment**: Python 3.12+, `pydantic`, `srt`; external tools yt-dlp / ffmpeg / Whisper / XeLaTeX invoked as needed;
 - **Scale**: ~11k lines of Python, 28 modules, 31 test files;
-- **Tests**: `python -m pytest -q` (477 passing, reproducible on Python 3.11 / 3.12 / 3.13);
+- **Tests**: `python -m pytest -q` (546 passing, reproducible on Python 3.11 / 3.12 / 3.13);
 - **CLI**: `vka` exposes 31 stage commands covering acquisition, evidence, knowledge, content, views, and rendering;
 - **Contracts**: 23 schema / workflow / security contract documents in [`references/`](./create-video-knowledge-assets/references/);
 - **CI**: [`.github/workflows/ci.yml`](./.github/workflows/ci.yml), stable (blocking) + experimental (non-blocking);
@@ -152,7 +151,7 @@ Installation and full examples: [docs/getting-started/QUICKSTART.md](./docs/gett
 ```text
 ├── create-video-knowledge-assets/   # The skill itself (SKILL.md, scripts/, references/, assets/)
 ├── docs/                            # Product and engineering docs (architecture, capability map, quick start)
-├── demos/                           # End-to-end demo deliverables (PDF / HTML / Markdown)
+├── demos/                           # End-to-end demos (content PDF + boundary PDF)
 ├── tests/                           # Stable tests + experimental tests
 └── CHANGELOG.md / LICENSE / SECURITY.md / CONTRIBUTING.md
 ```
@@ -163,7 +162,7 @@ This project began with a product requirements document that defined one guiding
 
 | Phase | Goal | Status |
 | --- | --- | --- |
-| Phase 1: Usable | Single video, deep summary / course notes, PDF/HTML/MD, evidence traceability | ✅ shipped in v0.1 |
+| Phase 1: Usable | Single video, deep summary / course notes, PDF delivery, evidence traceability | ✅ shipped in v0.1 |
 | Phase 2: Reusable | Deep articles, short video scripts, broader content profiles | 🧪 implemented early, awaiting more real-business validation |
 | Phase 3: Productizable | Quality gates, release review, exception recovery, scaled reuse | 🔜 planned |
 
@@ -174,7 +173,7 @@ Changes: [CHANGELOG.md](./CHANGELOG.md).
 | Document | Content | For |
 | --- | --- | --- |
 | [Quick start](./docs/getting-started/QUICKSTART.md) | Start in 30 seconds + scenario examples | Regular users |
-| [Architecture](./docs/ARCHITECTURE.md) | Asset layout, pipeline, data contracts, content/view bridge | Engineers |
+| [Architecture](./docs/ARCHITECTURE.md) | Asset layout, pipeline, data contracts, product views | Engineers |
 | [Capability map](./docs/SKILLS_CATALOG.md) | 4 production profiles + one experimental path + P1–P4 pipeline + contract index | Anyone exploring boundaries |
 
 ## Privacy, copyright & license

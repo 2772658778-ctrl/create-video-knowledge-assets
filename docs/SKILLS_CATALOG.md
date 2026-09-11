@@ -33,7 +33,7 @@ profile 选择与路由逻辑见 [profile-routing](../create-video-knowledge-ass
 | P3 业务视图 | 投影计划、业务写作、视图质量门 | `views/<profile>/` · `outputs/<profile>/` | [p3-profile-workflow](../create-video-knowledge-assets/references/p3-profile-workflow.md) · [p3-profile-authoring](../create-video-knowledge-assets/references/p3-profile-authoring.md) · [projection-plan](../create-video-knowledge-assets/references/projection-plan.md) · [document-schema](../create-video-knowledge-assets/references/document-schema.md) |
 | P4 证据问答 | 索引、拓扑、检索、回答计划、校验 | `index/` · `views/<profile>/document.json` | [p4-qa](../create-video-knowledge-assets/references/p4-qa.md) · [p4-video-topology](../create-video-knowledge-assets/references/p4-video-topology.md) · [p4-qa-authoring](../create-video-knowledge-assets/references/p4-qa-authoring.md) · [p4-qa-evaluation](../create-video-knowledge-assets/references/p4-qa-evaluation.md) · [p4-external-evidence](../create-video-knowledge-assets/references/p4-external-evidence.md) · [p4-answer-presentation](../create-video-knowledge-assets/references/p4-answer-presentation.md) |
 
-## 完整契约清单（23 份）
+## 完整契约清单（24 份）
 
 见 [`references/`](../create-video-knowledge-assets/references/)，按前缀分组：
 

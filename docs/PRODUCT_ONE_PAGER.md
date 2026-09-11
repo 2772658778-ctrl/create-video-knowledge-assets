@@ -14,7 +14,7 @@
 
 ## 产品做什么
 
-输入一个 Bilibili 链接或本地知识视频，输出**deep-summary、deep-article、short-video-script、course-notes**四类主成品 profile。正文默认只交付一个干净成品，内部 provenance 保留在资产里。三种格式（PDF / HTML / Markdown）来自同一份 renderer-neutral 底稿，先沉淀知识，再由同一份底稿渲染，内容完全一致。
+输入一个 Bilibili 链接或本地知识视频，输出**deep-summary、deep-article、short-video-script、course-notes**四类主成品 profile。正文默认只交付一个干净成品，内部 provenance 保留在资产里。正文与证据边界各出一份 PDF，来自同一份 renderer-neutral 底稿，内容完全一致。
 
 ## 核心设计决策（为什么这样设计）
 
@@ -28,8 +28,8 @@
 ## 做出的结果
 
 - **端到端可用**：2 个真实 Bilibili 视频完成从 URL、转录、抽帧检查、知识建模到 PDF 交付的完整链路（见 [README Demo 区](../README.md#真实成果)）。
-- **工程可靠**：约 1.1 万行 Python、28 个功能模块、31 个测试文件；**全套测试 477 项通过**，CI 双门禁（stable 阻断 + experimental 不阻断）。
-- **契约化交付**：23 份 schema / 工作流 / 安全契约文档，让 Agent 的每一步都可被校验和追溯。
+- **工程可靠**：约 1.2 万行 Python、33 个功能模块、37 个测试文件；**全套测试 546 项通过**，CI 双门禁（stable 阻断 + experimental 不阻断）。
+- **契约化交付**：24 份 schema / 工作流 / 安全契约文档，让 Agent 的每一步都可被校验和追溯。
 - **产品化思考**：从产品需求出发定义了北极星指标——"一份视频经过一次完整处理后，能否被直接拿去学习、汇报或再创作，而无需重听整段视频"。
 
 ## 我的角色

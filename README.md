@@ -8,7 +8,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12%2B-blue)](./pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-477_passed-green)](#工程质量)
+[![Tests](https://img.shields.io/badge/tests-546_passed-green)](#工程质量)
 
 ---
 
@@ -140,10 +140,10 @@
 ## 工程质量
 
 - **语言 / 环境**：Python 3.12+，`pydantic`、`srt`；外部工具 yt-dlp / ffmpeg / Whisper / XeLaTeX 按需调用；
-- **代码规模**：约 1.1 万行 Python，28 个功能模块，31 个测试文件；
-- **测试**：`python -m pytest -q`（全套 477 通过，Python 3.11 / 3.12 / 3.13 均可复现）；
-- **CLI**：`vka` 提供 31 个阶段命令，覆盖获取、证据、知识、内容、视图、渲染全链路；
-- **契约**：23 份 schema / 工作流 / 安全契约文档，见 [`references/`](./create-video-knowledge-assets/references/)；
+- **代码规模**：约 1.2 万行 Python，33 个功能模块，37 个测试文件；
+- **测试**：`python -m pytest -q`（全套 546 通过，Python 3.11 / 3.12 / 3.13 均可复现）；
+- **CLI**：`vka` 提供 38 个子命令，覆盖获取、证据、知识、视图、渲染、打包全链路；
+- **契约**：24 份 schema / 工作流 / 安全契约文档，见 [`references/`](./create-video-knowledge-assets/references/)；
 - **CI**：[`.github/workflows/ci.yml`](./.github/workflows/ci.yml)，stable（阻断）+ experimental（不阻断）双任务；
 - **安全边界**：Bilibili 内容需显式 Cookie（Cookie-Editor 导出）；凭据、私有媒体与日志不入库。详见 [SECURITY.md](./SECURITY.md)。
 
