@@ -29,13 +29,13 @@ def test_document_tex_renders_table_and_caption_with_source_footnote() -> None:
         ],
     })
 
-    assert r"\begin{tabularx}{\linewidth}" in tex
+    assert r"\begin{longtable}" in tex
     assert "Measure & Value" in tex
     assert r"\textit{The values are illustrative.}" in tex
     assert "00:00:02--00:00:04" in tex
 
 
-def test_document_tex_uses_wrapping_tabularx_columns_for_long_chinese_cells() -> None:
+def test_document_tex_uses_wrapping_columns_for_long_chinese_cells() -> None:
     tex = render_document_tex({
         "profile_id": "general-deep", "title": "Long table", "blocks": [
             {
@@ -54,9 +54,10 @@ def test_document_tex_uses_wrapping_tabularx_columns_for_long_chinese_cells() ->
         ],
     })
 
-    assert r"\begin{tabularx}{\linewidth}" in tex
-    assert r">{\raggedright\arraybackslash}X" in tex
-    assert r"\end{tabularx}" in tex
+    assert r"\begin{longtable}" in tex
+    assert r">{\raggedright\arraybackslash}p{" in tex
+    assert r"\endhead" in tex
+    assert r"\end{longtable}" in tex
 
 
 def test_document_tex_wraps_long_url_table_cells_with_url_macro() -> None:
@@ -304,10 +305,11 @@ def test_renderer_writes_cover_image_and_subtitle() -> None:
     assert "原视频标题" in tex
     assert "ASR repaired" in tex
     assert (
-        r"\includegraphics[width=0.40\linewidth,height=0.135\textheight,keepaspectratio]"
+        r"\includegraphics[width=0.62\linewidth,height=0.21\textheight,keepaspectratio]"
         r"{source/cover.jpg}"
     ) in tex
-    assert tex.index(r"\tableofcontents") < tex.index(r"\end{titlepage}")
+    assert tex.index(r"\end{titlepage}") < tex.index(r"\tableofcontents")
+    assert tex.index(r"\tableofcontents") < tex.index(r"\section{第一部分}")
 
 
 def test_renderer_escapes_latex_special_characters_without_touching_time() -> None:

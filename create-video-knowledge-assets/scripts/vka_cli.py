@@ -1072,8 +1072,11 @@ def _run_compile_pdf(args: argparse.Namespace) -> int:
         str(tex_path),
     ]
 
+    # Three passes: the contents list changes how much of the first content
+    # page is left for prose, so a two-pass build ships page numbers that
+    # describe the previous layout.
     try:
-        for _ in range(2):
+        for _ in range(3):
             subprocess.run(
                 command,
                 check=True,

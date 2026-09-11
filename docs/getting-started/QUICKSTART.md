@@ -49,11 +49,9 @@ python -m pip install "pydantic>=2.7,<3" "srt>=3.5,<4"
 
 | Demo | 直接查看 |
 | --- | --- |
-| Transformer 的 QKV（课程笔记） | [PDF](../../demos/BV1uPMA62E8e/summary.pdf) |
-| 猫为什么把幼崽叼给主人（深度总结） | [PDF](../../demos/BV1idEL6REd3/summary.pdf) |
-| 国民凉茶为什么卖不动了（短视频脚本） | [PDF](../../demos/bili-BV1hwtB6YEzo/summary.pdf) |
-| 为什么很少有国家吃笋（深度总结） | [PDF](../../demos/bili-BV1tHdoYnEGm/summary.pdf) · [边界与来源](../../demos/bili-BV1tHdoYnEGm/notes.pdf) |
-| Harness 实践：把文字变成精美文章（公众号长文） | [PDF](../../demos/bili-BV1ayLD6uERL/summary.pdf) · [边界与来源](../../demos/bili-BV1ayLD6uERL/notes.pdf) |
+| 为什么很少有国家吃笋（11:48 科普 → 深度总结） | [正文 PDF](../../demos/bili-BV1tHdoYnEGm/summary.pdf) · [边界与来源](../../demos/bili-BV1tHdoYnEGm/notes.pdf) |
+| 国民凉茶为什么卖不动了（10:20 财经口播 → 短视频脚本） | [正文 PDF](../../demos/bili-BV1hwtB6YEzo/summary.pdf) · [边界与来源](../../demos/bili-BV1hwtB6YEzo/notes.pdf) |
+| Harness 实践：把文字变成精美文章（20:37 教程 → 公众号长文） | [正文 PDF](../../demos/bili-BV1ayLD6uERL/summary.pdf) · [边界与来源](../../demos/bili-BV1ayLD6uERL/notes.pdf) |
 
 ## 验证环境
 

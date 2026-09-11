@@ -55,7 +55,9 @@ Three rules follow from the source form:
 - **A tutorial is measured by coverage, not by length.** Every source step and
   checkpoint ends in one of three states: told in full, merged into another
   step, or explicitly omitted with a reason. A nine-step tutorial that shows
-  two steps has not been summarised.
+  two steps has not been summarised. Record that ledger in the notes part with
+  the output section each step lands in; the reader's document carries the
+  steps themselves, not a report about covering them.
 - **One claim per paragraph.** A paragraph develops one judgement. A number, a
   mechanism, and a historical source are three paragraphs, not one sentence
   with three commas.

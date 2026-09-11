@@ -55,7 +55,6 @@ def render_course_tex(
     theme: str | None = None,
     one_sentence_summary: str | None = None,
     metadata: Mapping[str, Any] | None = None,
-    title_page_label: str = "Codex course notes",
     show_cover: bool = True,
     show_toc: bool = True,
     show_source_notes: bool = True,
@@ -81,6 +80,7 @@ def render_course_tex(
         r"\usepackage{amsmath}",
         r"\usepackage{array}",
         r"\usepackage{tabularx}",
+        r"\usepackage{longtable}",
         r"\usepackage{listings}",
         r"\usepackage[bottom]{footmisc}",
         r"\usepackage{caption}",
@@ -88,15 +88,19 @@ def render_course_tex(
         r"\usepackage{needspace}",
         r"\usepackage{multicol}",
         r"\usepackage{hyperref}",
-        r"\captionsetup{format=hang,width=.92\linewidth,font={small},labelfont={bf,sf},labelsep=quad,justification=raggedright,singlelinecheck=false,skip=7pt}",
+        r"\DeclareCaptionLabelFormat{vkagreen}{{\color{vkaGreen}#1~#2}}",
+        r"\captionsetup{format=hang,width=.92\linewidth,font={small},labelfont={bf,sf},labelformat=vkagreen,labelsep=quad,justification=raggedright,singlelinecheck=false,skip=7pt}",
         r"\hypersetup{unicode=true,hidelinks}",
-        r"\ctexset{section={format=\Large\bfseries\sffamily\raggedright,beforeskip=1.6em,afterskip=.6em,aftertitle={\par\nobreak\vspace{.3em}{\noindent\color{vkaRule}\rule{\linewidth}{0.4pt}}}},subsection={format=\large\bfseries\sffamily\raggedright,beforeskip=1.2em,afterskip=.5em}}",
+        r"\ctexset{section={format=\Large\bfseries\sffamily\raggedright,beforeskip=1.6em,afterskip=.6em,number={\color{vkaGreen}\arabic{section}},aftertitle={\par\nobreak\vspace{.3em}{\noindent\color{vkaRule}\rule{\linewidth}{0.4pt}}}},subsection={format=\large\bfseries\sffamily\raggedright,beforeskip=1.2em,afterskip=.5em}}",
         r"\renewcommand{\contentsname}{目录}",
+        r"\renewcommand{\numberline}[1]{{\color{vkaGreen}#1}}",
         r"\pagestyle{plain}",
         r"\setcounter{tocdepth}{2}",
         r"\setcounter{secnumdepth}{2}",
         r"\AtBeginDocument{\fontsize{10.5}{16.5}\selectfont}",
-        r"\setlength{\parskip}{0.45em}",
+        # A boundary document is a companion note rather than an article, so it
+        # is set a little tighter to stay short.
+        rf"\setlength{{\parskip}}{{{'0.3em' if not show_cover else '0.45em'}}}",
         r"\setlength{\parindent}{2em}",
         r"\raggedbottom",
         r"\setlength{\intextsep}{0.7em}",
@@ -116,28 +120,46 @@ def render_course_tex(
         r"\definecolor{vkaRule}{HTML}{DCDCDC}",
         r"\setlength{\fboxsep}{0pt}",
         r"\setlength{\fboxrule}{0.4pt}",
+        r"\newsavebox{\vkapic}",
         r"\color{vkaInk}",
         r"\newenvironment{vkabox}[2]{\par\medskip\noindent{\color{#1}\rule{0.8em}{0.8em}}\hspace{0.4em}\textbf{#2}\par\smallskip\noindent\begingroup\leftskip=1.2em\rightskip=0.6em\ignorespaces}{\par\endgroup\medskip}",
         r"\lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible,frame=single}",
         "",
         r"\begin{document}",
-        r"\begin{titlepage}",
-        r"\thispagestyle{empty}",
-        r"\centering",
-        r"\vspace*{0.02\textheight}",
-        r"\begin{center}\begin{minipage}{0.88\textwidth}\centering",
-        rf"{{\sffamily\bfseries\fontsize{{26}}{{34}}\selectfont {_escape_latex(title)}\par}}",
-        r"\end{minipage}\end{center}",
     ]
 
-    if theme:
+    if show_cover:
+        lines.extend(
+            [
+                r"\begin{titlepage}",
+                r"\thispagestyle{empty}",
+                r"\centering",
+                r"\vspace*{0.02\textheight}",
+                r"\begin{center}\begin{minipage}{0.94\textwidth}\centering",
+                rf"{{\sffamily\bfseries\fontsize{{24}}{{32}}\selectfont {_cover_title_latex(title)}\par}}",
+                r"\end{minipage}\end{center}",
+            ]
+        )
+    else:
+        # A boundary document is a short companion, not a publication: give it
+        # a heading line instead of a cover page nobody needs to turn past.
+        lines.extend(
+            [
+                rf"{{\sffamily\bfseries\fontsize{{15}}{{20}}\selectfont {_escape_latex(title)}\par}}",
+                r"\vspace{0.35em}",
+                r"\noindent{\color{vkaRule}\rule{\linewidth}{0.4pt}}",
+                r"\vspace{0.9em}",
+            ]
+        )
+
+    if show_cover and theme:
         lines.extend(
             [
                 r"\vspace{0.35cm}",
                 rf"{{\sffamily\fontsize{{14}}{{20}}\selectfont\color{{vkaGreen}} {_escape_latex(theme)}\par}}",
             ]
         )
-    if one_sentence_summary:
+    if show_cover and one_sentence_summary:
         lines.extend(
             [
                 r"\vspace{0.45cm}",
@@ -149,7 +171,7 @@ def render_course_tex(
                 r"\end{center}",
             ]
         )
-    if subtitle:
+    if show_cover and subtitle:
         lines.extend(
             [
                 r"\vspace{0.45cm}",
@@ -157,12 +179,12 @@ def render_course_tex(
             ]
         )
 
-    if cover_image and show_cover:
+    if show_cover and cover_image:
         lines.extend(
             [
                 r"\vspace{0.6cm}",
                 r"\begin{center}",
-                rf"\fcolorbox{{vkaRule}}{{white}}{{\includegraphics[width=0.40\linewidth,height=0.135\textheight,keepaspectratio]{{{_latex_path(cover_image)}}}}}",
+                rf"\fcolorbox{{vkaRule}}{{white}}{{\includegraphics[width=0.62\linewidth,height=0.21\textheight,keepaspectratio]{{{_latex_path(cover_image)}}}}}",
                 r"\end{center}",
             ]
         )
@@ -181,23 +203,22 @@ def render_course_tex(
             ]
         )
 
+    if show_cover:
+        lines.append(r"\end{titlepage}")
+    lines.append(r"\pagenumbering{arabic}")
+    # The contents list opens the first content page instead of taking a page
+    # of its own: a short document's table of contents is a signpost, and a
+    # signpost on an otherwise empty page reads as a missing file.
     if show_toc and sections:
         lines.extend(
             [
-                r"\vspace{0.5cm}",
-                r"\begin{center}",
-                r"\begin{minipage}{0.84\textwidth}",
-                r"\raggedright",
                 r"\begingroup",
                 r"\ctexset{section={format=\sffamily\bfseries\fontsize{10.5}{14}\selectfont,beforeskip=0pt,afterskip=.6em,aftertitle={}}}",
                 r"\tableofcontents",
                 r"\endgroup",
-                r"\end{minipage}",
-                r"\end{center}",
+                r"\vspace{0.5\baselineskip}",
             ]
         )
-
-    lines.extend([r"\end{titlepage}", r"\pagenumbering{arabic}"])
     lines.append("")
 
     for section_index, section in enumerate(sections):
@@ -219,7 +240,7 @@ def render_course_tex(
             [
                 r"\needspace{5\baselineskip}",
                 r"\vspace{1.5\baselineskip}",
-                r"{\sffamily\bfseries\fontsize{11}{14}\selectfont\color{black!68} 来源时间\par}",
+                r"{\sffamily\bfseries\fontsize{11}{14}\selectfont\color{vkaGreen} 来源时间\par}",
                 r"\vspace{0.3\baselineskip}",
                 r"\noindent{\color{vkaRule}\rule{\linewidth}{0.4pt}}",
                 r"\vspace{0.5\baselineskip}",
@@ -232,13 +253,6 @@ def render_course_tex(
                 r"\end{enumerate}",
                 r"\end{multicols}",
                 r"}",
-            ]
-        )
-    if title_page_label:
-        lines.extend(
-            [
-                r"\vfill",
-                rf"{{\footnotesize\color{{black!45}} {_escape_latex(title_page_label)}\par}}",
             ]
         )
     lines.append("")
@@ -269,36 +283,17 @@ def render_document_tex(
         allow_rebased_image_paths=rebased_image_paths,
         source_navigation=source_navigation,
     )
-    profile_id = document.get("profile_id")
-    title_page_label = {
-        "course-notes": "Codex course notes",
-        "creator-article": "Codex source-led article",
-        "enterprise-knowledge": "Codex internal knowledge record",
-        "research-brief": "Codex evidence-separated research brief",
-        "short-video-script": "Codex short-video script",
-    }.get(profile_id, "Codex knowledge document")
-    if part == "notes":
-        title_page_label = "Codex source notes"
     is_reader_part = part == "main"
     return render_course_tex(
         title,
         sections,
         cover_image=_optional_string(document, "cover_image") if is_reader_part else None,
-        subtitle=(
-            _profile_optional_string(document, "subtitle", profile_id)
-            if is_reader_part
-            else None
-        ),
-        theme=(
-            _profile_optional_string(document, "theme", profile_id) if is_reader_part else None
-        ),
+        subtitle=_optional_string(document, "subtitle") if is_reader_part else None,
+        theme=_optional_string(document, "theme") if is_reader_part else None,
         one_sentence_summary=(
-            _profile_optional_string(document, "one_sentence_summary", profile_id)
-            if is_reader_part
-            else None
+            _optional_string(document, "one_sentence_summary") if is_reader_part else None
         ),
-        metadata=_profile_optional_mapping(document, "metadata", profile_id),
-        title_page_label=title_page_label,
+        metadata=_optional_mapping(document, "metadata"),
         show_cover=part == "main",
         show_toc=part == "main",
     )
@@ -398,9 +393,13 @@ def _render_image_block(block: Mapping[str, Any]) -> list[str]:
     latex_path = _latex_path(path)
     return [
         r"\begin{center}",
+        rf"\sbox{{\vkapic}}{{\fcolorbox{{vkaRule}}{{white}}{{\includegraphics[width=0.9\linewidth,height=0.27\textheight,keepaspectratio]{{{latex_path}}}}}}}",
+        r"\begin{minipage}{\wd\vkapic}",
         r"\centering",
-        rf"\fcolorbox{{vkaRule}}{{white}}{{\includegraphics[width=0.9\linewidth,height=0.27\textheight,keepaspectratio]{{{latex_path}}}}}",
+        r"\usebox{\vkapic}\par",
+        r"\captionsetup{width=\wd\vkapic}",
         rf"\captionof{{figure}}{{{_escape_latex(caption)}{marker}}}",
+        r"\end{minipage}",
         r"\end{center}",
         r"\vspace{0.4\baselineskip}",
     ]
@@ -413,7 +412,7 @@ def _render_list_block(block: Mapping[str, Any], *, ordered: bool) -> list[str]:
 
     env = "enumerate" if ordered else "itemize"
     lines = [
-        rf"\begin{{{env}}}[leftmargin=1.6em,labelsep=.5em,itemsep=3pt,topsep=3pt,parsep=2pt]"
+        rf"\begin{{{env}}}[leftmargin=1.6em,labelsep=.5em,itemsep=2pt,topsep=2pt,parsep=1pt]"
     ]
     for index, item in enumerate(items):
         if not isinstance(item, str) or not item.strip():
@@ -485,16 +484,29 @@ def _render_code_block(block: Mapping[str, Any]) -> list[str]:
 
 def _render_table_block(block: Mapping[str, Any]) -> list[str]:
     headers, rows = _table_data(block)
-    columns = "".join(r">{\raggedright\arraybackslash}X" for _ in headers)
-    lines = [r"\begin{center}", rf"\begin{{tabularx}}{{\linewidth}}{{{columns}}}", r"\hline"]
+    # The citation rides in the last cell: a marker emitted after the table
+    # would otherwise be stranded alone at the foot of the page.
+    footnote = _source_footnote(block)
+    cells = [[_escape_table_cell(cell) for cell in row] for row in rows]
+    if footnote:
+        cells[-1][-1] = cells[-1][-1] + footnote
+    # Equal-width wrapping columns. `longtable` is in LaTeX's own tools bundle,
+    # so a table that outgrows a page can break without a new dependency.
+    width = rf"\dimexpr(\linewidth-{2 * len(headers)}\tabcolsep)/{len(headers)}\relax"
+    columns = "".join(rf">{{\raggedright\arraybackslash}}p{{{width}}}" for _ in headers)
+    # A table may be longer than a page (a tutorial's step ledger is), so it
+    # breaks across pages and repeats its header instead of jumping whole.
+    lines = [
+        r"{\renewcommand{\arraystretch}{1.2}\small",
+        rf"\begin{{longtable}}{{{columns}}}",
+        r"\hline",
+    ]
     lines.append(" & ".join(_escape_table_cell(cell) for cell in headers) + r"\\")
     lines.append(r"\hline")
-    for row in rows:
-        lines.append(" & ".join(_escape_table_cell(cell) for cell in row) + r"\\")
-    lines.extend([r"\hline", r"\end{tabularx}", r"\end{center}"])
-    footnote = _source_footnote(block)
-    if footnote:
-        lines.append(footnote)
+    lines.append(r"\endhead")
+    for row in cells:
+        lines.append(" & ".join(row) + r"\\")
+    lines.extend([r"\hline", r"\end{longtable}", r"}"])
     return lines
 
 
@@ -630,6 +642,19 @@ def _compact_metadata(metadata: Mapping[str, Any] | None) -> list[str]:
     return lines
 
 
+def _cover_title_latex(title: str) -> str:
+    """Break a Chinese title at its colon, the way its author would.
+
+    Left to itself LaTeX breaks a long centred title wherever the measure
+    runs out, which splits a word across two lines.
+    """
+    escaped = _escape_latex(title)
+    head, separator, tail = escaped.partition("：")
+    if separator and tail.strip():
+        return head + separator + r"\\" + tail
+    return escaped
+
+
 def _metadata_lines(metadata: Mapping[str, Any] | None) -> list[str]:
     if not isinstance(metadata, Mapping):
         return []
@@ -675,22 +700,6 @@ def _optional_mapping(document: Mapping[str, Any], key: str) -> Mapping[str, Any
     if not isinstance(value, Mapping):
         raise ValueError(f"document {key} must be an object")
     return value
-
-
-def _profile_optional_string(
-    document: Mapping[str, Any], key: str, profile_id: object
-) -> str | None:
-    if profile_id == "short-video-script":
-        return None
-    return _optional_string(document, key)
-
-
-def _profile_optional_mapping(
-    document: Mapping[str, Any], key: str, profile_id: object
-) -> Mapping[str, Any] | None:
-    if profile_id == "short-video-script":
-        return None
-    return _optional_mapping(document, key)
 
 
 def _metadata_value_tex(key: str, value: str) -> str:

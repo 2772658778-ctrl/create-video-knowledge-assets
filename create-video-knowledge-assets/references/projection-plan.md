@@ -89,6 +89,12 @@ tutorial's steps is not a smaller document, it is an unfinished one.
    `projection_plan_ref`, `projection_plan_id`, and `projection_plan_sha256`.
 5. Reproject and render. Canonical data remains unchanged throughout.
 
+Any edit to a stored plan changes its bytes, so the bound document's
+`projection_plan_sha256` stops matching. Re-record that hash when the plan
+changes without changing the projection, and reproject when the plan's
+decisions change; a document that declares a stale hash fails the plan
+binding the next time it is reprojected.
+
 ## Future Profile Packs
 
 Future hot-pluggable profiles are declarative, versioned packs: profile

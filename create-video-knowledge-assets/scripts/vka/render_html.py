@@ -41,6 +41,7 @@ def render_course_html(
     theme: str | None = None,
     one_sentence_summary: str | None = None,
     metadata: Mapping[str, Any] | None = None,
+    show_toc: bool = True,
     show_source_notes: bool = True,
 ) -> str:
     if not isinstance(title, str) or not title:
@@ -63,7 +64,7 @@ def render_course_html(
         "</head>",
         "<body>",
         "<main>",
-        f"<h1>{_escape(title)}</h1>",
+        f"<h1>{_cover_title_html(title)}</h1>",
     ]
     if theme:
         body.append(f'<p class="theme">{_escape(theme)}</p>')
@@ -71,21 +72,22 @@ def render_course_html(
         body.append(f'<p class="summary">{_escape(one_sentence_summary)}</p>')
     if subtitle:
         body.append(f'<p class="subtitle">{_escape(subtitle)}</p>')
+    if cover_image:
+        body.append(
+            f'<figure class="cover"><img src="{_image_src(cover_image)}" alt="视频封面"></figure>'
+        )
     metadata_lines = _metadata_lines(metadata)
     if metadata_lines:
         body.append('<p class="metadata">')
         body.append("<br>".join(metadata_lines))
         body.append("</p>")
-    if cover_image:
-        body.append(
-            f'<figure class="cover"><img src="{_image_src(cover_image)}" alt="视频封面"></figure>'
-        )
 
-    body.append("<nav><strong>目录</strong><ol>")
-    for index, section in enumerate(sections, start=1):
-        section_title = _section_title(section)
-        body.append(f'<li><a href="#section-{index}">{_escape(section_title)}</a></li>')
-    body.append("</ol></nav>")
+    if show_toc and sections:
+        body.append("<nav><strong>目录</strong><ol>")
+        for index, section in enumerate(sections, start=1):
+            section_title = _section_title(section)
+            body.append(f'<li><a href="#section-{index}">{_escape(section_title)}</a></li>')
+        body.append("</ol></nav>")
 
     # Number every citation before the body is written: the markers and the
     # endnote list must come from the same pass, or the reader sees times with
@@ -149,21 +151,18 @@ def render_document_html(
         allow_rebased_image_paths=rebased_image_paths,
         source_navigation=source_navigation,
     )
-    profile_id = document.get("profile_id")
+    is_reader_part = part == "main"
     return render_course_html(
         title,
         sections,
-        cover_image=_optional_string(document, "cover_image") if part == "main" else None,
-        subtitle=(
-            _profile_optional_string(document, "subtitle", profile_id)
-            if part == "main"
-            else None
+        cover_image=_optional_string(document, "cover_image") if is_reader_part else None,
+        subtitle=_optional_string(document, "subtitle") if is_reader_part else None,
+        theme=_optional_string(document, "theme") if is_reader_part else None,
+        one_sentence_summary=(
+            _optional_string(document, "one_sentence_summary") if is_reader_part else None
         ),
-        theme=_profile_optional_string(document, "theme", profile_id),
-        one_sentence_summary=_profile_optional_string(
-            document, "one_sentence_summary", profile_id
-        ),
-        metadata=_profile_optional_mapping(document, "metadata", profile_id),
+        metadata=_optional_mapping(document, "metadata"),
+        show_toc=is_reader_part,
     )
 
 
@@ -349,6 +348,15 @@ def _escape(value: str) -> str:
     return html.escape(value, quote=True)
 
 
+def _cover_title_html(title: str) -> str:
+    """Break a Chinese title at its colon, the way its author would."""
+    escaped = html.escape(title, quote=True)
+    head, separator, tail = escaped.partition("：")
+    if separator and tail.strip():
+        return f"{head}{separator}<br>{tail}"
+    return escaped
+
+
 def _inline(value: str) -> str:
     escaped = _escape(value)
     escaped = re.sub(r"`([^`]+)`", r"<code>\1</code>", escaped)
@@ -421,28 +429,12 @@ def _optional_mapping(document: Mapping[str, Any], key: str) -> Mapping[str, Any
     return value
 
 
-def _profile_optional_string(
-    document: Mapping[str, Any], key: str, profile_id: object
-) -> str | None:
-    if profile_id == "short-video-script":
-        return None
-    return _optional_string(document, key)
-
-
-def _profile_optional_mapping(
-    document: Mapping[str, Any], key: str, profile_id: object
-) -> Mapping[str, Any] | None:
-    if profile_id == "short-video-script":
-        return None
-    return _optional_mapping(document, key)
-
-
 _STYLE = """
 :root {
   color-scheme: light;
   --ink: #23211f;
   --ink-soft: #46423f;
-  --muted: #8b8681;
+  --muted: #6f6a65;
   --line: #e7e3dc;
   --accent: #2f6b52;
   --blue: #245b7d;
@@ -459,7 +451,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--serif);
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.85;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -474,7 +466,7 @@ main {
 }
 h1, h2, h3 { font-family: var(--sans); color: var(--ink); line-height: 1.34; text-wrap: balance; }
 h1 { font-size: 2rem; font-weight: 700; letter-spacing: 0.005em; margin: 0 0 0.5em; }
-h2 { font-size: 1.34rem; font-weight: 700; margin: 3.2rem 0 1.1rem; counter-increment: sec; }
+h2 { font-size: 1.45rem; font-weight: 700; margin: 3.2rem 0 1.1rem; counter-increment: sec; }
 h2::before {
   content: counter(sec, decimal-leading-zero);
   display: block;
@@ -484,7 +476,7 @@ h2::before {
   color: var(--accent);
   margin-bottom: 0.35em;
 }
-h3 { font-size: 1.06rem; font-weight: 600; margin: 2.1rem 0 0.7em; color: var(--ink-soft); }
+h3 { font-size: 1.12rem; font-weight: 600; margin: 2.1rem 0 0.7em; color: var(--ink-soft); }
 p { margin: 0 0 1.15em; }
 .theme { font-family: var(--sans); font-size: 1.02rem; font-weight: 500; color: var(--accent); margin: 0 0 1rem; }
 .summary { font-size: 1rem; color: var(--ink-soft); margin: 0 0 0.7rem; padding-left: 0.9rem; border-left: 2px solid var(--line); }
@@ -529,10 +521,10 @@ th, td { border-bottom: 1px solid var(--line); padding: 0.55rem 0.6rem; text-ali
 th { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); font-weight: 600; }
 blockquote { margin: 1.5rem 0; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 2px solid var(--accent); color: var(--ink-soft); }
 .notes { margin-top: 4.5rem; padding-top: 1.7rem; border-top: 1px solid var(--line); }
-.notes h2 { counter-increment: none; font-family: var(--sans); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.22em; color: var(--muted); margin: 0 0 1.2rem; }
+.notes h2 { counter-increment: none; font-family: var(--sans); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.22em; color: var(--accent); margin: 0 0 1.2rem; }
 .notes h2::before { content: none; }
-.notes-list { list-style: none; margin: 0; padding: 0; counter-reset: note; font-size: 0.8rem; line-height: 1.7; color: var(--muted); }
-.notes-list li { counter-increment: note; display: grid; grid-template-columns: 2.6em 1fr; margin: 0.3rem 0; }
+.notes-list { list-style: none; margin: 0; padding: 0; counter-reset: note; font-size: 0.8rem; line-height: 1.7; color: var(--muted); columns: 2; column-gap: 2.4em; }
+.notes-list li { counter-increment: note; display: grid; grid-template-columns: 2.6em 1fr; margin: 0 0 0.3rem; break-inside: avoid; }
 .notes-list li::before { content: counter(note) "."; color: var(--muted); }
 .notes-list .time { font-family: var(--mono); font-size: 0.94em; }
 .box { border-left: 4px solid var(--blue); background: #f7fbff; padding: 0.85rem 1.1rem; margin: 1.4rem 0; }
@@ -546,6 +538,7 @@ code, .formula { font-family: var(--mono); font-size: 0.88em; }
   main { padding: 32px 20px 64px; }
   h1 { font-size: 1.6rem; }
   h2 { font-size: 1.2rem; margin-top: 2.6rem; }
+  .notes-list { columns: 1; }
 }
 @media print {
   body { background: #fff; }

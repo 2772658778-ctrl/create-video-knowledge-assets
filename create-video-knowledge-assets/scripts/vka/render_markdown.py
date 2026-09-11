@@ -74,21 +74,14 @@ def render_document_markdown(
         allow_rebased_image_paths=rebased_image_paths,
         source_navigation=source_navigation,
     )
-    profile_id = document.get("profile_id")
     return render_course_markdown(
         title,
         sections,
         cover_image=_optional_string(document, "cover_image") if part == "main" else None,
-        subtitle=(
-            _profile_optional_string(document, "subtitle", profile_id)
-            if part == "main"
-            else None
-        ),
-        theme=_profile_optional_string(document, "theme", profile_id),
-        one_sentence_summary=_profile_optional_string(
-            document, "one_sentence_summary", profile_id
-        ),
-        metadata=_profile_optional_mapping(document, "metadata", profile_id),
+        subtitle=_optional_string(document, "subtitle") if part == "main" else None,
+        theme=_optional_string(document, "theme"),
+        one_sentence_summary=_optional_string(document, "one_sentence_summary"),
+        metadata=_optional_mapping(document, "metadata"),
     )
 
 
@@ -268,22 +261,6 @@ def _optional_string(document: Mapping[str, Any], key: str) -> str | None:
     if not isinstance(value, str):
         raise ValueError(f"document {key} must be a string")
     return value or None
-
-
-def _profile_optional_string(
-    document: Mapping[str, Any], key: str, profile_id: object
-) -> str | None:
-    if profile_id == "short-video-script":
-        return None
-    return _optional_string(document, key)
-
-
-def _profile_optional_mapping(
-    document: Mapping[str, Any], key: str, profile_id: object
-) -> Mapping[str, Any] | None:
-    if profile_id == "short-video-script":
-        return None
-    return _optional_mapping(document, key)
 
 
 def _optional_mapping(document: Mapping[str, Any], key: str) -> Mapping[str, Any] | None:

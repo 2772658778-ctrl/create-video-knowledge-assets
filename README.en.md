@@ -78,12 +78,13 @@ Staged contracts, quality gates, and human review points govern the process: mul
 
 | Demo | Scenario | View directly |
 | --- | --- | --- |
-| Transformer QKV | Course notes (Whisper transcription + 312-segment timeline + 8 inspected frames) | [PDF](./demos/BV1uPMA62E8e/summary.pdf) · [HTML](./demos/BV1uPMA62E8e/summary.html) · [Markdown](./demos/BV1uPMA62E8e/summary.md) |
-| Why cats bring kittens to their owners | Deep summary (with evidence boundaries & video navigation) | [PDF](./demos/BV1idEL6REd3/summary.pdf) · [HTML](./demos/BV1idEL6REd3/summary.html) · [Markdown](./demos/BV1idEL6REd3/summary.md) |
+| Why so few countries eat bamboo shoots (11:48 explainer) | Deep summary: three eating thresholds, line-by-line reviewed transcript, 6 inspected frames | [PDF](./demos/bili-BV1tHdoYnEGm/summary.pdf) · [boundary notes](./demos/bili-BV1tHdoYnEGm/notes.pdf) |
+| Why the national herbal tea stopped selling (10:20 finance short) | Short-video script: ~2-minute cut, with pacing assumptions and a cut list | [PDF](./demos/bili-BV1hwtB6YEzo/summary.pdf) · [boundary notes](./demos/bili-BV1hwtB6YEzo/notes.pdf) |
+| Harness in practice: turning any text into a polished article (20:37 tutorial) | Long-form article: all nine steps covered, with checkpoints and process evidence | [PDF](./demos/bili-BV1ayLD6uERL/summary.pdf) · [boundary notes](./demos/bili-BV1ayLD6uERL/notes.pdf) |
 
-Both demos completed the full pipeline: URL → subtitles/transcription → frame extraction and inspection → knowledge modeling → writing → PDF. The second demo best embodies the product philosophy: the prose explicitly distinguishes "how the video explains this" from "whether this demo independently confirms it," and provides a time-window table for going back to verify — **this is the evidence-first principle productized.**
+The three demos cover three different source forms — a dense 12-minute explainer, a 10-minute data commentary, and a 20-minute tutorial — and their length and structure follow the source rather than a template. All of them ran the full pipeline: URL → subtitles/transcription → frame extraction and inspection → knowledge modeling → writing → PDF. Each also ships a separate boundary document, so the reader copy stays about the video while scope, uncertainty, and claim-to-source navigation live in their own PDF.
 
-**Current verification scope**: the two demos validate the Codex, single-part Bilibili, CPU ASR, and the PDF delivery path. GPU, platform subtitles, full multi-part handling, and local videos are not yet covered by demos.
+**Current verification scope**: these demos validate the Codex, single-part Bilibili, CPU ASR, and the PDF delivery path. GPU, platform subtitles, full multi-part handling, and local videos are not yet covered by demos.
 
 ## Architecture at a glance
 
