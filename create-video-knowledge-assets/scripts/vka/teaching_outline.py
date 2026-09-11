@@ -2,17 +2,6 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import Any
-
-
-CORE_MOVES = {
-    "motivation",
-    "wrong_intuition",
-    "mechanism",
-    "worked_example",
-    "formula_or_visual",
-    "misconception",
-    "takeaway",
-}
 FINAL_MOVES = {"synthesis", "practice", "takeaway"}
 
 

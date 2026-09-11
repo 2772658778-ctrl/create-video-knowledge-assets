@@ -13,7 +13,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-from vka.models import ContentUnit, KnowledgeUnit
+from vka.models import KnowledgeUnit
 from vka.validate import validate_knowledge_graph
 
 
@@ -79,8 +79,6 @@ def validate_asset_knowledge(asset: Path | str) -> dict[str, Any]:
             )
         )
 
-    errors.extend(_check_content_units(root, evidence, unit_ids, supporting_ids))
-
     return {
         "asset": str(root),
         "valid": not errors,
@@ -127,45 +125,6 @@ def _check_refs(
         for ref in evidence_refs
         if isinstance(ref, str) and ref not in evidence
     ]
-
-
-def _check_content_units(
-    root: Path,
-    evidence: Mapping[str, Mapping[str, Any]],
-    unit_ids: set[str],
-    supporting_ids: set[str],
-) -> list[str]:
-    path = root / "content" / "units.jsonl"
-    if not path.is_file():
-        return []
-
-    errors: list[str] = []
-    try:
-        rows = _read_jsonl(path)
-    except (OSError, ValueError) as exc:
-        return [f"content/units.jsonl cannot be read: {exc}"]
-
-    for row in rows:
-        content_unit_id = str(row.get("content_unit_id", "<missing>"))
-        try:
-            ContentUnit.model_validate(row)
-        except ValueError:
-            errors.append(f"{content_unit_id} does not match the content unit schema")
-        for ref in row.get("evidence_refs") or []:
-            if isinstance(ref, str) and ref not in evidence:
-                errors.append(f"{content_unit_id} references missing evidence {ref}")
-        for ref in row.get("knowledge_refs") or []:
-            if isinstance(ref, str) and ref not in unit_ids:
-                errors.append(f"{content_unit_id} references missing knowledge unit {ref}")
-        if row.get("epistemic_status") == "video_explicit":
-            refs = [ref for ref in (row.get("evidence_refs") or []) if isinstance(ref, str)]
-            if refs and not any(ref in supporting_ids for ref in refs):
-                errors.append(
-                    f"{content_unit_id} is marked video_explicit but no citation is "
-                    "checked content evidence; cite a checked frame or a reviewed "
-                    "transcript row, or downgrade the epistemic_status"
-                )
-    return errors
 
 
 def _read_evidence_index(

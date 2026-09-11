@@ -371,7 +371,7 @@ def test_no_profile_or_intent_defaults_to_general_deep() -> None:
     assert selection.profile_id == "general-deep"
     assert selection.selection_source == "default"
     assert selection.requested_formats == ()
-    assert selection.formats == ("md", "html", "tex", "pdf")
+    assert selection.formats == ("pdf",)
 
 
 def test_new_profile_specs_are_registered_with_approved_contracts() -> None:
@@ -404,7 +404,7 @@ def test_new_profile_specs_are_registered_with_approved_contracts() -> None:
         "payoff",
         "closing",
     )
-    assert short_script.formats == ("md", "html", "tex", "pdf")
+    assert short_script.formats == ("pdf",)
     assert short_script.reference_path == "references/profile-short-video-script.md"
     assert short_script.renderer_options == {"source_navigation": False}
     errors = short_script.validator({"sections": []})
@@ -466,7 +466,7 @@ def test_profile_selection_writes_view_and_asset_manifests(tmp_path) -> None:
         asset,
         explicit_profile=None,
         intent="研究简报",
-        requested_formats=("html", "pdf"),
+        requested_formats=("pdf",),
     )
 
     view_manifest = json.loads(
@@ -477,11 +477,11 @@ def test_profile_selection_writes_view_and_asset_manifests(tmp_path) -> None:
     asset_manifest = json.loads((asset.root / "manifest.json").read_text(encoding="utf-8"))
     assert view_manifest["profile_id"] == "research-brief"
     assert view_manifest["selection"] == selection.model_dump(mode="json")
-    assert view_manifest["requested_formats"] == ["html", "pdf"]
-    assert view_manifest["formats"] == ["html", "pdf"]
+    assert view_manifest["requested_formats"] == ["pdf"]
+    assert view_manifest["formats"] == ["pdf"]
     assert asset_manifest["profile_selection"] == selection.model_dump(mode="json")
-    assert asset_manifest["requested_formats"] == ["html", "pdf"]
-    assert asset_manifest["formats"] == ["html", "pdf"]
+    assert asset_manifest["requested_formats"] == ["pdf"]
+    assert asset_manifest["formats"] == ["pdf"]
     # Routing is an authoring decision, not completion of the eventual view.
     # The authoring stage later hashes both this manifest and document.json.
     assert "views/research-brief" not in asset_manifest["stages"]
@@ -490,7 +490,7 @@ def test_profile_selection_writes_view_and_asset_manifests(tmp_path) -> None:
 def test_profile_specs_keep_formats_immutable() -> None:
     profile = get_profile("general-deep")
 
-    assert profile.formats == ("md", "html", "tex", "pdf")
+    assert profile.formats == ("pdf",)
     with pytest.raises(FrozenInstanceError):
         profile.formats = ()  # type: ignore[misc]
 
@@ -1119,7 +1119,7 @@ def test_profile_writer_preserves_an_existing_selected_profile_route_and_formats
         asset,
         explicit_profile=None,
         intent="公众号长文",
-        requested_formats=("html",),
+        requested_formats=("pdf",),
     )
 
     write_profile_document(asset, profile_id="creator-article", document=document)
@@ -1131,8 +1131,8 @@ def test_profile_writer_preserves_an_existing_selected_profile_route_and_formats
     )
     asset_manifest = json.loads((asset.root / "manifest.json").read_text(encoding="utf-8"))
     assert view_manifest["selection"] == selected.model_dump(mode="json")
-    assert view_manifest["requested_formats"] == ["html"]
-    assert view_manifest["formats"] == ["html"]
+    assert view_manifest["requested_formats"] == ["pdf"]
+    assert view_manifest["formats"] == ["pdf"]
     assert asset_manifest["profile_selections"]["creator-article"] == selected.model_dump(
         mode="json"
     )
@@ -1353,14 +1353,14 @@ def test_select_profile_cli_writes_an_auditable_selection(tmp_path, capsys) -> N
 
     assert main([
         "select-profile", "--asset", str(asset.root), "--intent", "课程笔记",
-        "--format", "html", "--format", "pdf",
+        "--format", "pdf",
     ]) == 0
 
     reported = json.loads(capsys.readouterr().out)
     assert reported["profile_id"] == "course-notes"
     assert reported["selection_source"] == "intent_label"
-    assert reported["requested_formats"] == ["html", "pdf"]
-    assert reported["formats"] == ["html", "pdf"]
+    assert reported["requested_formats"] == ["pdf"]
+    assert reported["formats"] == ["pdf"]
 
 
 @pytest.mark.parametrize(
@@ -1489,7 +1489,7 @@ def test_completed_profile_view_only_allows_an_exact_idempotent_selection(tmp_pa
             asset,
             explicit_profile="general-deep",
             intent=None,
-            requested_formats=("html",),
+            requested_formats=("pdf",),
         )
 
     assert (asset.root / "manifest.json").read_bytes() == manifest_before

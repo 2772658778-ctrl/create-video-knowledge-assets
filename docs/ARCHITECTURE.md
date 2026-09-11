@@ -4,7 +4,7 @@
 
 ## 总览
 
-本项目是一条证据优先的视频内容再生产流水线：从视频输入到可交付成品，信息按 `source → evidence → knowledge → content → views → outputs` 逐级沉淀。层级之间用明确的数据契约（schema）约束，`content/` 负责承接可复用内容单元，业务视图只能读取底层，不能反向修改来源事实。
+本项目是一条证据优先的视频内容再生产流水线：从视频输入到可交付成品，信息按 `source → evidence → knowledge → views → outputs` 逐级沉淀。层级之间用明确的数据契约（schema）约束，业务视图只能读取底层，不能反向修改来源事实。
 
 ```text
 Bilibili URL 或本地视频
@@ -16,7 +16,6 @@ Bilibili URL 或本地视频
 字幕 / 音频 / 视频 / 候选帧 ──► 证据层（修复后时间线 + 已检查画面）──► 知识层（单元 / 关系 / 综合 / 限制）
         │                                              │                      │
         │                                              ▼                      ▼
-        └──────────── `content/` 可复用内容单元 ◄───────┘
                                                │
                                                ▼
                                业务视图（`views/<profile>/`）
@@ -44,7 +43,6 @@ Bilibili URL 或本地视频
 │   ├── outline.json              # deep-summary 写作中转层
 │   ├── teaching_outline.json     # course-notes 教学中转层
 │   └── revisions/                # 可选、带哈希绑定的知识修订
-├── content/                      # 可复用内容单元，承接知识到成品的中间层
 ├── views/<profile>/              # 视图级投影计划、文档与格式产物
 │   ├── view-manifest.json        # 业务视图选择原因与格式范围
 │   ├── projection-plan.json      # P3 业务场景的知识到文档桥梁
@@ -54,7 +52,7 @@ Bilibili URL 或本地视频
 └── logs/                         # 本地运行信息，不得作为公开 Demo 提交
 ```
 
-`source/`、`evidence/` 和 `knowledge/` 构成**规范事实层**，`content/` 是可复用内容层。业务视图（`views/`）和输出（`outputs/`）是派生品。
+`source/`、`evidence/` 和 `knowledge/` 构成**规范事实层**。业务视图（`views/`）和输出（`outputs/`）是派生品。
 
 ## 流水线阶段
 
@@ -80,7 +78,7 @@ Bilibili URL 或本地视频
 
 - `select-profile` / `route-profile` 记录选择原因；
 - `write-projection-plan` + `validate-projection-plan` 生成并校验知识到内容再到文档的桥梁；
-- Agent 只允许写 `content/`、`views/<profile>/` 和 `outputs/<profile>/`，禁止改动 `source/`、`evidence/`、`knowledge/`（`verify-asset` 校验哈希前后一致）。
+- Agent 只允许写 `views/<profile>/` 和 `outputs/<profile>/`，禁止改动 `source/`、`evidence/`、`knowledge/`（`verify-asset` 校验哈希前后一致）。
 
 ### P4 · 证据约束问答（独立实验通道）
 

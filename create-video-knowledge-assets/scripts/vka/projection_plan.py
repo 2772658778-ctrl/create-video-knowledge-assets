@@ -92,18 +92,6 @@ def validate_projection_plan(
                     errors.append(f"projection plan selected figure {index} needs {key}")
             if figure.get("required") is not True:
                 errors.append(f"projection plan selected figure {index} must be required")
-    content_units = plan.get("selected_content_units")
-    if content_units is not None:
-        if not isinstance(content_units, list) or not content_units:
-            errors.append("projection plan selected_content_units must be a non-empty list")
-        else:
-            for index, content_unit in enumerate(content_units, start=1):
-                if not isinstance(content_unit, Mapping):
-                    errors.append(f"projection plan selected content unit {index} must be an object")
-                    continue
-                for key in ("content_unit_id", "role"):
-                    if not isinstance(content_unit.get(key), str) or not content_unit[key].strip():
-                        errors.append(f"projection plan selected content unit {index} needs {key}")
     rejected = plan.get("rejected_frames", [])
     if not isinstance(rejected, list) or any(
         not isinstance(item, Mapping)

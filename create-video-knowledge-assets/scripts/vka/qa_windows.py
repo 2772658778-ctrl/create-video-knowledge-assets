@@ -274,21 +274,6 @@ def _build_windows(
     return windows
 
 
-def _deduplicate_direct_frames(
-    direct: Sequence[Evidence], emitted_frame_ids: set[str]
-) -> tuple[list[Evidence], list[Evidence]]:
-    materialized: list[Evidence] = []
-    shared: list[Evidence] = []
-    for record in direct:
-        if record.modality == "frame" and record.evidence_id in emitted_frame_ids:
-            shared.append(record)
-            continue
-        materialized.append(record)
-        if record.modality == "frame":
-            emitted_frame_ids.add(record.evidence_id)
-    return materialized, shared
-
-
 def _is_usable_direct_evidence(record: Evidence) -> bool:
     if record.origin != "video":
         return False

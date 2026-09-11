@@ -939,28 +939,6 @@ def _analysis_video_attribution_in(value: str) -> bool:
     return any(re.search(pattern, value, flags=re.IGNORECASE) for pattern in source_tokens)
 
 
-def _research_video_claim(label: object, text: str) -> bool:
-    candidates = [value for value in (label, text) if isinstance(value, str)]
-    return any(
-        re.search(
-            r"(?:(?:在|从|根据)视频(?:中|里)?|(?:讲者|演讲者|讲解者)|"
-            r"视频(?:中|里|没有|未|不|是|为|可|能|会|应|将|把|对)|"
-            r"视频(?:中(?:的)?|里)?(?:讲者|演讲者|讲解者)?(?:明确(?:指出|表明)|表明|显示|指出|讲解|讲了|讲述|介绍|讨论|展示|演示|说明|呈现|说|认为|提到)|"
-            r"|(?:录像|录屏|录制(?:内容|画面)?|录音)(?:中|里|没有|未|不|是|为|可|能|会|应|将|把|对|明确(?:指出|表明)|表明|显示|指出|讲解|讲了|讲述|介绍|讨论|展示|演示|说明|呈现|说|认为|提到)|"
-            r"(?:根据|从)视频(?:中|里)?(?:可以)?(?:可知|可见|看出|得知|来看)|"
-            r"(?:the\s+)?video\s+(?:explicitly\s+)?(?:states?|indicates?|shows?|says?|claims?|explains?|introduces?|discusses?|demonstrates?|presents?)|"
-            r"(?:the\s+)?(?:recording|footage|screen\s+recording)\s+(?:explicitly\s+)?(?:states?|indicates?|shows?|says?|claims?|explains?|introduces?|discusses?|demonstrates?|presents?)|"
-            r"(?:the\s+)?(?:presenter|speaker)\s+in\s+(?:the\s+)?video\s+(?:argues?|states?|says?|claims?)|"
-            r"\b(?:presenter|speaker)\b|\bin\s+(?:the\s+)?video\b|\baccording\s+to\b|"
-            r"according\s+to\s+(?:the\s+)?video|"
-            r"from\s+(?:the\s+)?video(?:\s+(?:we\s+)?(?:can\s+)?(?:see|infer|learn))?)",
-            value,
-            flags=re.IGNORECASE,
-        )
-        for value in candidates
-    )
-
-
 def _research_structured_refs_match(
     block: Mapping[str, Any],
     value: object,

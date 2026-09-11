@@ -116,10 +116,6 @@ def _short_video_script_plan(asset: AssetStore) -> dict[str, object]:
                 "required_blocks": ["paragraph"],
             },
         ],
-        "selected_content_units": [
-            {"content_unit_id": "cu-hook", "role": "hook"},
-            {"content_unit_id": "cu-explainer", "role": "explainer"},
-        ],
         "selected_figures": [],
         "rejected_frames": [],
         "quality_targets": {"minimum_meaningful_blocks": 4, "requires_visual": False},
@@ -154,7 +150,7 @@ def test_projection_plan_rejects_changed_canonical_hash_or_uninspected_figure(tm
         raise AssertionError("changed canonical input must fail")
 
 
-def test_projection_plan_accepts_selected_content_units_for_short_video_script(tmp_path: Path) -> None:
+def test_projection_plan_accepts_a_short_video_script_plan(tmp_path: Path) -> None:
     asset = _asset(tmp_path)
     plan = _short_video_script_plan(asset)
 
@@ -165,20 +161,6 @@ def test_projection_plan_accepts_selected_content_units_for_short_video_script(t
 
     assert path == asset.root / "views" / "short-video-script" / "projection-plan.json"
     assert json.loads(path.read_text(encoding="utf-8"))["plan_id"] == "pp-short-video-001"
-
-
-def test_projection_plan_rejects_explicitly_empty_selected_content_units(tmp_path: Path) -> None:
-    asset = _asset(tmp_path)
-    plan = _short_video_script_plan(asset)
-    plan["selected_content_units"] = []
-
-    errors = validate_projection_plan(
-        plan, profile_id="short-video-script", required_sections=get_profile("short-video-script").required_sections
-    )
-
-    assert "projection plan selected_content_units must be a non-empty list" in errors
-
-
 def test_cli_validates_projection_plan_before_asset_write(tmp_path: Path, capsys) -> None:
     asset = _asset(tmp_path)
     input_path = tmp_path / "plan.json"

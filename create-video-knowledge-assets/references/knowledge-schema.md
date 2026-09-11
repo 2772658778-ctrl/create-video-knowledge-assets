@@ -1,10 +1,9 @@
 # Knowledge Schema
 
 Knowledge units are scene-independent normalized facts, claims, procedures, and
-interpretations derived from source evidence. They are the factual base under
-the reusable `content/` layer, which turns knowledge into profile-ready content
-units. Every unit must remain traceable to evidence and must preserve its
-epistemic status.
+interpretations derived from source evidence. They are the factual base a
+reader-facing document is projected from. Every unit must remain traceable to
+evidence and must preserve its epistemic status.
 
 ## Fields
 
@@ -67,8 +66,7 @@ Every U1 asset saves its normalized knowledge layer in these distinct files:
 - `knowledge/relations.jsonl`: one directed relation per line.
 - `knowledge/synthesis.json`: source-backed video synthesis and clearly
   separated agent extension material.
-- `content/`: reusable content units derived from knowledge and evidence, as
-  documented in `content-schema.md`.
+
 
 Relations use `source_unit_id`, `target_unit_id`, and `relation_type`. Both
 endpoints must refer to units in `units.jsonl`. The only allowed relation types are

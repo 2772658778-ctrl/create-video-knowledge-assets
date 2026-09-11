@@ -76,29 +76,6 @@ def _validate_short_video_script(document: object) -> list[str]:
     return _short_video_script_document_errors(document)
 
 
-def _required_sections_validator(
-    profile_id: str, required_sections: tuple[str, ...]
-) -> DocumentValidator:
-    def validate(document: object) -> list[str]:
-        if not isinstance(document, Mapping):
-            return [f"{profile_id} document must be an object"]
-        sections = document.get("sections")
-        if not isinstance(sections, list):
-            return [f"{profile_id} document must declare semantic sections"]
-        present = {
-            section.get("kind")
-            for section in sections
-            if isinstance(section, Mapping) and isinstance(section.get("kind"), str)
-        }
-        return [
-            f"{profile_id} document is missing required section {section_name!r}"
-            for section_name in required_sections
-            if section_name not in present
-        ]
-
-    return validate
-
-
 def _options(**values: object) -> Mapping[str, object]:
     return MappingProxyType(dict(values))
 
@@ -108,7 +85,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
         "general-deep": ProfileSpec(
             profile_id="general-deep",
             required_sections=("overview", "logical_body", "limitations", "source_navigation"),
-            formats=("md", "html", "tex", "pdf"),
+            formats=("pdf",),
             validator=_validate_general_deep,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-general-deep.md",
@@ -116,7 +93,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
         "deep-summary": ProfileSpec(
             profile_id="deep-summary",
             required_sections=("overview", "logical_body", "limitations", "source_navigation"),
-            formats=("md", "html", "tex", "pdf"),
+            formats=("pdf",),
             validator=_validate_general_deep,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-general-deep.md",
@@ -132,7 +109,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "examples",
                 "final_synthesis",
             ),
-            formats=("md", "html", "tex", "pdf"),
+            formats=("pdf",),
             validator=_validate_course_notes,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-course-notes.md",
@@ -147,7 +124,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "actionable_takeaway",
                 "limitations_sources",
             ),
-            formats=("md", "html", "tex", "pdf"),
+            formats=("pdf",),
             validator=_validate_creator_article,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-creator-article.md",
@@ -162,7 +139,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "actionable_takeaway",
                 "limitations_sources",
             ),
-            formats=("md", "html", "tex", "pdf"),
+            formats=("pdf",),
             validator=_validate_creator_article,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-creator-article.md",
@@ -177,7 +154,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "risks",
                 "limitations_sources",
             ),
-            formats=("md", "html", "tex", "pdf"),
+            formats=("pdf",),
             validator=_validate_enterprise_knowledge,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-enterprise-knowledge.md",
@@ -191,7 +168,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "limitations_questions",
                 "source_navigation",
             ),
-            formats=("md", "html", "tex", "pdf"),
+            formats=("pdf",),
             validator=_validate_research_brief,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-research-brief.md",
@@ -206,7 +183,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "payoff",
                 "closing",
             ),
-            formats=("md", "html", "tex", "pdf"),
+            formats=("pdf",),
             validator=_validate_short_video_script,
             renderer_options=_options(source_navigation=False),
             reference_path="references/profile-short-video-script.md",
@@ -1345,28 +1322,6 @@ def _analysis_video_attribution_in(value: str) -> bool:
     return any(re.search(pattern, value, flags=re.IGNORECASE) for pattern in source_tokens)
 
 
-def _is_video_visible_claim(label: object, text: str) -> bool:
-    return any(
-        re.search(
-            r"(?:(?:在|从|根据)视频(?:中|里)?|(?:讲者|演讲者|讲解者)|"
-            r"视频(?:中|里|没有|未|不|是|为|可|能|会|应|将|把|对)|"
-            r"视频(?:中(?:的)?|里)?(?:讲者|演讲者|讲解者)?(?:明确(?:指出|表明)|表明|显示|指出|讲解|讲了|讲述|介绍|讨论|展示|演示|说明|呈现|说|认为|提到)|"
-            r"|(?:录像|录屏|录制(?:内容|画面)?|录音)(?:中|里|没有|未|不|是|为|可|能|会|应|将|把|对|明确(?:指出|表明)|表明|显示|指出|讲解|讲了|讲述|介绍|讨论|展示|演示|说明|呈现|说|认为|提到)|"
-            r"(?:根据|从)视频(?:中|里)?(?:可以)?(?:可知|可见|看出|得知|来看)|"
-            r"(?:the\s+)?video\s+(?:explicitly\s+)?(?:states?|indicates?|shows?|says?|claims?|explains?|introduces?|discusses?|demonstrates?|presents?)|"
-            r"(?:the\s+)?(?:recording|footage|screen\s+recording)\s+(?:explicitly\s+)?(?:states?|indicates?|shows?|says?|claims?|explains?|introduces?|discusses?|demonstrates?|presents?)|"
-            r"(?:the\s+)?(?:presenter|speaker)\s+in\s+(?:the\s+)?video\s+(?:argues?|states?|says?|claims?)|"
-            r"\b(?:presenter|speaker)\b|\bin\s+(?:the\s+)?video\b|\baccording\s+to\b|"
-            r"according\s+to\s+(?:the\s+)?video|"
-            r"from\s+(?:the\s+)?video(?:\s+(?:we\s+)?(?:can\s+)?(?:see|infer|learn))?)",
-            value,
-            flags=re.IGNORECASE,
-        )
-        for value in (label, text)
-        if isinstance(value, str)
-    )
-
-
 def _research_block_text(block: Mapping[str, object]) -> str:
     text = block.get("text")
     if isinstance(text, str):
@@ -1459,10 +1414,6 @@ def _validate_research_structured_ref_origin(
         _validate_user_supplied_external_evidence(
             str(evidence.get("evidence_id", "external")), evidence
         )
-
-
-def _is_video_visible_label(value: object) -> bool:
-    return isinstance(value, str) and ("视频" in value or "video" in value.casefold())
 
 
 def _validate_user_supplied_external_evidence(

@@ -1,10 +1,9 @@
 # Projection Plan Contract
 
 `views/<profile_id>/projection-plan.json` is the P3 bridge from canonical
-knowledge and reusable content to a reader-facing document. It is not prose and
-it is not a render template. It records what a profile should explain, which
-content units it should reuse, the evidence it may use, and which inspected
-frames must become figures.
+knowledge to a reader-facing document. It is not prose and it is not a render
+template. It records what a profile should explain, the evidence it may use,
+and which inspected frames must become figures.
 
 `deep-summary`, `deep-article`, `short-video-script`, `creator-article`,
 `enterprise-knowledge`, and `research-brief` use this contract. P1
@@ -22,17 +21,11 @@ bridge.
   "canonical_hash_tree": {"knowledge/units.jsonl": "<sha256>"},
   "reader_goal": "Help a reader understand and check the demonstrated practice.",
   "status": "ready",
-  "selected_content_units": [
-    {
-      "content_unit_id": "cu-hook",
-      "role": "hook"
-    }
-  ],
   "sections": [
     {
       "section_id": "narrative",
       "kind": "narrative",
-      "reader_question": "What reusable content unit should carry the central argument?",
+      "reader_question": "What should the reader understand by the end of this section?",
       "knowledge_refs": ["ku-flow"],
       "evidence_refs": ["ev-flow"],
       "required_blocks": ["paragraph", "paragraph"]
@@ -54,11 +47,10 @@ bridge.
 ```
 
 `canonical_hash_tree` must exactly match the asset's `source/`, `evidence/`,
-and `knowledge/` hashes at write time. A selected content unit must name a
-reusable content record already derived from knowledge. A selected figure must
-name a directly inspected video-frame evidence record and repeat its exact
-`artifact_ref`. `status` may be `ready`, `declined`, or `evidence_inventory`;
-only `ready` may be bound to a final profile document.
+and `knowledge/` hashes at write time. A selected figure must name a directly
+inspected video-frame evidence record and repeat its exact `artifact_ref`.
+`status` may be `ready`, `declined`, or `evidence_inventory`; only `ready` may
+be bound to a final profile document.
 
 ## Workflow
 

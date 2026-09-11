@@ -64,62 +64,6 @@ class KnowledgeUnit(BaseModel):
     schema_version: str = "1.0"
 
 
-ContentUnitKind = Literal[
-    "thesis",
-    "argument",
-    "narrative_beat",
-    "example",
-    "quote",
-    "procedure",
-    "comparison",
-    "scene",
-    "clip_candidate",
-    "limitation",
-    "transition",
-]
-
-
-class ContentUnit(BaseModel):
-    content_unit_id: str = Field(min_length=1)
-    kind: ContentUnitKind
-    title: str = Field(min_length=1)
-    editorial_text: str = Field(min_length=1)
-    knowledge_refs: list[str] = Field(min_length=1)
-    evidence_refs: list[str] = Field(min_length=1)
-    source_spans: list[SourceSpan] = Field(default_factory=list)
-    epistemic_status: Literal[
-        "video_explicit",
-        "agent_inference",
-        "external_enrichment",
-        "insufficient_evidence",
-    ]
-    speaker_refs: list[str] = Field(default_factory=list)
-    visual_refs: list[str] = Field(default_factory=list)
-    standalone_level: Literal[
-        "standalone",
-        "needs_intro",
-        "needs_previous_context",
-        "cannot_reuse_alone",
-    ]
-    context_requirements: list[str] = Field(default_factory=list)
-    adaptation: dict[str, object] = Field(default_factory=dict)
-    fidelity_notes: list[str] = Field(default_factory=list)
-    schema_version: str = "1.0"
-
-    @field_validator(
-        "knowledge_refs",
-        "evidence_refs",
-        "speaker_refs",
-        "visual_refs",
-        mode="after",
-    )
-    @classmethod
-    def validate_nonblank_ref_lists(cls, refs: list[str]) -> list[str]:
-        if any(not ref.strip() for ref in refs):
-            raise ValueError("reference lists cannot contain blank strings")
-        return refs
-
-
 DocumentBlockKind = Literal[
     "heading",
     "paragraph",
