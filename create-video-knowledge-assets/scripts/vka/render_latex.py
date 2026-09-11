@@ -179,14 +179,23 @@ def render_document_tex(
     }.get(profile_id, "Codex knowledge document")
     if part == "notes":
         title_page_label = "Codex source notes"
+    is_reader_part = part == "main"
     return render_course_tex(
         title,
         sections,
-        cover_image=_optional_string(document, "cover_image"),
-        subtitle=_profile_optional_string(document, "subtitle", profile_id),
-        theme=_profile_optional_string(document, "theme", profile_id),
-        one_sentence_summary=_profile_optional_string(
-            document, "one_sentence_summary", profile_id
+        cover_image=_optional_string(document, "cover_image") if is_reader_part else None,
+        subtitle=(
+            _profile_optional_string(document, "subtitle", profile_id)
+            if is_reader_part
+            else None
+        ),
+        theme=(
+            _profile_optional_string(document, "theme", profile_id) if is_reader_part else None
+        ),
+        one_sentence_summary=(
+            _profile_optional_string(document, "one_sentence_summary", profile_id)
+            if is_reader_part
+            else None
         ),
         metadata=_profile_optional_mapping(document, "metadata", profile_id),
         title_page_label=title_page_label,

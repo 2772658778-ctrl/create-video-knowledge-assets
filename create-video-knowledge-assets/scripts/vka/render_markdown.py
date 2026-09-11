@@ -79,7 +79,11 @@ def render_document_markdown(
         title,
         sections,
         cover_image=_optional_string(document, "cover_image") if part == "main" else None,
-        subtitle=_profile_optional_string(document, "subtitle", profile_id),
+        subtitle=(
+            _profile_optional_string(document, "subtitle", profile_id)
+            if part == "main"
+            else None
+        ),
         theme=_profile_optional_string(document, "theme", profile_id),
         one_sentence_summary=_profile_optional_string(
             document, "one_sentence_summary", profile_id
