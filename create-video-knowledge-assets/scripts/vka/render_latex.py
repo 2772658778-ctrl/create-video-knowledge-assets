@@ -85,12 +85,13 @@ def render_course_tex(
         r"\usepackage[bottom]{footmisc}",
         r"\usepackage{caption}",
         r"\usepackage{enumitem}",
-        r"\usepackage{placeins}",
         r"\usepackage{needspace}",
+        r"\usepackage{multicol}",
         r"\usepackage{hyperref}",
-        r"\captionsetup{format=hang,width=.94\linewidth,font={small,sf},labelfont={bf,sf},justification=raggedright,singlelinecheck=false,skip=6pt}",
+        r"\captionsetup{format=hang,width=.92\linewidth,font={small},labelfont={bf,sf},labelsep=quad,justification=raggedright,singlelinecheck=false,skip=7pt}",
         r"\hypersetup{unicode=true,hidelinks}",
-        r"\ctexset{section={format=\Large\bfseries\sffamily\raggedright,beforeskip=1.7em,afterskip=.7em},subsection={format=\large\bfseries\sffamily\raggedright,beforeskip=1.2em,afterskip=.5em}}",
+        r"\ctexset{section={format=\Large\bfseries\sffamily\raggedright,beforeskip=1.6em,afterskip=.6em,aftertitle={\par\nobreak\vspace{.3em}{\noindent\color{vkaRule}\rule{\linewidth}{0.4pt}}}},subsection={format=\large\bfseries\sffamily\raggedright,beforeskip=1.2em,afterskip=.5em}}",
+        r"\renewcommand{\contentsname}{目录}",
         r"\pagestyle{plain}",
         r"\setcounter{tocdepth}{2}",
         r"\setcounter{secnumdepth}{2}",
@@ -123,21 +124,23 @@ def render_course_tex(
         r"\begin{titlepage}",
         r"\thispagestyle{empty}",
         r"\centering",
-        r"\vspace*{0.05\textheight}",
-        rf"{{\sffamily\bfseries\fontsize{{30}}{{38}}\selectfont {_escape_latex(title)}\par}}",
+        r"\vspace*{0.02\textheight}",
+        r"\begin{center}\begin{minipage}{0.88\textwidth}\centering",
+        rf"{{\sffamily\bfseries\fontsize{{26}}{{34}}\selectfont {_escape_latex(title)}\par}}",
+        r"\end{minipage}\end{center}",
     ]
 
     if theme:
         lines.extend(
             [
-                r"\vspace{0.5cm}",
+                r"\vspace{0.35cm}",
                 rf"{{\sffamily\fontsize{{14}}{{20}}\selectfont\color{{vkaGreen}} {_escape_latex(theme)}\par}}",
             ]
         )
     if one_sentence_summary:
         lines.extend(
             [
-                r"\vspace{0.6cm}",
+                r"\vspace{0.45cm}",
                 r"\begin{center}",
                 r"\begin{minipage}{0.76\textwidth}",
                 r"\raggedright\fontsize{10.5}{16}\selectfont\color{vkaMuted}",
@@ -157,9 +160,9 @@ def render_course_tex(
     if cover_image and show_cover:
         lines.extend(
             [
-                r"\vspace{0.9cm}",
+                r"\vspace{0.6cm}",
                 r"\begin{center}",
-                rf"\fcolorbox{{vkaRule}}{{white}}{{\includegraphics[width=0.52\linewidth,height=0.21\textheight,keepaspectratio]{{{_latex_path(cover_image)}}}}}",
+                rf"\fcolorbox{{vkaRule}}{{white}}{{\includegraphics[width=0.40\linewidth,height=0.135\textheight,keepaspectratio]{{{_latex_path(cover_image)}}}}}",
                 r"\end{center}",
             ]
         )
@@ -168,7 +171,7 @@ def render_course_tex(
     if metadata_lines:
         lines.extend(
             [
-                r"\vspace{0.7cm}",
+                r"\vspace{0.5cm}",
                 r"\begin{center}",
                 r"\begin{minipage}{0.8\textwidth}",
                 r"\centering\sffamily\fontsize{8.5}{13}\selectfont\color{vkaMuted}",
@@ -178,35 +181,29 @@ def render_course_tex(
             ]
         )
 
-    lines.extend(
-        [
-            r"\vfill",
-            rf"{{\small\color{{black!55}} {_escape_latex(title_page_label)}\par}}",
-            r"\end{titlepage}",
-        ]
-    )
-    if show_toc:
+    if show_toc and sections:
         lines.extend(
             [
-                r"\pagenumbering{roman}",
-                r"\tableofcontents",
-                r"\vspace{1.2em}",
+                r"\vspace{0.5cm}",
                 r"\begin{center}",
-                r"{\small\color{black!55} 正文中的上标编号对应文末「来源时间」，标注该段内容在视频中的位置。\par}",
+                r"\begin{minipage}{0.84\textwidth}",
+                r"\raggedright",
+                r"\begingroup",
+                r"\ctexset{section={format=\sffamily\bfseries\fontsize{10.5}{14}\selectfont,beforeskip=0pt,afterskip=.6em,aftertitle={}}}",
+                r"\tableofcontents",
+                r"\endgroup",
+                r"\end{minipage}",
                 r"\end{center}",
-                r"\newpage",
-                r"\pagenumbering{arabic}",
-                "",
             ]
         )
-    else:
-        lines.append("")
+
+    lines.extend([r"\end{titlepage}", r"\pagenumbering{arabic}"])
+    lines.append("")
 
     for section_index, section in enumerate(sections):
         section_title = _section_title(section)
         if section_index:
             lines.append(r"\par\vspace{1.15\baselineskip}")
-            lines.append(r"\needspace{4\baselineskip}")
         lines.append(rf"\section{{{_escape_latex(section_title)}}}")
         lines.append("")
 
@@ -214,24 +211,37 @@ def render_course_tex(
             lines.extend(_render_block(block))
             lines.append("")
 
-        # Keep a figure inside the section it illustrates: floats may not drift
-        # past the barrier, so an image never appears next to another chapter.
-        lines.append(r"\FloatBarrier")
-        lines.append("")
+        lines.append(r"\vspace{0.6\baselineskip}")
 
     notes = _source_notes if show_source_notes else []
     if notes:
         lines.extend(
             [
-                r"\FloatBarrier",
+                r"\needspace{5\baselineskip}",
                 r"\vspace{1.5\baselineskip}",
-                r"\section*{来源时间}",
+                r"{\sffamily\bfseries\fontsize{11}{14}\selectfont\color{black!68} 来源时间\par}",
+                r"\vspace{0.3\baselineskip}",
+                r"\noindent{\color{vkaRule}\rule{\linewidth}{0.4pt}}",
+                r"\vspace{0.5\baselineskip}",
+                r"{\fontsize{8.5}{13}\selectfont\color{vkaMuted} 正文中的上标编号对应下面列出的时间范围，标注该段内容在视频中的位置。\par}",
+                r"\vspace{0.4\baselineskip}",
+                r"{\fontsize{8}{11.5}\selectfont\ttfamily\color{black!65}",
+                r"\begin{multicols}{2}",
                 r"\begin{enumerate}[leftmargin=1.8em,labelsep=.5em,itemsep=2pt,topsep=3pt]",
                 *(rf"\item {text}" for _, text in notes),
                 r"\end{enumerate}",
-                "",
+                r"\end{multicols}",
+                r"}",
             ]
         )
+    if title_page_label:
+        lines.extend(
+            [
+                r"\vfill",
+                rf"{{\footnotesize\color{{black!45}} {_escape_latex(title_page_label)}\par}}",
+            ]
+        )
+    lines.append("")
     lines.append(r"\end{document}")
     lines.append("")
     return "\n".join(lines)
@@ -387,11 +397,12 @@ def _render_image_block(block: Mapping[str, Any]) -> list[str]:
     marker = _source_footnote(block)
     latex_path = _latex_path(path)
     return [
-        r"\begin{figure}[htbp]",
+        r"\begin{center}",
         r"\centering",
-        rf"\fcolorbox{{vkaRule}}{{white}}{{\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{{{latex_path}}}}}",
-        rf"\caption{{{_escape_latex(caption)}{marker}}}",
-        r"\end{figure}",
+        rf"\fcolorbox{{vkaRule}}{{white}}{{\includegraphics[width=0.9\linewidth,height=0.27\textheight,keepaspectratio]{{{latex_path}}}}}",
+        rf"\captionof{{figure}}{{{_escape_latex(caption)}{marker}}}",
+        r"\end{center}",
+        r"\vspace{0.4\baselineskip}",
     ]
 
 

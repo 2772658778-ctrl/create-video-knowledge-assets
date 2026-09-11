@@ -24,7 +24,11 @@ def test_document_html_renders_table_and_caption() -> None:
 
     assert "<table>" in html
     assert "<th>Measure</th>" in html
-    assert '<p class="caption">The values are illustrative.</p>' in html
+    assert (
+        '<p class="caption">The values are illustrative.'
+        '<sup class="cite"><a href="#src-2">2</a></sup></p>'
+    ) in html
+    assert '<li id="src-2"><span class="time">00:00:04--00:00:06</span></li>' in html
 
 
 def test_general_document_html_preserves_local_image_path_without_audit_text() -> None:

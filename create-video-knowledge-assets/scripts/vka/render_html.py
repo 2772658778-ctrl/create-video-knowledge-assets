@@ -41,7 +41,6 @@ def render_course_html(
     theme: str | None = None,
     one_sentence_summary: str | None = None,
     metadata: Mapping[str, Any] | None = None,
-    document_class: str | None = None,
     show_source_notes: bool = True,
 ) -> str:
     if not isinstance(title, str) or not title:
@@ -62,7 +61,7 @@ def render_course_html(
         _STYLE,
         "</style>",
         "</head>",
-        f'<body{_body_class_attribute(document_class)}>',
+        "<body>",
         "<main>",
         f"<h1>{_escape(title)}</h1>",
     ]
@@ -75,7 +74,7 @@ def render_course_html(
     metadata_lines = _metadata_lines(metadata)
     if metadata_lines:
         body.append('<p class="metadata">')
-        body.extend(metadata_lines)
+        body.append("<br>".join(metadata_lines))
         body.append("</p>")
     if cover_image:
         body.append(
@@ -88,6 +87,19 @@ def render_course_html(
         body.append(f'<li><a href="#section-{index}">{_escape(section_title)}</a></li>')
     body.append("</ol></nav>")
 
+    # Number every citation before the body is written: the markers and the
+    # endnote list must come from the same pass, or the reader sees times with
+    # nothing pointing at them.
+    sources = (
+        assign_source_notes(
+            sections,
+            sourced_kinds=SOURCED_BLOCK_KINDS,
+            spans_of=_source_spans,
+        )
+        if show_source_notes
+        else []
+    )
+
     for index, section in enumerate(sections, start=1):
         section_title = _section_title(section)
         body.append(f'<section id="section-{index}">')
@@ -96,12 +108,7 @@ def render_course_html(
             body.extend(_render_block(block))
         body.append("</section>")
 
-    sources = assign_source_notes(
-        sections,
-        sourced_kinds=SOURCED_BLOCK_KINDS,
-        spans_of=_source_spans,
-    )
-    if sources and show_source_notes:
+    if sources:
         body.extend(
             [
                 '<section class="notes" id="source-times">',
@@ -157,7 +164,6 @@ def render_document_html(
             document, "one_sentence_summary", profile_id
         ),
         metadata=_profile_optional_mapping(document, "metadata", profile_id),
-        document_class=_profile_document_class(profile_id),
     )
 
 
@@ -339,13 +345,6 @@ def _table_data(block: Mapping[str, Any]) -> tuple[list[str], list[list[str]]]:
     return headers, normalized_rows
 
 
-def _time(milliseconds: int) -> str:
-    total_seconds = milliseconds // 1000
-    hours, remainder = divmod(total_seconds, 3600)
-    minutes, seconds = divmod(remainder, 60)
-    return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-
-
 def _escape(value: str) -> str:
     return html.escape(value, quote=True)
 
@@ -363,34 +362,45 @@ def _image_src(value: str) -> str:
 
 
 def _metadata_lines(metadata: Mapping[str, Any] | None) -> list[str]:
+    """Three short grey lines: who made it, how it was read, where it lives.
+
+    Identity reads as one scannable line so the cover answers "what am I
+    looking at" at a glance; the transcript audit trail keeps its own line
+    instead of running into the title.
+    """
     if not isinstance(metadata, Mapping):
         return []
-    fields = [
-        ("source_title", "视频名称"),
-        ("author", "作者/UP主"),
-        ("uploader", "作者/UP主"),
-        ("publish_date", "发布时间"),
-        ("duration", "视频时长"),
-        ("subtitle_source", "字幕来源"),
-        ("transcript_source", "转录来源"),
-        ("data_sources", "数据来源"),
-        ("source_url", "视频链接"),
+    identity: list[str] = []
+    for key in ("source_title", "author", "uploader", "publish_date", "duration"):
+        value = _metadata_value(metadata, key)
+        if value is None:
+            continue
+        rendered = f"《{value}》" if key == "source_title" else value
+        if rendered not in identity:
+            identity.append(rendered)
+    provenance = [
+        value
+        for key in ("subtitle_source", "transcript_source", "data_sources")
+        if (value := _metadata_value(metadata, key)) is not None
     ]
-    seen_labels: set[str] = set()
+    url = _metadata_value(metadata, "source_url")
     lines: list[str] = []
-    for key, label in fields:
-        if label in seen_labels:
-            continue
-        value = metadata.get(key)
-        if isinstance(value, list):
-            value = "；".join(str(item) for item in value if str(item).strip())
-        if not isinstance(value, str) or not value.strip():
-            continue
-        seen_labels.add(label)
-        text = value.strip()
-        rendered = f"《{text}》" if key == "source_title" else text
-        lines.append(_escape(rendered))
+    if identity:
+        lines.append(_escape("　·　".join(identity)))
+    if provenance:
+        lines.append(_escape("；".join(provenance)))
+    if url:
+        lines.append(_escape(url))
     return lines
+
+
+def _metadata_value(metadata: Mapping[str, Any], key: str) -> str | None:
+    value = metadata.get(key)
+    if isinstance(value, list):
+        value = "；".join(str(item) for item in value if str(item).strip())
+    if not isinstance(value, str) or not value.strip():
+        return None
+    return value.strip()
 
 
 def _optional_string(document: Mapping[str, Any], key: str) -> str | None:
@@ -411,17 +421,6 @@ def _optional_mapping(document: Mapping[str, Any], key: str) -> Mapping[str, Any
     return value
 
 
-def _profile_document_class(profile_id: object) -> str | None:
-    if not isinstance(profile_id, str):
-        return None
-    return {
-        "creator-article": "profile-creator-article",
-        "enterprise-knowledge": "profile-enterprise-knowledge",
-        "research-brief": "profile-research-brief",
-        "short-video-script": "profile-short-video-script",
-    }.get(profile_id)
-
-
 def _profile_optional_string(
     document: Mapping[str, Any], key: str, profile_id: object
 ) -> str | None:
@@ -438,90 +437,118 @@ def _profile_optional_mapping(
     return _optional_mapping(document, key)
 
 
-def _body_class_attribute(value: str | None) -> str:
-    return f' class="{_escape(value)}"' if value else ""
-
-
 _STYLE = """
 :root {
   color-scheme: light;
-  --ink: #1a1a1a;
-  --muted: #8a8a8a;
-  --line: #dcdcdc;
+  --ink: #23211f;
+  --ink-soft: #46423f;
+  --muted: #8b8681;
+  --line: #e7e3dc;
+  --accent: #2f6b52;
   --blue: #245b7d;
-  --green: #3f6b57;
   --amber: #8a5a00;
-  --paper: #ffffff;
-  --bg: #f2f2f0;
+  --paper: #fffefb;
+  --bg: #f1eee8;
+  --serif: "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif SC", "Songti SC", STSong, SimSun, Georgia, serif;
+  --sans: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Hiragino Sans GB", sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
 }
+html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Songti SC", SimSun, "Noto Serif CJK SC", Georgia, serif;
+  font-family: var(--serif);
   font-size: 17px;
-  line-height: 1.95;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 main {
-  max-width: 720px;
+  max-width: 680px;
   margin: 0 auto;
-  padding: 56px 44px 88px;
+  padding: 72px 52px 104px;
   background: var(--paper);
+  box-shadow: 0 1px 48px rgba(35, 33, 31, 0.06);
+  counter-reset: sec fig;
 }
-h1, h2, h3 {
-  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-  line-height: 1.35;
-  color: var(--ink);
+h1, h2, h3 { font-family: var(--sans); color: var(--ink); line-height: 1.34; text-wrap: balance; }
+h1 { font-size: 2rem; font-weight: 700; letter-spacing: 0.005em; margin: 0 0 0.5em; }
+h2 { font-size: 1.34rem; font-weight: 700; margin: 3.2rem 0 1.1rem; counter-increment: sec; }
+h2::before {
+  content: counter(sec, decimal-leading-zero);
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  margin-bottom: 0.35em;
 }
-h1 { font-size: 2.05rem; font-weight: 700; margin: 0 0 0.6rem; letter-spacing: 0.01em; }
-h2 { font-size: 1.32rem; font-weight: 700; margin: 2.6rem 0 0.9rem; }
-h3 { font-size: 1.08rem; font-weight: 600; margin: 1.8rem 0 0.6rem; }
-p { margin: 0 0 1.05rem; }
-.theme { font-family: "Microsoft YaHei", sans-serif; font-size: 1.05rem; color: var(--green); margin: 0 0 0.9rem; }
-.summary { font-size: 0.95rem; color: var(--muted); margin: 0 0 0.5rem; }
-.subtitle, .source, figcaption, .metadata { color: var(--muted); font-size: 0.86rem; }
-.metadata { display: block; margin: 0.4rem 0 1.6rem; line-height: 1.9; }
-.metadata br { display: none; }
-nav { margin: 2rem 0 2.4rem; padding: 0; }
-nav strong { font-family: "Microsoft YaHei", sans-serif; font-size: 0.9rem; color: var(--muted); letter-spacing: 0.12em; }
-nav ol { list-style: none; margin: 0.7rem 0 0; padding: 0; counter-reset: toc; }
-nav li { counter-increment: toc; margin: 0.35rem 0; }
+h3 { font-size: 1.06rem; font-weight: 600; margin: 2.1rem 0 0.7em; color: var(--ink-soft); }
+p { margin: 0 0 1.15em; }
+.theme { font-family: var(--sans); font-size: 1.02rem; font-weight: 500; color: var(--accent); margin: 0 0 1rem; }
+.summary { font-size: 1rem; color: var(--ink-soft); margin: 0 0 0.7rem; padding-left: 0.9rem; border-left: 2px solid var(--line); }
+.subtitle, .source, figcaption, .metadata { color: var(--muted); font-size: 0.84rem; }
+.subtitle { margin: 0 0 0.8rem; letter-spacing: 0.02em; }
+.metadata { display: block; margin: 0 0 2rem; line-height: 1.95; }
+nav { margin: 2.6rem 0 3.2rem; padding: 1.3rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+nav strong { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.22em; }
+nav ol { list-style: none; margin: 0.9rem 0 0; padding: 0; counter-reset: toc; }
+nav li { counter-increment: toc; margin: 0.55rem 0; font-size: 1rem; line-height: 1.6; }
 nav li a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
-nav li a:hover { border-bottom-color: var(--green); }
-nav li a::before { content: counter(toc) "  "; color: var(--green); font-family: "Microsoft YaHei", sans-serif; }
+nav li a::before {
+  content: counter(toc, decimal-leading-zero);
+  margin-right: 0.75em;
+  font-family: var(--sans);
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+nav li a:hover { border-bottom-color: var(--accent); }
 img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
-figure { margin: 1.8rem 0; }
-figure img { border: 1px solid var(--line); }
-figcaption { font-size: 0.84rem; text-align: left; margin-top: 0.5rem; line-height: 1.6; }
-.cover img { max-height: 300px; width: auto; border: 1px solid var(--line); }
-.cite { font-size: 0.68em; vertical-align: super; }
-.cite a { color: var(--green); text-decoration: none; }
-table { width: 100%; border-collapse: collapse; margin: 1.3rem 0; font-size: 0.92rem; }
-th, td { border-bottom: 1px solid var(--line); padding: 0.5rem 0.6rem; text-align: left; vertical-align: top; }
-th { font-family: "Microsoft YaHei", sans-serif; font-size: 0.88rem; color: var(--muted); font-weight: 600; }
-blockquote { margin: 1.3rem 0; padding: 0 0 0 1rem; border-left: 2px solid var(--green); color: #333; }
-.notes { margin-top: 3rem; border-top: 1px solid var(--line); padding-top: 1.4rem; }
-.notes h2 { font-size: 1rem; color: var(--muted); }
-.notes-list { margin: 0; padding-left: 1.4rem; color: var(--muted); font-size: 0.8rem; line-height: 1.8; }
-.notes-list .time { font-family: Consolas, "Cascadia Mono", monospace; }
-.box { border-left: 5px solid var(--blue); background: #f7fbff; padding: 0.8rem 1rem; margin: 1rem 0; }
-.knowledgebox { border-left-color: var(--green); background: #f6fbf7; }
+figure { margin: 2.3rem 0 2.5rem; }
+figure:not(.cover) { counter-increment: fig; }
+figure img { border: 1px solid var(--line); border-radius: 3px; }
+figcaption { text-align: left; margin-top: 0.75rem; line-height: 1.7; }
+figure:not(.cover) figcaption::before {
+  content: "图 " counter(fig) "　";
+  font-family: var(--sans);
+  font-size: 0.9em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+.caption { font-size: 0.84rem; line-height: 1.75; color: var(--muted); margin: -1.6rem 0 2.2rem; }
+.cover { margin: 0 0 2.4rem; }
+.cover img { width: 100%; border-radius: 4px; }
+.cite { font-size: 0.6em; vertical-align: super; line-height: 0; margin-left: 0.12em; }
+.cite a { color: var(--muted); text-decoration: none; }
+.cite a:hover { color: var(--accent); }
+table { width: 100%; border-collapse: collapse; margin: 1.4rem 0; font-size: 0.9rem; }
+th, td { border-bottom: 1px solid var(--line); padding: 0.55rem 0.6rem; text-align: left; vertical-align: top; }
+th { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+blockquote { margin: 1.5rem 0; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 2px solid var(--accent); color: var(--ink-soft); }
+.notes { margin-top: 4.5rem; padding-top: 1.7rem; border-top: 1px solid var(--line); }
+.notes h2 { counter-increment: none; font-family: var(--sans); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.22em; color: var(--muted); margin: 0 0 1.2rem; }
+.notes h2::before { content: none; }
+.notes-list { list-style: none; margin: 0; padding: 0; counter-reset: note; font-size: 0.8rem; line-height: 1.7; color: var(--muted); }
+.notes-list li { counter-increment: note; display: grid; grid-template-columns: 2.6em 1fr; margin: 0.3rem 0; }
+.notes-list li::before { content: counter(note) "."; color: var(--muted); }
+.notes-list .time { font-family: var(--mono); font-size: 0.94em; }
+.box { border-left: 4px solid var(--blue); background: #f7fbff; padding: 0.85rem 1.1rem; margin: 1.4rem 0; }
+.knowledgebox { border-left-color: var(--accent); background: #f4faf6; }
 .warningbox { border-left-color: var(--amber); background: #fffaf0; }
-.formula, pre { overflow-x: auto; background: #f6f8fa; padding: 0.9rem; border: 1px solid var(--line); }
-code, .formula { font-family: Consolas, "Cascadia Mono", monospace; }
-.profile-creator-article main { max-width: 760px; }
-.profile-creator-article h1 { font-size: 2.25rem; }
-.profile-enterprise-knowledge main { max-width: 1040px; }
-.profile-enterprise-knowledge h2 { color: var(--green); }
-.profile-enterprise-knowledge table { width: 100%; border-collapse: collapse; }
-.profile-enterprise-knowledge th, .profile-enterprise-knowledge td { border: 1px solid var(--line); padding: 0.55rem; text-align: left; vertical-align: top; }
-.profile-research-brief main { max-width: 980px; }
-.profile-research-brief h2 { color: #6b3d7a; }
-.profile-research-brief blockquote { border-left: 4px solid #8b5ca0; margin: 1rem 0; padding-left: 1rem; color: var(--muted); }
-.profile-short-video-script main { max-width: 820px; }
-.profile-short-video-script h2 { color: var(--blue); }
-@media (max-width: 680px) {
-  main { padding: 24px 16px 56px; }
-  h1 { font-size: 1.55rem; }
+.box strong { font-family: var(--sans); font-size: 0.9rem; letter-spacing: 0.04em; }
+.formula, pre { overflow-x: auto; background: #f7f5f1; padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 3px; }
+code, .formula { font-family: var(--mono); font-size: 0.88em; }
+@media (max-width: 720px) {
+  body { font-size: 16.5px; }
+  main { padding: 32px 20px 64px; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.2rem; margin-top: 2.6rem; }
+}
+@media print {
+  body { background: #fff; }
+  main { max-width: none; padding: 0; box-shadow: none; }
 }
 """

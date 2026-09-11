@@ -284,7 +284,7 @@ def test_renderer_writes_section_with_bottom_time_footnote() -> None:
 def test_renderer_writes_cover_image_and_subtitle() -> None:
     tex = render_course_tex(
         "测试课程",
-        [],
+        [{"title": "第一部分", "blocks": []}],
         cover_image="source/cover.jpg",
         subtitle="视频标题与来源说明",
         theme="核心主题",
@@ -304,10 +304,10 @@ def test_renderer_writes_cover_image_and_subtitle() -> None:
     assert "原视频标题" in tex
     assert "ASR repaired" in tex
     assert (
-        r"\includegraphics[width=0.52\linewidth,height=0.21\textheight,keepaspectratio]"
+        r"\includegraphics[width=0.40\linewidth,height=0.135\textheight,keepaspectratio]"
         r"{source/cover.jpg}"
     ) in tex
-    assert tex.index(r"\end{titlepage}") < tex.index(r"\tableofcontents")
+    assert tex.index(r"\tableofcontents") < tex.index(r"\end{titlepage}")
 
 
 def test_renderer_escapes_latex_special_characters_without_touching_time() -> None:
@@ -384,12 +384,12 @@ def test_renderer_writes_image_block_with_caption_and_source() -> None:
     )
 
     assert r"\usepackage{graphicx}" in tex
-    assert r"\begin{figure}[htbp]" in tex
+    assert r"\begin{center}" in tex
     assert (
-        r"\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]"
+        r"\includegraphics[width=0.9\linewidth,height=0.27\textheight,keepaspectratio]"
         r"{evidence/frames/frame-001.jpg}"
     ) in tex
-    assert r"\caption{A directly inspected frame.\textsuperscript{1}}" in tex
+    assert r"\captionof{figure}{A directly inspected frame.\textsuperscript{1}}" in tex
     assert r"\item 00:00:12--00:00:16" in tex
     assert "00:00:12--00:00:16" in tex
 
