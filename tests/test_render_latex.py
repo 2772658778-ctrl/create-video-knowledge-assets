@@ -382,7 +382,7 @@ def test_renderer_writes_image_block_with_caption_and_source() -> None:
     )
 
     assert r"\usepackage{graphicx}" in tex
-    assert r"\begin{figure}[H]" in tex
+    assert r"\begin{figure}[htbp]" in tex
     assert (
         r"\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]"
         r"{evidence/frames/frame-001.jpg}"
