@@ -58,6 +58,7 @@ def render_course_tex(
         r"\usepackage[bottom]{footmisc}",
         r"\usepackage{caption}",
         r"\usepackage{enumitem}",
+        r"\usepackage{placeins}",
         r"\usepackage{needspace}",
         r"\usepackage{hyperref}",
         r"\captionsetup{width=.92\linewidth,font=small,labelfont=bf,justification=raggedright,singlelinecheck=false,skip=6pt}",
@@ -167,6 +168,11 @@ def render_course_tex(
         for block in _section_blocks(section):
             lines.extend(_render_block(block))
             lines.append("")
+
+        # Keep a figure inside the section it illustrates: floats may not drift
+        # past the barrier, so an image never appears next to another chapter.
+        lines.append(r"\FloatBarrier")
+        lines.append("")
 
     lines.append(r"\end{document}")
     lines.append("")
@@ -323,7 +329,7 @@ def _render_image_block(block: Mapping[str, Any]) -> list[str]:
     footnote = _source_footnote(block)
     latex_path = _latex_path(path)
     return [
-        r"\begin{figure}[H]",
+        r"\begin{figure}[htbp]",
         r"\centering",
         rf"\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{{{latex_path}}}",
         (
