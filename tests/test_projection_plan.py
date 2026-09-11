@@ -44,7 +44,17 @@ def _plan(asset: AssetStore) -> dict[str, object]:
         "profile_id": "creator-article", "profile_spec_version": "1.0",
         "canonical_hash_tree": canonical_hash_tree(asset),
         "reader_goal": "Help a reader understand the demonstrated workflow and its boundary.",
-        "status": "ready", "sections": sections,
+        "status": "ready",
+        "source_form": {
+            "type": "explainer",
+            "duration_band": "under_15m",
+            "density": "high",
+            "chapter_mode": "explicit",
+        },
+        "granularity": {
+            "planned_claims": 4,
+            "rationale": "The source carries four verifiable claims in two sections.",
+        },        "sections": sections,
         "selected_figures": [{
             "section_id": "sec-video_evidence", "evidence_id": "ev-frame",
             "artifact_ref": "source/frames/flow.jpg",
@@ -66,6 +76,16 @@ def _short_video_script_plan(asset: AssetStore) -> dict[str, object]:
         "canonical_hash_tree": canonical_hash_tree(asset),
         "reader_goal": "Select reusable content units for a short video script.",
         "status": "ready",
+        "source_form": {
+            "type": "commentary",
+            "duration_band": "under_15m",
+            "density": "medium",
+            "chapter_mode": "inferable",
+        },
+        "granularity": {
+            "planned_claims": 2,
+            "rationale": "A sixty-second script carries one point and one proof.",
+        },
         "sections": [
             {
                 "section_id": "sec-hook",

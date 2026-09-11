@@ -9,6 +9,19 @@ someone will read aloud — write the way a person talks.
 Author these sections in this order. The `kind` values are authoring metadata
 and must not appear as visible headings.
 
+Before writing, fix two numbers: the **target runtime** of the finished clip and
+the reading speed you assume. They decide how much of the source survives; a
+sixty-second script and a three-minute script are different documents, not the
+same document at two lengths. Where the source is longer than the runtime
+allows, keep the hook, one core point, and the evidence that carries it —
+dropping the rest is the job, not a compromise.
+
+A script is a shooting document. Beyond the prose, each beat states what the
+viewer sees and hears: the spoken line, the on-screen text or shot, and the
+evidence behind it. Production notes ("one card", "start from the title card",
+data credits) belong in the notes part; the body is only what the audience
+receives.
+
 1. `hook` — the opening attention and promise.
 2. `context` — the minimum setup needed to understand the subject.
 3. `core_point` — the source-backed central idea.

@@ -39,6 +39,19 @@ course-summary template.
 - A tutorial follows `问题—机制/步骤—例子—注意事项` (problem,
   mechanism/steps, example, cautions). Keep the order close to the task a
   reader would perform and state conditions that make a step fail or change.
+- A commentary follows `中心判断—最强反方—证据—限制` (judgement, the
+  strongest opposing case, evidence, limits). A single-sided explanation of a
+  contested claim is not a summary.
+- A data report follows `指标—变化—比较基准—替代解释` (metric, movement,
+  baseline, alternative explanation). Every figure answers one reader question;
+  repeating the chart in prose is not explanation.
+- An explainer with no chapters is cut where the argument turns or the visual
+  state changes, never by slicing the timeline into equal parts.
+
+Length follows density, not duration. A ten-minute video with four verifiable
+claims per ten minutes carries more than a sixty-minute interview with the same
+four claims spread thin; the plan states how many core claims the document
+carries and why.
 
 The profile may use a different structure when the video requires it, but it
 must still provide the required overview, two logical-body sections,

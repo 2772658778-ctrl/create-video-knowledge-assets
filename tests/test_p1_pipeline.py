@@ -51,4 +51,4 @@ def test_fixture_keeps_provenance_traceable_from_srt_to_course_tex() -> None:
         ],
     )
     assert "00:00:03--00:00:06" in tex
-    assert r"\footnote{00:00:03--00:00:06}" in tex
+    assert r"\item 00:00:03--00:00:06" in tex

@@ -21,6 +21,16 @@ bridge.
   "canonical_hash_tree": {"knowledge/units.jsonl": "<sha256>"},
   "reader_goal": "Help a reader understand and check the demonstrated practice.",
   "status": "ready",
+  "source_form": {
+    "type": "explainer",
+    "duration_band": "under_15m",
+    "density": "high",
+    "chapter_mode": "explicit"
+  },
+  "granularity": {
+    "planned_claims": 5,
+    "rationale": "十分钟里视频给出五个可验证判断，正文按判断分段，不为凑结构加背景。"
+  },
   "sections": [
     {
       "section_id": "narrative",
@@ -51,6 +61,22 @@ and `knowledge/` hashes at write time. A selected figure must name a directly
 inspected video-frame evidence record and repeat its exact `artifact_ref`.
 `status` may be `ready`, `declined`, or `evidence_inventory`; only `ready` may
 be bound to a final profile document.
+
+## Source Form Decides The Writing
+
+`source_form` is required, and it is not metadata: it is the input to the
+writing decision. State the type (`tutorial`, `interview`, `explainer`,
+`commentary`, `data_report`, `other`), the duration band (`under_15m`,
+`15_to_45m`, `over_45m`), the density (how many verifiable claims the source
+offers per ten minutes: `high`, `medium`, `low`), and whether chapters are
+`explicit`, `inferable`, or absent.
+
+`granularity` records what the plan decided that shape implies: how many core
+claims the document will carry, and why. **There is no fixed quota** — a dense
+ten-minute explainer and a thin one-hour interview legitimately differ, and a
+source may justify an unusually high or low count. What the plan owes the
+reader is a decision with a reason; a document that silently drops most of a
+tutorial's steps is not a smaller document, it is an unfinished one.
 
 ## Workflow
 

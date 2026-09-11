@@ -10,20 +10,22 @@ document from that plan.
 The reader came for the source's content, not for a report about a source.
 These rules apply to every reader-facing profile and are enforced by the gate:
 
-- **State the content; never make the video the subject.** `视频把油炒视为…` and
-  `视频给出三点…` turn the reader into a spectator. Write the claim itself, or
-  name the author when the attribution matters: `作者把采后五小时称为“黄金时间”`.
-  `视频` may still appear in metadata, in a one-off attribution, or when the
-  video's own production is the topic.
-- **Push attribution down, not out.** Documents, data, history, and mechanics
-  are stated directly (`《周礼》记载…`); only the author's own judgement,
-  naming, or unverified claim keeps `作者认为` / `作者把…称为`.
+- **Retell the source; never make the video the subject.** The document *is* the
+  source's content in written form, so write the claim itself: `油炒是…`,
+  `《周礼》记载…`, `采后五小时被称为“黄金时间”`. `视频把油炒视为…` and
+  `视频给出三点…` turn the reader into a spectator and are rejected. `视频` may
+  still appear in metadata or when the video's own production is the topic.
+- **Attribute the author's own view to the author.** Facts, documents, data,
+  history, and mechanics are stated directly; a judgement, a name the author
+  invents, or an unverified claim is attributed once: `作者把采后五小时称为
+  “黄金时间”`. Do not keep re-introducing the author as the actor of ordinary
+  sentences — `作者先肯定了 HTML 的优势` is worse than `HTML 的优势是…`.
 - **Captions describe the picture.** A caption says what is visible and why it
   matters. Production directions ("开场用标题卡", "口播要说明") belong in the
   notes part, never mixed into reader copy.
 - **Do not argue your own evidence in the body.** Sentences like "这张图支持…
-  不单独证明…" turn a reader into an auditor. Source times live in footnotes;
-  scope lives in the notes part.
+  不单独证明…" turn a reader into an auditor. Source times are numbered in the
+  body and listed under 来源时间 at the end; scope lives in the notes part.
 - **Vary the sentence pattern.** `不是 A，而是 B` is strong once per section and
   a tic when it carries the whole text.
 - **Keep one address.** Talk to the reader as `你`. Do not drift between `你`,
@@ -35,6 +37,10 @@ Create a short private plan containing:
 
 1. target reader and the decision, understanding, or action the document
    supports;
+2. the source form — type, duration band, density, chapter mode — and the
+   granularity it implies. Decide how many core claims the document carries and
+   say why; do not import a number from a template, and do not quietly drop
+   most of a tutorial's steps to keep the document short;
 2. selected canonical knowledge IDs, split into video fact, inference, and
    limitation where applicable;
 3. section-by-section reader question and the evidence that answers it;
@@ -43,6 +49,20 @@ Create a short private plan containing:
    the reader should learn from the image;
 5. a negative decision for each rejected frame (unreadable, redundant, or low
    information). Never insert decorative screenshots.
+
+Three rules follow from the source form:
+
+- **A tutorial is measured by coverage, not by length.** Every source step and
+  checkpoint ends in one of three states: told in full, merged into another
+  step, or explicitly omitted with a reason. A nine-step tutorial that shows
+  two steps has not been summarised.
+- **One claim per paragraph.** A paragraph develops one judgement. A number, a
+  mechanism, and a historical source are three paragraphs, not one sentence
+  with three commas.
+- **Evidence is quoted per claim.** Each core claim cites one to three
+  contiguous time windows. If a claim needs more than three disjoint windows,
+  label it in the body as a synthesis and give it an evidence table in the
+  notes part.
 
 If the asset contains a directly inspected frame with an `artifact_ref`, every
 creator, enterprise, and research projection must render at least one selected

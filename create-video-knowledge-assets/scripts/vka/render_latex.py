@@ -6,6 +6,22 @@ from typing import Any
 
 from vka.quality import document_sections_for_part, rebase_document_image_paths
 
+# Block kinds whose text is a claim about the source, and therefore carry a
+# numbered pointer to the source-time list at the end of the document.
+SOURCED_BLOCK_KINDS = frozenset(
+    {
+        "paragraph",
+        "quote",
+        "bullet_list",
+        "numbered_list",
+        "table",
+        "image",
+        "caption",
+        "summary",
+        "importantbox",
+    }
+)
+
 
 URL_RE = re.compile(
     r"https?://[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;=%-]+"
@@ -37,11 +53,15 @@ def render_course_tex(
     title_page_label: str = "Codex course notes",
     show_cover: bool = True,
     show_toc: bool = True,
+    show_source_notes: bool = True,
 ) -> str:
     if not isinstance(title, str):
         raise ValueError("course title must be a string")
     if not _is_sequence(sections):
         raise ValueError("sections must be an array")
+
+    sections = [dict(section) if isinstance(section, Mapping) else section for section in sections]
+    _source_notes = _assign_source_notes(sections) if show_source_notes else []
 
     lines = [
         r"\documentclass[UTF8,a4paper]{ctexart}",
@@ -147,7 +167,7 @@ def render_course_tex(
                 r"\tableofcontents",
                 r"\vspace{1.2em}",
                 r"\begin{center}",
-                r"{\small\color{black!55} 脚注标注该段内容在视频中的时间位置。\par}",
+                r"{\small\color{black!55} 正文中的上标编号对应文末「来源时间」，标注该段内容在视频中的位置。\par}",
                 r"\end{center}",
                 r"\newpage",
                 r"\pagenumbering{arabic}",
@@ -174,6 +194,19 @@ def render_course_tex(
         lines.append(r"\FloatBarrier")
         lines.append("")
 
+    notes = _source_notes if show_source_notes else []
+    if notes:
+        lines.extend(
+            [
+                r"\FloatBarrier",
+                r"\vspace{1.5\baselineskip}",
+                r"\section*{来源时间}",
+                r"\begin{enumerate}[leftmargin=1.8em,labelsep=.5em,itemsep=2pt,topsep=3pt]",
+                *(rf"\item {text}" for _, text in notes),
+                r"\end{enumerate}",
+                "",
+            ]
+        )
     lines.append(r"\end{document}")
     lines.append("")
     return "\n".join(lines)
@@ -326,19 +359,14 @@ def _render_image_block(block: Mapping[str, Any]) -> list[str]:
     if not isinstance(caption, str) or not caption:
         raise ValueError("image caption must be a non-empty string")
 
-    footnote = _source_footnote(block)
+    marker = _source_footnote(block)
     latex_path = _latex_path(path)
     return [
         r"\begin{figure}[htbp]",
         r"\centering",
         rf"\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{{{latex_path}}}",
-        (
-            rf"\caption{{{_escape_latex(caption)}\protect\footnotemark}}"
-            if footnote
-            else rf"\caption{{{_escape_latex(caption)}}}"
-        ),
+        rf"\caption{{{_escape_latex(caption)}{marker}}}",
         r"\end{figure}",
-        *([rf"\footnotetext{{{_source_note_text(block)}}}"] if footnote else []),
     ]
 
 
@@ -439,9 +467,33 @@ def _source_lines(block: Mapping[str, Any]) -> list[str]:
 
 
 def _source_footnote(block: Mapping[str, Any]) -> str:
-    if block.get("_allow_empty_source_spans") is True and not block.get("source_spans"):
+    """Mark the claim in place; the source times are listed at the end."""
+    number = block.get("_note_number")
+    if not isinstance(number, int):
         return ""
-    return rf"\footnote{{{_source_note_text(block)}}}"
+    return rf"\textsuperscript{{{number}}}"
+
+
+def _assign_source_notes(sections: Sequence[Any]) -> list[tuple[int, str]]:
+    """Number every sourced block once, for the end-of-document source list."""
+    notes: list[tuple[int, str]] = []
+    for section in sections:
+        if not isinstance(section, Mapping):
+            continue
+        for block in _section_blocks(section):
+            if not isinstance(block, dict):
+                raise ValueError("block must be an object")
+            kind = block.get("kind")
+            if kind in SOURCED_BLOCK_KINDS:
+                spans = _source_spans(block)
+            else:
+                spans = block.get("source_spans") or []
+            if not spans:
+                continue
+            number = len(notes) + 1
+            block["_note_number"] = number
+            notes.append((number, _source_note_text(block)))
+    return notes
 
 
 def _source_note_text(block: Mapping[str, Any]) -> str:

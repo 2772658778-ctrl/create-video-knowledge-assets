@@ -11,6 +11,16 @@ P3_PROFILE_IDS = frozenset(
 )
 PLAN_STATUSES = frozenset({"ready", "declined", "evidence_inventory"})
 
+# The shape of the source decides how the document is written. A ten-minute
+# data-dense explainer and a one-hour interview cannot share a structure, so the
+# plan has to state the shape and the granularity it implies before drafting.
+SOURCE_TYPES = frozenset(
+    {"tutorial", "interview", "explainer", "commentary", "data_report", "other"}
+)
+DURATION_BANDS = frozenset({"under_15m", "15_to_45m", "over_45m"})
+DENSITIES = frozenset({"high", "medium", "low"})
+CHAPTER_MODES = frozenset({"explicit", "inferable", "none"})
+
 
 def validate_projection_plan(
     plan: object,
@@ -44,6 +54,8 @@ def validate_projection_plan(
     status = plan.get("status")
     if status not in PLAN_STATUSES:
         errors.append("projection plan status must be ready, declined, or evidence_inventory")
+    errors.extend(_source_form_errors(plan.get("source_form")))
+    errors.extend(_granularity_errors(plan.get("granularity")))
 
     sections = plan.get("sections")
     if not isinstance(sections, list) or not sections:
@@ -119,6 +131,43 @@ def _valid_refs(value: object) -> bool:
     return isinstance(value, list) and bool(value) and all(
         isinstance(item, str) and item.strip() for item in value
     )
+
+
+def _source_form_errors(value: object) -> list[str]:
+    if not isinstance(value, Mapping):
+        return ["projection plan must declare source_form"]
+    errors: list[str] = []
+    for key, allowed in (
+        ("type", SOURCE_TYPES),
+        ("duration_band", DURATION_BANDS),
+        ("density", DENSITIES),
+        ("chapter_mode", CHAPTER_MODES),
+    ):
+        if value.get(key) not in allowed:
+            errors.append(
+                f"projection plan source_form.{key} must be one of "
+                + ", ".join(sorted(allowed))
+            )
+    return errors
+
+
+def _granularity_errors(value: object) -> list[str]:
+    """The plan states how much the document will cover, and why.
+
+    There is no fixed quota: a dense ten-minute video and a thin one-hour
+    interview legitimately differ. What the plan owes the reader is a decision
+    with a reason, not a number that matches a template.
+    """
+    if not isinstance(value, Mapping):
+        return ["projection plan must declare granularity"]
+    errors: list[str] = []
+    claims = value.get("planned_claims")
+    if not isinstance(claims, int) or isinstance(claims, bool) or claims < 1:
+        errors.append("projection plan granularity.planned_claims must be a positive integer")
+    rationale = value.get("rationale")
+    if not isinstance(rationale, str) or not rationale.strip():
+        errors.append("projection plan granularity.rationale must explain the planned depth")
+    return errors
 
 
 def _valid_hash_tree(value: object) -> bool:
