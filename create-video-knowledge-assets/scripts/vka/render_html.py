@@ -6,7 +6,30 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-from vka.quality import document_sections_for_part, rebase_document_image_paths
+from vka.quality import (
+    assign_source_notes,
+    document_sections_for_part,
+    format_source_note,
+    rebase_document_image_paths,
+)
+
+# Block kinds that make a claim about the source, so they carry a numbered
+# pointer into the 来源时间 list at the end of the document.
+SOURCED_BLOCK_KINDS = frozenset(
+    {
+        "paragraph",
+        "quote",
+        "bullet_list",
+        "numbered_list",
+        "table",
+        "image",
+        "caption",
+        "summary",
+        "importantbox",
+        "knowledgebox",
+        "warningbox",
+    }
+)
 
 
 def render_course_html(
@@ -19,11 +42,14 @@ def render_course_html(
     one_sentence_summary: str | None = None,
     metadata: Mapping[str, Any] | None = None,
     document_class: str | None = None,
+    show_source_notes: bool = True,
 ) -> str:
     if not isinstance(title, str) or not title:
         raise ValueError("course title must be a non-empty string")
     if not isinstance(sections, Sequence) or isinstance(sections, (str, bytes)):
         raise ValueError("sections must be an array")
+
+    sections = [dict(section) if isinstance(section, Mapping) else section for section in sections]
 
     body: list[str] = [
         "<!doctype html>",
@@ -48,9 +74,9 @@ def render_course_html(
         body.append(f'<p class="subtitle">{_escape(subtitle)}</p>')
     metadata_lines = _metadata_lines(metadata)
     if metadata_lines:
-        body.append('<dl class="metadata">')
+        body.append('<p class="metadata">')
         body.extend(metadata_lines)
-        body.append("</dl>")
+        body.append("</p>")
     if cover_image:
         body.append(
             f'<figure class="cover"><img src="{_image_src(cover_image)}" alt="视频封面"></figure>'
@@ -69,6 +95,26 @@ def render_course_html(
         for block in _section_blocks(section):
             body.extend(_render_block(block))
         body.append("</section>")
+
+    sources = assign_source_notes(
+        sections,
+        sourced_kinds=SOURCED_BLOCK_KINDS,
+        spans_of=_source_spans,
+    )
+    if sources and show_source_notes:
+        body.extend(
+            [
+                '<section class="notes" id="source-times">',
+                "<h2>来源时间</h2>",
+                '<ol class="notes-list">',
+                *(
+                    f'<li id="src-{number}"><span class="time">{_escape(text)}</span></li>'
+                    for number, text in sources
+                ),
+                "</ol>",
+                "</section>",
+            ]
+        )
 
     body.extend(["</main>", "</body>", "</html>", ""])
     return "\n".join(body)
@@ -121,8 +167,7 @@ def _render_block(block: Any) -> list[str]:
     kind = block.get("kind")
 
     if kind == "paragraph":
-        _source(block)
-        return [f"<p>{_inline(_text(block))}</p>"]
+        return [f"<p>{_inline(_text(block))}{_source(block)}</p>"]
     if kind == "subsection":
         title = block.get("title")
         if not isinstance(title, str) or not title:
@@ -135,10 +180,10 @@ def _render_block(block: Any) -> list[str]:
             "knowledgebox": "补充知识",
             "warningbox": "易错提醒",
         }[kind]
-        _source(block)
+        marker = _source(block)
         return [
             f'<aside class="box {kind}"><strong>{_escape(heading)}</strong>',
-            f"<p>{_inline(_text(block))}</p>",
+            f"<p>{_inline(_text(block))}{marker}</p>",
             "</aside>",
         ]
     if kind in {"bullet_list", "numbered_list"}:
@@ -151,7 +196,9 @@ def _render_block(block: Any) -> list[str]:
             if not isinstance(item, str) or not item:
                 raise ValueError("list item must be a non-empty string")
             lines.append(f"<li>{_inline(item)}</li>")
-        _source(block)
+        marker = _source(block)
+        if marker and len(lines) > 1:
+            lines[-1] = lines[-1].replace("</li>", f"{marker}</li>")
         lines.append(f"</{tag}>")
         return lines
     if kind == "formula":
@@ -171,7 +218,9 @@ def _render_block(block: Any) -> list[str]:
                     raise ValueError("formula symbol explanation must be a non-empty string")
                 lines.append(f"<li>{_inline(symbol)}</li>")
             lines.append("</ul>")
-        _source(block)
+        marker = _source(block)
+        if marker and lines:
+            lines[-1] = lines[-1].replace("</ul>", f"{marker}</ul>")
         return lines
     if kind == "code":
         code = block.get("code")
@@ -181,15 +230,14 @@ def _render_block(block: Any) -> list[str]:
         lines = []
         if isinstance(caption, str) and caption:
             lines.append(f"<p><strong>{_escape(caption)}</strong></p>")
-        _source(block)
-        lines.append(f"<pre><code>{_escape(code.rstrip())}</code></pre>")
+        marker = _source(block)
+        lines.append(f"<pre><code>{_escape(code.rstrip())}</code></pre>{marker}")
         return lines
     if kind == "quote":
-        _source(block)
-        return [f"<blockquote>{_inline(_text(block))}</blockquote>"]
+        return [f"<blockquote>{_inline(_text(block))}{_source(block)}</blockquote>"]
     if kind == "table":
         headers, rows = _table_data(block)
-        _source(block)
+        marker = _source(block)
         lines = ["<table>", "<thead><tr>"]
         lines.extend(f"<th>{_inline(header)}</th>" for header in headers)
         lines.extend(["</tr></thead>", "<tbody>"])
@@ -197,11 +245,10 @@ def _render_block(block: Any) -> list[str]:
             lines.append("<tr>")
             lines.extend(f"<td>{_inline(cell)}</td>" for cell in row)
             lines.append("</tr>")
-        lines.extend(["</tbody>", "</table>"])
+        lines.extend(["</tbody>", f"</table>{marker}"])
         return lines
     if kind == "caption":
-        _source(block)
-        return [f'<p class="caption">{_inline(_text(block))}</p>']
+        return [f'<p class="caption">{_inline(_text(block))}{_source(block)}</p>']
     if kind == "image":
         path = block.get("path")
         caption = block.get("caption")
@@ -209,11 +256,11 @@ def _render_block(block: Any) -> list[str]:
             raise ValueError("image path must be a non-empty string")
         if not isinstance(caption, str) or not caption:
             raise ValueError("image caption must be a non-empty string")
-        _source(block)
+        marker = _source(block)
         return [
             "<figure>",
             f'<img src="{_image_src(path)}" alt="{_escape(caption)}">',
-            f"<figcaption>{_inline(caption)}</figcaption>",
+            f"<figcaption>{_inline(caption)}{marker}</figcaption>",
             "</figure>",
         ]
 
@@ -246,9 +293,20 @@ def _text(block: Mapping[str, Any]) -> str:
 
 
 def _source(block: Mapping[str, Any]) -> str:
+    spans = _source_spans(block)
+    if not spans:
+        return ""
+    number = block.get("_note_number")
+    if not isinstance(number, int):
+        return ""
+    return f'<sup class="cite"><a href="#src-{number}">{number}</a></sup>'
+
+
+def _source_spans(block: Mapping[str, Any]) -> list[Any]:
+    """Validated source spans, or an empty list when the block is unsourced."""
     spans = block.get("source_spans")
     if spans in (None, []) and block.get("_allow_empty_source_spans") is True:
-        return ""
+        return []
     if not isinstance(spans, list) or not spans:
         raise ValueError("source_spans must be a non-empty list")
     for span in spans:
@@ -258,7 +316,7 @@ def _source(block: Mapping[str, Any]) -> str:
         end = span.get("end_ms")
         if not isinstance(start, int) or not isinstance(end, int) or end <= start:
             raise ValueError("source span must have increasing integer times")
-    return ""
+    return list(spans)
 
 
 def _table_data(block: Mapping[str, Any]) -> tuple[list[str], list[list[str]]]:
@@ -329,7 +387,9 @@ def _metadata_lines(metadata: Mapping[str, Any] | None) -> list[str]:
         if not isinstance(value, str) or not value.strip():
             continue
         seen_labels.add(label)
-        lines.append(f"<dt>{_escape(label)}</dt><dd>{_escape(value.strip())}</dd>")
+        text = value.strip()
+        rendered = f"《{text}》" if key == "source_title" else text
+        lines.append(_escape(rendered))
     return lines
 
 
@@ -385,44 +445,65 @@ def _body_class_attribute(value: str | None) -> str:
 _STYLE = """
 :root {
   color-scheme: light;
-  --ink: #1f2933;
-  --muted: #607080;
-  --line: #d9e2ec;
+  --ink: #1a1a1a;
+  --muted: #8a8a8a;
+  --line: #dcdcdc;
   --blue: #245b7d;
-  --green: #2f6b4f;
+  --green: #3f6b57;
   --amber: #8a5a00;
   --paper: #ffffff;
-  --bg: #f4f7f9;
+  --bg: #f2f2f0;
 }
 body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
-  line-height: 1.75;
+  font-family: "Songti SC", SimSun, "Noto Serif CJK SC", Georgia, serif;
+  font-size: 17px;
+  line-height: 1.95;
 }
 main {
-  max-width: 920px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 40px 28px 72px;
+  padding: 56px 44px 88px;
   background: var(--paper);
 }
-h1, h2, h3 { line-height: 1.28; }
-h1 { font-size: 2rem; margin-bottom: 0.25rem; }
-h2 { border-top: 1px solid var(--line); padding-top: 1.4rem; margin-top: 2rem; }
-h3 { color: var(--blue); margin-top: 1.4rem; }
-.theme { font-size: 1.25rem; font-weight: 700; margin: 0.4rem 0 0.2rem; }
-.summary { font-size: 1.05rem; margin: 0.25rem 0 0.6rem; }
-.subtitle, .source, figcaption, .metadata { color: var(--muted); }
-.source { font-size: 0.9rem; margin-top: -0.4rem; }
-.metadata { display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 0.8rem; margin: 1rem 0; }
-.metadata dt { font-weight: 700; }
-.metadata dd { margin: 0; }
-nav { border: 1px solid var(--line); padding: 1rem 1.2rem; margin: 1.5rem 0 2rem; }
+h1, h2, h3 {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  line-height: 1.35;
+  color: var(--ink);
+}
+h1 { font-size: 2.05rem; font-weight: 700; margin: 0 0 0.6rem; letter-spacing: 0.01em; }
+h2 { font-size: 1.32rem; font-weight: 700; margin: 2.6rem 0 0.9rem; }
+h3 { font-size: 1.08rem; font-weight: 600; margin: 1.8rem 0 0.6rem; }
+p { margin: 0 0 1.05rem; }
+.theme { font-family: "Microsoft YaHei", sans-serif; font-size: 1.05rem; color: var(--green); margin: 0 0 0.9rem; }
+.summary { font-size: 0.95rem; color: var(--muted); margin: 0 0 0.5rem; }
+.subtitle, .source, figcaption, .metadata { color: var(--muted); font-size: 0.86rem; }
+.metadata { display: block; margin: 0.4rem 0 1.6rem; line-height: 1.9; }
+.metadata br { display: none; }
+nav { margin: 2rem 0 2.4rem; padding: 0; }
+nav strong { font-family: "Microsoft YaHei", sans-serif; font-size: 0.9rem; color: var(--muted); letter-spacing: 0.12em; }
+nav ol { list-style: none; margin: 0.7rem 0 0; padding: 0; counter-reset: toc; }
+nav li { counter-increment: toc; margin: 0.35rem 0; }
+nav li a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+nav li a:hover { border-bottom-color: var(--green); }
+nav li a::before { content: counter(toc) "  "; color: var(--green); font-family: "Microsoft YaHei", sans-serif; }
 img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
-figure { margin: 1.3rem 0; }
-figcaption { font-size: 0.94rem; text-align: center; margin-top: 0.6rem; }
-.cover img { max-height: 320px; }
+figure { margin: 1.8rem 0; }
+figure img { border: 1px solid var(--line); }
+figcaption { font-size: 0.84rem; text-align: left; margin-top: 0.5rem; line-height: 1.6; }
+.cover img { max-height: 300px; width: auto; border: 1px solid var(--line); }
+.cite { font-size: 0.68em; vertical-align: super; }
+.cite a { color: var(--green); text-decoration: none; }
+table { width: 100%; border-collapse: collapse; margin: 1.3rem 0; font-size: 0.92rem; }
+th, td { border-bottom: 1px solid var(--line); padding: 0.5rem 0.6rem; text-align: left; vertical-align: top; }
+th { font-family: "Microsoft YaHei", sans-serif; font-size: 0.88rem; color: var(--muted); font-weight: 600; }
+blockquote { margin: 1.3rem 0; padding: 0 0 0 1rem; border-left: 2px solid var(--green); color: #333; }
+.notes { margin-top: 3rem; border-top: 1px solid var(--line); padding-top: 1.4rem; }
+.notes h2 { font-size: 1rem; color: var(--muted); }
+.notes-list { margin: 0; padding-left: 1.4rem; color: var(--muted); font-size: 0.8rem; line-height: 1.8; }
+.notes-list .time { font-family: Consolas, "Cascadia Mono", monospace; }
 .box { border-left: 5px solid var(--blue); background: #f7fbff; padding: 0.8rem 1rem; margin: 1rem 0; }
 .knowledgebox { border-left-color: var(--green); background: #f6fbf7; }
 .warningbox { border-left-color: var(--amber); background: #fffaf0; }

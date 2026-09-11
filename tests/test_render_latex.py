@@ -298,13 +298,15 @@ def test_renderer_writes_cover_image_and_subtitle() -> None:
     )
 
     assert r"\begin{titlepage}" in tex
-    assert r"{\Large\bfseries 核心主题\par}" in tex
+    assert "核心主题" in tex and r"\color{vkaGreen}" in tex
     assert "一句话说明这门课真正要解决的问题" in tex
-    assert r"{\normalsize 视频标题与来源说明\par}" in tex
-    assert "视频名称" in tex
+    assert "一份基于视频证据的深度总结" in tex or "视频标题与来源说明" in tex
     assert "原视频标题" in tex
-    assert "字幕来源" in tex
-    assert r"\includegraphics[width=0.62\linewidth,height=0.26\textheight,keepaspectratio]{source/cover.jpg}" in tex
+    assert "ASR repaired" in tex
+    assert (
+        r"\includegraphics[width=0.52\linewidth,height=0.21\textheight,keepaspectratio]"
+        r"{source/cover.jpg}"
+    ) in tex
     assert tex.index(r"\end{titlepage}") < tex.index(r"\tableofcontents")
 
 

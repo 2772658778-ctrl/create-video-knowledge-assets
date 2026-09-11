@@ -4,7 +4,12 @@ import re
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from vka.quality import document_sections_for_part, rebase_document_image_paths
+from vka.quality import (
+    assign_source_notes,
+    document_sections_for_part,
+    format_source_note,
+    rebase_document_image_paths,
+)
 
 # Block kinds whose text is a claim about the source, and therefore carry a
 # numbered pointer to the source-time list at the end of the document.
@@ -66,8 +71,10 @@ def render_course_tex(
     lines = [
         r"\documentclass[UTF8,a4paper]{ctexart}",
         r"\usepackage{fontspec}",
-        r"\IfFontExistsTF{Microsoft YaHei}{\setCJKmainfont{Microsoft YaHei}\setCJKsansfont{Microsoft YaHei UI}\setCJKmonofont{Microsoft YaHei}}{}",
-        r"\usepackage[margin=2.5cm]{geometry}",
+        r"\IfFontExistsTF{SimSun}{\setCJKmainfont{SimSun}}{}",
+        r"\IfFontExistsTF{Microsoft YaHei}{\setCJKsansfont{Microsoft YaHei}\setCJKmonofont{Microsoft YaHei}}{}",
+        r"\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{}",
+        r"\usepackage[a4paper,top=2.4cm,bottom=2.6cm,left=2.5cm,right=2.5cm,includeheadfoot]{geometry}",
         r"\usepackage{graphicx}",
         r"\usepackage{float}",
         r"\usepackage{xcolor}",
@@ -81,13 +88,14 @@ def render_course_tex(
         r"\usepackage{placeins}",
         r"\usepackage{needspace}",
         r"\usepackage{hyperref}",
-        r"\captionsetup{width=.92\linewidth,font=small,labelfont=bf,justification=raggedright,singlelinecheck=false,skip=6pt}",
+        r"\captionsetup{format=hang,width=.94\linewidth,font={small,sf},labelfont={bf,sf},justification=raggedright,singlelinecheck=false,skip=6pt}",
         r"\hypersetup{unicode=true,hidelinks}",
-        r"\ctexset{section={format=\Large\bfseries\raggedright,beforeskip=1.6em,afterskip=.7em},subsection={format=\large\bfseries\raggedright,beforeskip=1.1em,afterskip=.45em}}",
+        r"\ctexset{section={format=\Large\bfseries\sffamily\raggedright,beforeskip=1.7em,afterskip=.7em},subsection={format=\large\bfseries\sffamily\raggedright,beforeskip=1.2em,afterskip=.5em}}",
         r"\pagestyle{plain}",
         r"\setcounter{tocdepth}{2}",
         r"\setcounter{secnumdepth}{2}",
-        r"\setlength{\parskip}{0.42em}",
+        r"\AtBeginDocument{\fontsize{10.5}{16.5}\selectfont}",
+        r"\setlength{\parskip}{0.45em}",
         r"\setlength{\parindent}{2em}",
         r"\raggedbottom",
         r"\setlength{\intextsep}{0.7em}",
@@ -102,6 +110,12 @@ def render_course_tex(
         r"\definecolor{vkaBlue}{HTML}{245B7D}",
         r"\definecolor{vkaGreen}{HTML}{3B6B4F}",
         r"\definecolor{vkaAmber}{HTML}{8A5A00}",
+        r"\definecolor{vkaInk}{HTML}{1A1A1A}",
+        r"\definecolor{vkaMuted}{HTML}{8A8A8A}",
+        r"\definecolor{vkaRule}{HTML}{DCDCDC}",
+        r"\setlength{\fboxsep}{0pt}",
+        r"\setlength{\fboxrule}{0.4pt}",
+        r"\color{vkaInk}",
         r"\newenvironment{vkabox}[2]{\par\medskip\noindent{\color{#1}\rule{0.8em}{0.8em}}\hspace{0.4em}\textbf{#2}\par\smallskip\noindent\begingroup\leftskip=1.2em\rightskip=0.6em\ignorespaces}{\par\endgroup\medskip}",
         r"\lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible,frame=single}",
         "",
@@ -109,33 +123,43 @@ def render_course_tex(
         r"\begin{titlepage}",
         r"\thispagestyle{empty}",
         r"\centering",
-        r"\vspace*{0.03\textheight}",
-        rf"{{\Huge\bfseries {_escape_latex(title)}\par}}",
+        r"\vspace*{0.05\textheight}",
+        rf"{{\sffamily\bfseries\fontsize{{30}}{{38}}\selectfont {_escape_latex(title)}\par}}",
     ]
 
     if theme:
-        lines.extend([r"\vspace{0.4cm}", rf"{{\Large\bfseries {_escape_latex(theme)}\par}}"])
+        lines.extend(
+            [
+                r"\vspace{0.5cm}",
+                rf"{{\sffamily\fontsize{{14}}{{20}}\selectfont\color{{vkaGreen}} {_escape_latex(theme)}\par}}",
+            ]
+        )
     if one_sentence_summary:
         lines.extend(
             [
-                r"\vspace{0.35cm}",
+                r"\vspace{0.6cm}",
                 r"\begin{center}",
-                r"\begin{minipage}{0.82\textwidth}",
-                r"\centering\large",
+                r"\begin{minipage}{0.76\textwidth}",
+                r"\raggedright\fontsize{10.5}{16}\selectfont\color{vkaMuted}",
                 rf"{_escape_latex(one_sentence_summary)}\par",
                 r"\end{minipage}",
                 r"\end{center}",
             ]
         )
     if subtitle:
-        lines.extend([r"\vspace{0.4cm}", rf"{{\normalsize {_escape_latex(subtitle)}\par}}"])
+        lines.extend(
+            [
+                r"\vspace{0.45cm}",
+                rf"{{\sffamily\fontsize{{9.5}}{{13}}\selectfont\color{{vkaMuted}} {_escape_latex(subtitle)}\par}}",
+            ]
+        )
 
     if cover_image and show_cover:
         lines.extend(
             [
-                r"\vfill",
+                r"\vspace{0.9cm}",
                 r"\begin{center}",
-                rf"\includegraphics[width=0.62\linewidth,height=0.26\textheight,keepaspectratio]{{{_latex_path(cover_image)}}}",
+                rf"\fcolorbox{{vkaRule}}{{white}}{{\includegraphics[width=0.52\linewidth,height=0.21\textheight,keepaspectratio]{{{_latex_path(cover_image)}}}}}",
                 r"\end{center}",
             ]
         )
@@ -144,11 +168,12 @@ def render_course_tex(
     if metadata_lines:
         lines.extend(
             [
-                r"\vfill",
+                r"\vspace{0.7cm}",
                 r"\begin{center}",
-                r"\begin{tabularx}{0.88\textwidth}{>{\bfseries}r>{\raggedright\arraybackslash}X}",
-                *metadata_lines,
-                r"\end{tabularx}",
+                r"\begin{minipage}{0.8\textwidth}",
+                r"\centering\sffamily\fontsize{8.5}{13}\selectfont\color{vkaMuted}",
+                *(line + r"\par" for line in _compact_metadata(metadata)),
+                r"\end{minipage}",
                 r"\end{center}",
             ]
         )
@@ -364,7 +389,7 @@ def _render_image_block(block: Mapping[str, Any]) -> list[str]:
     return [
         r"\begin{figure}[htbp]",
         r"\centering",
-        rf"\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{{{latex_path}}}",
+        rf"\fcolorbox{{vkaRule}}{{white}}{{\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{{{latex_path}}}}}",
         rf"\caption{{{_escape_latex(caption)}{marker}}}",
         r"\end{figure}",
     ]
@@ -476,43 +501,16 @@ def _source_footnote(block: Mapping[str, Any]) -> str:
 
 def _assign_source_notes(sections: Sequence[Any]) -> list[tuple[int, str]]:
     """Number every sourced block once, for the end-of-document source list."""
-    notes: list[tuple[int, str]] = []
-    for section in sections:
-        if not isinstance(section, Mapping):
-            continue
-        for block in _section_blocks(section):
-            if not isinstance(block, dict):
-                raise ValueError("block must be an object")
-            kind = block.get("kind")
-            if kind in SOURCED_BLOCK_KINDS:
-                spans = _source_spans(block)
-            else:
-                spans = block.get("source_spans") or []
-            if not spans:
-                continue
-            number = len(notes) + 1
-            block["_note_number"] = number
-            notes.append((number, _source_note_text(block)))
-    return notes
+    return assign_source_notes(
+        sections,
+        sourced_kinds=SOURCED_BLOCK_KINDS,
+        spans_of=_source_spans,
+    )
 
 
 def _source_note_text(block: Mapping[str, Any]) -> str:
-    """Compact the source times: merge overlaps, drop the repeated prefix.
-
-    The reader is told once, under the table of contents, that footnotes carry
-    video times; repeating "来源时间：" on every line only adds noise.
-    """
-    spans = _source_spans(block)
-    merged: list[list[int]] = []
-    for span in sorted(spans, key=lambda item: item["start_ms"]):
-        start_ms = span["start_ms"]
-        end_ms = span["end_ms"]
-        if merged and start_ms <= merged[-1][1]:
-            merged[-1][1] = max(merged[-1][1], end_ms)
-        else:
-            merged.append([start_ms, end_ms])
-    ranges = [f"{_format_time(start)}--{_format_time(end)}" for start, end in merged]
-    return _escape_latex("，".join(ranges))
+    """Compact the source times, without repeating a prefix on every line."""
+    return _escape_latex(format_source_note(_source_spans(block)))
 
 
 def _paragraph_text(block: Any) -> str:
@@ -589,6 +587,36 @@ def _escape_prose_latex(value: str) -> str:
         offset = match.end()
     parts.append(_escape_latex(value[offset:]))
     return "".join(parts)
+
+
+def _compact_metadata(metadata: Mapping[str, Any] | None) -> list[str]:
+    """One or two grey lines of source attribution, not an eight-row form."""
+    if not isinstance(metadata, Mapping):
+        return []
+    parts: list[str] = []
+    for key in ("source_title", "author", "uploader", "publish_date", "duration"):
+        value = metadata.get(key)
+        if isinstance(value, str) and value.strip():
+            text = value.strip().strip("《》")
+            rendered = f"《{text}》" if key == "source_title" else text
+            if rendered not in parts:
+                parts.append(rendered)
+
+    notes: list[str] = []
+    for key in ("subtitle_source", "transcript_source"):
+        value = metadata.get(key)
+        if isinstance(value, str) and value.strip():
+            notes.append(value.strip())
+
+    lines: list[str] = []
+    if parts:
+        lines.append(_escape_latex("　·　".join(parts)))
+    if notes:
+        lines.append(_escape_latex("；".join(notes)))
+    url = metadata.get("source_url")
+    if isinstance(url, str) and url.strip():
+        lines.append(_escape_latex(url.strip()))
+    return lines
 
 
 def _metadata_lines(metadata: Mapping[str, Any] | None) -> list[str]:

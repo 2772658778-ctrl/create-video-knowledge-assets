@@ -5,6 +5,7 @@ from collections.abc import Mapping, Sequence
 from copy import deepcopy
 import os
 from pathlib import Path, PureWindowsPath
+from collections.abc import Callable
 from typing import Any
 
 
@@ -445,6 +446,78 @@ def rebase_document_image_paths(
         relative_path = os.path.relpath(source_path, output).replace("\\", "/")
         _replace_image_path(block, relative_path)
     return rebased
+
+
+SOURCE_TIME_MERGE_GAP_MS = 2_000
+
+
+def format_source_note(spans: Sequence[Mapping[str, Any]]) -> str:
+    """Merge a claim's time windows into one plain-text citation.
+
+    Windows a couple of seconds apart are one citation; duplicates collapse.
+    """
+    ordered = sorted(
+        (int(span["start_ms"]), int(span["end_ms"]))
+        for span in spans
+        if isinstance(span, Mapping)
+    )
+    merged: list[list[int]] = []
+    for start, end in ordered:
+        if merged and start <= merged[-1][1] + SOURCE_TIME_MERGE_GAP_MS:
+            merged[-1][1] = max(merged[-1][1], end)
+        else:
+            merged.append([start, end])
+    ranges: list[str] = []
+    for start, end in merged:
+        text = f"{_format_source_time(start)}--{_format_source_time(end)}"
+        if text not in ranges:
+            ranges.append(text)
+    return "，".join(ranges)
+
+
+def assign_source_notes(
+    sections: Sequence[Any],
+    *,
+    sourced_kinds: frozenset[str],
+    spans_of: Callable[[Mapping[str, Any]], Sequence[Any]],
+) -> list[tuple[int, str]]:
+    """Number a document's citations once, sharing numbers for equal citations.
+
+    Both renderers use this so the PDF and the HTML cite the same source list.
+    """
+    notes: list[tuple[int, str]] = []
+    shared: dict[str, int] = {}
+    for section in sections:
+        if not isinstance(section, Mapping):
+            continue
+        blocks = section.get("blocks")
+        if not isinstance(blocks, list):
+            continue
+        for block in blocks:
+            if not isinstance(block, dict):
+                raise ValueError("block must be an object")
+            spans = (
+                spans_of(block)
+                if block.get("kind") in sourced_kinds
+                else block.get("source_spans") or []
+            )
+            if not spans:
+                continue
+            text = format_source_note(spans)
+            number = shared.get(text)
+            if number is None:
+                number = len(notes) + 1
+                notes.append((number, text))
+                shared[text] = number
+            block["_note_number"] = number
+    return notes
+
+
+def _format_source_time(milliseconds: int) -> str:
+    total_seconds = milliseconds // 1000
+    minutes, seconds = divmod(total_seconds, 60)
+    hours, minutes = divmod(minutes, 60)
+    return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
 
 def document_sections_for_part(

@@ -38,7 +38,7 @@ def test_general_document_html_preserves_local_image_path_without_audit_text() -
     html = render_document_html(document)
 
     assert 'src="evidence/frames/chart.jpg"' in html
-    assert "00:00:20--00:00:28" not in html
+    assert '<li id="src-1"><span class="time">00:00:20--00:00:28</span></li>' in html
     assert "source_spans" not in html
 from vka_cli import main
 
@@ -79,8 +79,8 @@ def test_html_renderer_writes_readable_page_with_local_images() -> None:
     assert "视频来源：Bilibili" in html
     assert "file:///D:/asset/cover.jpg" in html
     assert "file:///D:/asset/frames/attention.jpg" in html
-    assert "来源时间" not in html
-    assert "00:00:10--00:00:18" not in html
+    assert "来源时间" in html
+    assert '<li id="src-1"><span class="time">00:00:10--00:00:18</span></li>' in html
 
 
 def test_cli_render_html_writes_draft_without_p1_gate(tmp_path) -> None:
