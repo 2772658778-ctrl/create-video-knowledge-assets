@@ -116,6 +116,39 @@ ARTICLE_CLICHE_PHRASES = (
     "打通",
 )
 
+# A reader came for the video's content, not for a report about a video. Copy
+# that keeps saying "视频认为…" turns the subject into a spectator and reads
+# like a summary of a summary. State the content directly; name the author when
+# a claim needs attribution.
+VIDEO_NARRATION_OPENER_RE = re.compile(
+    r"^\s*(?:本|该|这个|这条|这支)?视频"
+    r"(?:中|里|则|会|先|再|把|用|给出|认为|指出|展示|提到|讲|说|介绍|解释|承认|将)"
+)
+VIDEO_NARRATION_ALLOWED_CHARS = 700
+
+
+def _video_narration_errors(blocks: Sequence[object], prose: str) -> list[str]:
+    errors: list[str] = []
+    for block in blocks:
+        if not isinstance(block, Mapping):
+            continue
+        text = _block_text(block).strip()
+        if text and VIDEO_NARRATION_OPENER_RE.search(text):
+            errors.append(
+                "reader copy must state the content, not narrate the video: "
+                f"{text[:24]}…"
+            )
+            break
+    mentions = prose.count("视频")
+    allowed = max(2, len(prose) // VIDEO_NARRATION_ALLOWED_CHARS)
+    if mentions > allowed:
+        errors.append(
+            "reader copy mentions 视频 "
+            f"{mentions} times in {len(prose)} characters; state the content "
+            "directly instead of reporting on the video"
+        )
+    return errors
+
 
 def validate_course_document_quality(document: object) -> list[str]:
     """Return quality errors that would make a P1 course-note document unreadable."""
@@ -549,11 +582,13 @@ def _general_deep_document_errors(document: Mapping[str, Any]) -> list[str]:
             "general-deep must not carry boundary or source chapters; put them in notes"
         )
     errors.extend(notes_errors(document))
-    prose = sum(
-        len(_block_text(block))
+    prose_blocks = [
+        block
         for block in _document_blocks(document)
         if isinstance(block, Mapping) and block.get("kind") != "image"
-    )
+    ]
+    prose = sum(len(_block_text(block)) for block in prose_blocks)
+    errors.extend(_video_narration_errors(prose_blocks, "".join(map(_block_text, prose_blocks))))
     if prose < 600:
         errors.append("general-deep document needs sufficient explanatory prose")
     if document.get("video_has_visual_value") is True and not any(
@@ -734,6 +769,7 @@ def _creator_article_document_errors(document: object) -> list[str]:
             + "、".join(cliches)
         )
     errors.extend(notes_errors(document))
+    errors.extend(_video_narration_errors(blocks, prose))
     if not _section_has_video_span(document, "video_evidence"):
         errors.append("creator-article video evidence must retain video source spans")
     return errors

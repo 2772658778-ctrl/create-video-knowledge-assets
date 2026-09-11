@@ -1207,6 +1207,10 @@ def _run_compile_pdf(args: argparse.Namespace) -> int:
         byproduct = output_directory / f"{tex_path.stem}{suffix}"
         if byproduct.is_file():
             byproduct.unlink()
+    pdf_path = output_directory / f"{tex_path.stem}.pdf"
+    previous = None
+    if pdf_path.is_file():
+        previous = pdf_path.read_bytes()
     command = [
         str(xelatex),
         "-interaction=nonstopmode",
@@ -1227,6 +1231,7 @@ def _run_compile_pdf(args: argparse.Namespace) -> int:
                 errors="replace",
             )
     except subprocess.CalledProcessError as exc:
+        _restore_pdf(pdf_path, previous)
         log_path = _latex_log_path(output_directory)
         _write_latex_build_log(log_path, exc.stdout, exc.stderr)
         sys.stderr.write(
@@ -1234,10 +1239,28 @@ def _run_compile_pdf(args: argparse.Namespace) -> int:
         )
         return exc.returncode or 1
     except OSError as exc:
+        _restore_pdf(pdf_path, previous)
         sys.stderr.write(f"error: failed to run xelatex: {exc}\n")
         return 1
 
     return 0
+
+
+def _restore_pdf(pdf_path: Path, previous: bytes | None) -> None:
+    """Keep a failed build from replacing a good deliverable with a fragment.
+
+    xelatex writes the first pass's PDF before the second pass can fail, so a
+    broken run would otherwise leave a truncated document in the output
+    directory and downstream packaging would copy it as the final product.
+    """
+    try:
+        if previous is None:
+            if pdf_path.is_file():
+                pdf_path.unlink()
+        else:
+            pdf_path.write_bytes(previous)
+    except OSError:
+        pass
 
 
 def _run_package_demo(args: argparse.Namespace) -> int:

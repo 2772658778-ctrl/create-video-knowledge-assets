@@ -8,7 +8,7 @@
       "blocks": [
         {
           "kind": "paragraph",
-          "text": "本文帮助读者把视频中讲解的流程整理为可以检查、可以复用的行动步骤。",
+          "text": "本文把一套可以检查、可以复用的行动步骤整理出来。",
           "knowledge_refs": [
             "ku-promise"
           ],
@@ -30,7 +30,7 @@
       "blocks": [
         {
           "kind": "paragraph",
-          "text": "视频将可靠交付归结为明确输入、执行步骤和复核输出之间的连续关系。",
+          "text": "可靠交付取决于明确输入、执行步骤和复核输出之间的连续关系。",
           "knowledge_refs": [
             "ku-core"
           ],
@@ -52,7 +52,7 @@
       "blocks": [
         {
           "kind": "paragraph",
-          "text": "先识别流程中容易遗漏的输入，再按视频说明的顺序执行，并在最后检查输出是否满足目标。",
+          "text": "先识别流程中容易遗漏的输入，再按顺序执行，并在最后检查输出是否满足目标。",
           "knowledge_refs": [
             "ku-flow"
           ],
@@ -70,7 +70,7 @@
     },
     {
       "kind": "video_evidence",
-      "title": "视频中的依据",
+      "title": "依据",
       "blocks": [
         {
           "kind": "paragraph",

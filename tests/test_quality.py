@@ -305,6 +305,32 @@ def _article_document(reader_promise: str, *, takeaway: str | None = None) -> di
     }
 
 
+def test_reader_copy_must_not_narrate_the_video() -> None:
+    errors = validate_document_quality(
+        _article_document("视频把油炒视为中国竹笋烹饪的一次重大突破。", takeaway="油炒是重要突破。")
+    )
+
+    assert any("must state the content, not narrate the video" in error for error in errors)
+
+
+def test_reader_copy_accepts_stating_the_content_directly() -> None:
+    document = _article_document(
+        "你可能正在为一个标题改到凌晨，反复删掉又写回来。",
+        takeaway="作者把采后五小时称为黄金时间。",
+    )
+
+    assert validate_document_quality(document) == []
+
+
+def test_reader_copy_rejects_repeated_video_mentions() -> None:
+    document = _article_document("你可能正在为一个标题改到凌晨，反复删掉又写回来。")
+    document["sections"][2]["blocks"][0]["text"] = "视频提到这一点。" * 6
+
+    errors = validate_document_quality(document)
+
+    assert any("mentions 视频" in error for error in errors)
+
+
 def test_article_rejects_an_announcement_opener() -> None:
     errors = validate_document_quality(
         _article_document("在当今这个信息爆炸的时代，写作能力变得越来越重要。")
