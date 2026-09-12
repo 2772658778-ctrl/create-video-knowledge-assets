@@ -30,11 +30,18 @@ of each other. A caption is two steps below the body and never competes with it.
 
 ## One Accent Colour
 
-Deep green (`#3B6B4F` in LaTeX, `#2F6B52` in HTML), used in exactly four
-places: the section number, the contents number, the `图 N` caption label, and
-the `来源时间` heading. Everything else is ink, grey, or a hairline rule. If a
-fifth place wants colour, it does not get one — a muted document with four
-accents reads as designed, and the same document with ten reads as decorated.
+Deep green (`#3B6B4F` in LaTeX, `#2F6B52` in HTML) marks where the reader is in
+the document, and nothing else: the section number, the contents number, the
+`图 N` caption label, and the `来源时间` heading. Two borrowed uses are
+deliberate and stay: the cover theme line, and the rule on a knowledge box,
+because each already means "this is the document's own frame, not its content".
+Body text, captions, rules, and metadata are ink, grey, or a hairline. If a
+sixth place wants colour, it does not get one — the accent works because a
+reader sees it four or five times per document, not twenty.
+
+The three teaching boxes are the one exception, and they are semantic rather
+than decorative: blue is the core point, green is background knowledge, amber
+is a common mistake. They appear only in course notes.
 
 ## Cover
 
