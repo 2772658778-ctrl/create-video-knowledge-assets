@@ -1,16 +1,22 @@
-"""Publish one rendered profile as a demo directory.
+"""Publish one profile view as a demo directory.
 
-Renderers rebase image paths against the asset output directory, so a demo
-copy needs the referenced images next to it and the paths rewritten. Doing that
-by hand is the same throwaway-script problem the rest of the pipeline avoids.
-The demo publishes one document twice per part: a PDF for archiving and a
-standalone HTML file for continuous reading on screen.
+The published reader copy is one self-contained HTML file per part, so a demo
+opens with a double click and carries its own cover and figures. That is why
+this module inlines images instead of copying them next to the page: a demo
+directory with a figures/ folder is a second thing to keep in sync, and a
+reader who moves the file loses the pictures.
+
+Only the formats recorded in the view selection are published, so a run that
+asked for HTML alone does not ship a PDF nobody requested.
 """
 
 from __future__ import annotations
 
-import copy
+import base64
+import html
 import json
+import mimetypes
+import re
 import shutil
 from collections.abc import Mapping
 from pathlib import Path
@@ -18,6 +24,10 @@ from typing import Any
 
 from vka.profiles import renderer_options_for
 from vka.render_html import render_document_html
+
+
+PARTS = (("main", "summary"), ("notes", "notes"))
+_SRC_RE = re.compile(r'src="([^"]+)"')
 
 
 def package_demo(
@@ -37,121 +47,89 @@ def package_demo(
     if not isinstance(document, Mapping):
         raise ValueError("document must be an object")
 
+    formats = _delivered_formats(asset, profile_id)
     demo = Path(demo_root) / asset.name
-    figures = demo / "figures"
-    figures.mkdir(parents=True, exist_ok=True)
-
-    rebased = _document_with_demo_paths(asset, document, demo, figures)
+    demo.mkdir(parents=True, exist_ok=True)
 
     written: list[str] = []
-    parts: list[tuple[str, str]] = []
-    for part, filename in (("main", name), ("notes", "notes")):
-        pdf = outputs / ("document.pdf" if part == "main" else "notes.pdf")
-        if pdf.is_file():
-            target = demo / f"{filename}.pdf"
-            shutil.copy2(pdf, target)
+    for part, default_name in PARTS:
+        if part == "notes" and not _has_notes(document):
+            continue
+        filename = name if part == "main" else default_name
+        if "html" in formats and (part == "main" or _has_notes(document)):
+            target = demo / f"{filename}.html"
+            target.write_text(
+                _self_contained_html(document, asset, profile_id, part=part),
+                encoding="utf-8",
+            )
             written.append(str(target))
-            parts.append((part, filename))
+        if "pdf" in formats:
+            pdf = outputs / ("document.pdf" if part == "main" else "notes.pdf")
+            if pdf.is_file():
+                target = demo / f"{filename}.pdf"
+                shutil.copy2(pdf, target)
+                written.append(str(target))
     if not written:
-        raise ValueError(f"{profile_id} has no rendered PDF to package")
+        raise ValueError(f"{profile_id} has nothing to publish for {formats}")
+    return {
+        "asset": asset.name,
+        "profile_id": profile_id,
+        "formats": list(formats),
+        "demo": str(demo),
+        "files": written,
+    }
 
+
+def _delivered_formats(asset: Path, profile_id: str) -> tuple[str, ...]:
+    """Read the formats this view was actually selected to deliver."""
+    view_manifest = asset / "views" / profile_id / "view-manifest.json"
+    if view_manifest.is_file():
+        payload = json.loads(view_manifest.read_text(encoding="utf-8-sig"))
+        formats = payload.get("formats") if isinstance(payload, Mapping) else None
+        if isinstance(formats, list) and formats:
+            return tuple(str(item) for item in formats)
+    manifest_path = asset / "manifest.json"
+    if manifest_path.is_file():
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8-sig"))
+        selections = manifest.get("profile_selections") if isinstance(manifest, Mapping) else None
+        selection = selections.get(profile_id) if isinstance(selections, Mapping) else None
+        formats = selection.get("formats") if isinstance(selection, Mapping) else None
+        if isinstance(formats, list) and formats:
+            return tuple(str(item) for item in formats)
+    return ("html",)
+
+
+def _has_notes(document: Mapping[str, Any]) -> bool:
+    notes = document.get("notes")
+    return isinstance(notes, Mapping) and bool(notes.get("sections"))
+
+
+def _self_contained_html(
+    document: Mapping[str, Any], asset: Path, profile_id: str, *, part: str
+) -> str:
+    """Render one part and fold every image into the page as a data URI."""
     source_navigation = bool(
         renderer_options_for(profile_id).get("source_navigation", True)
     )
-    for part, filename in parts:
-        target = demo / f"{filename}.html"
-        target.write_text(
-            render_document_html(
-                rebased, part=part, source_navigation=source_navigation
-            ),
-            encoding="utf-8",
-        )
-        written.append(str(target))
-    return {"asset": asset.name, "profile_id": profile_id, "demo": str(demo), "files": written}
+    rendered = render_document_html(
+        document, part=part, source_navigation=source_navigation
+    )
+    return _inline_images(rendered, asset)
 
 
-def _document_with_demo_paths(
-    asset: Path,
-    document: Mapping[str, Any],
-    demo: Path,
-    figures: Path,
-) -> dict[str, Any]:
-    """Copy every delivered image next to the demo and repoint the document.
+def _inline_images(rendered: str, asset: Path) -> str:
+    def replace(match: re.Match[str]) -> str:
+        source = html.unescape(match.group(1))
+        if source.startswith(("data:", "http://", "https://")):
+            return match.group(0)
+        path = _safe_asset_path(asset, source)
+        if not path.is_file():
+            raise ValueError(f"document references a missing image: {source}")
+        mime = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+        return f'src="data:{mime};base64,{encoded}"'
 
-    The HTML has to open on its own, so it may not reach back into the asset
-    directory for a cover or a figure.
-    """
-    rewrites = _copy_artifacts(asset, document, demo, figures)
-    rebased = copy.deepcopy(dict(document))
-
-    cover_ref = rebased.get("cover_image")
-    if isinstance(cover_ref, str) and cover_ref in rewrites:
-        rebased["cover_image"] = rewrites[cover_ref]
-
-    for block in _image_blocks(rebased):
-        for container in (block, block.get("data")):
-            if not isinstance(container, dict):
-                continue
-            for key in ("path", "image_path"):
-                value = container.get(key)
-                if isinstance(value, str) and value in rewrites:
-                    container[key] = rewrites[value]
-    return rebased
-
-
-def _copy_artifacts(
-    asset: Path,
-    document: Mapping[str, Any],
-    demo: Path,
-    figures: Path,
-) -> dict[str, str]:
-    """Copy the cover and the cited figures, mapping each old path to its copy."""
-    rewrites: dict[str, str] = {}
-
-    cover_ref = document.get("cover_image")
-    if isinstance(cover_ref, str) and cover_ref:
-        source = _safe_asset_path(asset, cover_ref)
-        if source.is_file():
-            shutil.copy2(source, demo / f"cover{source.suffix}")
-            rewrites[cover_ref] = f"cover{source.suffix}"
-
-    for figure_ref in _referenced_figures(document):
-        source = _safe_asset_path(asset, figure_ref)
-        if not source.is_file():
-            raise ValueError(f"document references a missing figure: {figure_ref}")
-        shutil.copy2(source, figures / source.name)
-        rewrites[figure_ref] = f"figures/{source.name}"
-    return rewrites
-
-
-def _image_blocks(document: Mapping[str, Any]) -> list[Mapping[str, Any]]:
-    """Every image block of both delivered parts, in document order."""
-    parts: list[object] = [document.get("sections")]
-    notes = document.get("notes")
-    if isinstance(notes, Mapping):
-        parts.append(notes.get("sections"))
-
-    blocks: list[Mapping[str, Any]] = []
-    for sections in parts:
-        if not isinstance(sections, list):
-            continue
-        for section in sections:
-            if not isinstance(section, Mapping):
-                continue
-            for block in section.get("blocks") or []:
-                if isinstance(block, Mapping) and block.get("kind") == "image":
-                    blocks.append(block)
-    return blocks
-
-
-def _referenced_figures(document: Mapping[str, Any]) -> list[str]:
-    """Every image the delivered parts actually show, in document order."""
-    refs: list[str] = []
-    for block in _image_blocks(document):
-        path = block.get("path") or block.get("image_path")
-        if isinstance(path, str) and path and path not in refs:
-            refs.append(path)
-    return refs
+    return _SRC_RE.sub(replace, rendered)
 
 
 def _safe_asset_path(asset: Path, relative: str) -> Path:

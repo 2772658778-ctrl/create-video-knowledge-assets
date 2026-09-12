@@ -8,11 +8,11 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12%2B-blue)](./pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-414_passed-green)](#工程质量)
+[![Tests](https://img.shields.io/badge/tests-415_passed-green)](#工程质量)
 
 ---
 
-本项目（`create-video-knowledge-assets`）是一个由 AI 驱动的视频内容再生产引擎。输入一个 **Bilibili 链接**或**本地知识视频**，它完成来源识别、字幕获取或语音转录、关键画面检查、证据整理、知识建模和业务化写作，最终交付一份可以直接使用的 PDF 和一份同样内容的 HTML。
+本项目（`create-video-knowledge-assets`）是一个由 AI 驱动的视频内容再生产引擎。输入一个 **Bilibili 链接**或**本地知识视频**，它完成来源识别、字幕获取或语音转录、关键画面检查、证据整理、知识建模和业务化写作，最终交付一份双击就能打开的 HTML —— 图片、封面、来源时间都在同一个文件里。需要归档或分享时，同一份底稿也可以再出一份 PDF。
 
 它不是"视频摘要生成器"。摘要压缩信息；它把一次性的观看过程，转成**可追溯、可复核、可继续利用**的知识资产。
 
@@ -44,8 +44,8 @@
 
 正文与证据边界分成两份交付：正文只讲视频内容，边界说明单独成册。
 
-- **PDF** —— 归档与分享，固定分页；
-- **HTML** —— 屏幕连续阅读，与 PDF 出自同一份底稿，单文件自带图片，可直接打开。
+- **HTML（默认）** —— 每个部分一个自包含文件，封面与图片内联，不需要安装任何东西，双击即可阅读；
+- **PDF（按需）** —— 需要归档或发送时，由同一份底稿编译，是唯一需要额外工具链（XeLaTeX）的格式，默认不产出。
 
 ## 怎么做到的：核心设计决策
 
@@ -59,7 +59,7 @@
 
 ### 2. 内容与格式分离：知识到内容，再到格式
 
-系统先建立一份与渲染器无关的底稿，由它编译出 PDF 和 HTML。**正文、图片和来源信息只写一遍**，不会出现换个格式内容就对不上的问题。
+系统先建立一份与渲染器无关的底稿，由它渲染出交付件（默认 HTML，需要时再出 PDF）。**正文、图片和来源信息只写一遍**，不会出现换个格式内容就对不上的问题。
 
 ### 3. 一个资产，多视图：内容单元复用
 
@@ -77,13 +77,13 @@
 
 | Demo | 场景 | 直接查看 |
 | --- | --- | --- |
-| 为什么很少有国家吃笋（11:48 科普） | 深度总结：三道食用门槛，逐行审校转录，6 张已检查画面 | [正文 PDF](./demos/bili-BV1tHdoYnEGm/summary.pdf) · [正文 HTML](./demos/bili-BV1tHdoYnEGm/summary.html) · [边界与来源 PDF](./demos/bili-BV1tHdoYnEGm/notes.pdf) |
-| 国民凉茶为什么卖不动了（10:20 财经口播） | 短视频脚本：约 2 分钟成片，含节奏假设与取舍清单 | [正文 PDF](./demos/bili-BV1hwtB6YEzo/summary.pdf) · [正文 HTML](./demos/bili-BV1hwtB6YEzo/summary.html) · [边界与来源 PDF](./demos/bili-BV1hwtB6YEzo/notes.pdf) |
-| Harness 实践：把文字变成精美文章（20:37 教程） | 公众号长文：九个步骤逐条覆盖，含检查点与流程证据 | [正文 PDF](./demos/bili-BV1ayLD6uERL/summary.pdf) · [正文 HTML](./demos/bili-BV1ayLD6uERL/summary.html) · [边界与来源 PDF](./demos/bili-BV1ayLD6uERL/notes.pdf) |
+| 为什么很少有国家吃笋（11:48 科普） | 深度总结：三道食用门槛，逐行审校转录，6 张已检查画面 | [正文](./demos/bili-BV1tHdoYnEGm/summary.html) · [边界与来源](./demos/bili-BV1tHdoYnEGm/notes.html) |
+| 国民凉茶为什么卖不动了（10:20 财经口播） | 短视频脚本：约 2 分钟成片，含节奏假设与取舍清单 | [正文](./demos/bili-BV1hwtB6YEzo/summary.html) · [边界与来源](./demos/bili-BV1hwtB6YEzo/notes.html) |
+| Harness 实践：把文字变成精美文章（20:37 教程） | 公众号长文：九个步骤逐条覆盖，含检查点与流程证据 | [正文](./demos/bili-BV1ayLD6uERL/summary.html) · [边界与来源](./demos/bili-BV1ayLD6uERL/notes.html) |
 
-三篇 Demo 覆盖三种不同的视频形态：一篇 12 分钟的高密度科普、一篇 10 分钟的数据口播、一篇 20 分钟的教程，长度和写法各不相同。它们都走完了从 URL、字幕/转录、抽帧检查、知识建模、写作到交付的完整链路，并且每篇都配一份单独的边界说明：正文只讲视频内容，哪些是视频明确表达、哪些是本文归纳、哪些没有独立核实，全部放在第二份文档里。每篇正文都出两种格式：PDF 用来归档和分享，HTML 用来在屏幕上连续读完，两者出自同一份底稿。**这就是证据优先的产品化表达。**
+三篇 Demo 覆盖三种不同的视频形态：一篇 12 分钟的高密度科普、一篇 10 分钟的数据口播、一篇 20 分钟的教程，长度和写法各不相同。它们都走完了从 URL、字幕/转录、抽帧检查、知识建模、写作到交付的完整链路，并且每篇都配一份单独的边界说明：正文只讲视频内容，哪些是视频明确表达、哪些是本文归纳、哪些没有独立核实，全部放在第二份文件里。每个文件都自带封面和图片，下载下来双击就能看，不需要仓库里的任何其他东西。**这就是证据优先的产品化表达。**
 
-**当前验证范围**：这些 Demo 验证了 Codex、单 P Bilibili 视频、CPU ASR 和 PDF + HTML 交付路径。GPU、平台字幕、多 P 完整处理和本地视频尚未由 Demo 覆盖。
+**当前验证范围**：这些 Demo 验证了 Codex、单 P Bilibili 视频、CPU ASR 和 HTML 交付路径。GPU、平台字幕、多 P 完整处理和本地视频尚未由 Demo 覆盖。
 
 ## 架构与数据流（概览）
 
@@ -99,7 +99,7 @@
         ▼                                    ▼
         │
         ▼
-与渲染器无关的文档 ──► 正文（PDF + HTML）+ 边界说明（PDF + HTML）
+与渲染器无关的文档 ──► 正文 HTML + 边界说明 HTML（需要时再由同一底稿出 PDF）
         │
         ▼
  学习 · 创作 · 归档 · 发布
@@ -115,14 +115,14 @@
 
 ```text
 使用 $create-video-knowledge-assets 深度总结这个视频：<Bilibili URL>。
-整理核心问题、机制、例子和关键画面，生成一份正文和一份边界说明，各出 PDF 和 HTML。
+整理核心问题、机制、例子和关键画面，生成一份正文和一份边界说明，各出一个双击能打开的单文件 HTML。
 ```
 
 **课程笔记：**
 
 ```text
 使用 $create-video-knowledge-assets，把这个视频制作成适合学习和复习的中文课程笔记：<Bilibili URL>。
-保留关键画面和教学结构，生成一份课程笔记，出 PDF 和 HTML。
+保留关键画面和教学结构，生成一份课程笔记，出一个单文件 HTML。
 ```
 
 **本地视频：**
@@ -139,8 +139,8 @@
 ## 工程质量
 
 - **语言 / 环境**：Python 3.12+，`pydantic`、`srt`；外部工具 yt-dlp / ffmpeg / Whisper / XeLaTeX 按需调用；
-- **代码规模**：约 7.7 千行 Python，23 个功能模块，27 个测试文件；
-- **测试**：`python -m pytest -q`（全套 414 通过，Python 3.11 / 3.12 / 3.13 均可复现）；
+- **代码规模**：约 7.6 千行 Python，23 个功能模块，27 个测试文件；
+- **测试**：`python -m pytest -q`（全套 415 通过，Python 3.11 / 3.12 / 3.13 均可复现）；
 - **CLI**：`vka` 提供 32 个子命令，覆盖获取、证据、知识、视图、渲染、打包全链路；
 - **契约**：19 份 schema / 工作流 / 契约文档，见 [`references/`](./create-video-knowledge-assets/references/)；
 - **CI**：[`.github/workflows/ci.yml`](./.github/workflows/ci.yml)，stable（阻断）+ experimental（不阻断）双任务；
@@ -151,7 +151,7 @@
 ```text
 ├── create-video-knowledge-assets/   # Skill 本体（SKILL.md、scripts/、references/、assets/）
 ├── docs/                            # 产品与工程文档（架构、能力地图、快速上手）
-├── demos/                           # 端到端 Demo 成果（正文与边界说明，各含 PDF + HTML）
+├── demos/                           # 端到端 Demo 成果（正文与边界说明，各自一个自包含 HTML）
 ├── tests/                           # 离线测试
 └── CHANGELOG.md / LICENSE / SECURITY.md / CONTRIBUTING.md
 ```
@@ -162,7 +162,7 @@
 
 | 阶段 | 目标 | 状态 |
 | --- | --- | --- |
-| 第一阶段：可用 | 单视频、深度总结 / 课程笔记、PDF + HTML 交付、证据追溯 | ✅ v0.1 已交付 |
+| 第一阶段：可用 | 单视频、深度总结 / 课程笔记、单文件 HTML 交付、证据追溯 | ✅ v0.1 已交付 |
 | 第二阶段：可复用 | 深度文章、短视频脚本、更多内容 profile | 🧪 初步实现，待更多真实业务验收 |
 | 第三阶段：可产品化 | 质量门、发布审核、异常恢复、规模化复用 | 🔜 规划中 |
 

@@ -15,12 +15,12 @@ Include all of the following:
 - Formula or code explanations: explain formulas, derivations, code blocks, commands, configuration, or pseudocode that appear in the transcript or frames.
 - Chapter summaries: end each chapter with the main takeaway and unresolved questions if any.
 - Title-page promise: include `theme`, `one_sentence_summary`, and source `metadata` so the first page states what the video is about, why it matters, and where the data came from.
-- Source provenance: keep timestamped `source_spans` on claims, examples, formulas, code explanations, and visual observations for validation and later QA. Render compact source-time footnotes in the PDF at the bottom of the page. Markdown/HTML may stay clean by default, but must preserve the same structured provenance in `document.json`.
+- Source provenance: keep timestamped `source_spans` on claims, examples, formulas, code explanations, and visual observations for validation and later QA. The rendered HTML numbers the citations in the body and lists them under `来源时间` at the end; a requested PDF may also carry page footnotes. Every render preserves the same structured provenance in `document.json`.
 - Final synthesis and extension: conclude with an integrated summary, common mistakes, practice prompts, and sensible next topics.
 
 Use a reader-facing hierarchy comparable to `bilibili-render-pdf`: every major teaching chapter before the final synthesis should contain at least two meaningful `subsection` blocks before its `本章小结` subsection. Good chapter shapes include `动机 -> 机制 -> 本章小结`, `错误直觉 -> 修正方案 -> 本章小结`, or `例子 -> 公式/实现 -> 本章小结`. Do not submit a chapter that only has a single subsection such as `2.1`, and do not rely on one long paragraph plus a figure as a chapter.
 
-For visual lecture videos, align images to the concept they teach. Mechanism chapters that introduce a new visual state, formula stage, projection, architecture, demo, or geometric relationship should include the inspected frame for that state near the relevant subsection. Do not skip a key frame merely because the chapter already has a formula or teaching box. Prefer the fully revealed readable frame over early sparse frames, and crop or replace frames with large unused dark areas when the relevant content would otherwise be hard to read at PDF scale.
+For visual lecture videos, align images to the concept they teach. Mechanism chapters that introduce a new visual state, formula stage, projection, architecture, demo, or geometric relationship should include the inspected frame for that state near the relevant subsection. Do not skip a key frame merely because the chapter already has a formula or teaching box. Prefer the fully revealed readable frame over early sparse frames, and replace a frame whose relevant content would be unreadable at delivery size.
 
 Before drafting `document.json`, create and validate `knowledge/teaching_outline.json`. Treat knowledge units as factual ingredients and the teaching outline as the authoring plan. Do not map one knowledge unit to one section or one paragraph. Merge, reorder, and rewrite units into a coherent explanation that a learner can follow without watching the video.
 
@@ -28,7 +28,7 @@ The first chapter is the golden prelude. It must quickly deliver the video's cor
 
 ## Minimum Quality Floor
 
-Before rendering final LaTeX/PDF, run `vka validate-document --input views/course-notes/document.json`.
+Before rendering the final deliverable, run `vka validate-document --input views/course-notes/document.json`.
 
 The view is not acceptable if it:
 
@@ -45,7 +45,7 @@ The view is not acceptable if it:
 - includes too few directly inspected teaching images for the lecture's visual explanations, or omits frames for major visual states such as projections, matching scores, normalization, or final weighted output;
 - lacks high-signal teaching blocks such as key ideas, background notes, or common mistakes.
 
-Use `vka render-markdown --input views/course-notes/document.json --output outputs/course-notes.md` or `vka render-html --input views/course-notes/document.json --output outputs/course-notes.html` as an iteration surface when prose is weak. Render to PDF only after the semantic view passes the quality gate.
+Use `vka render-markdown --input views/course-notes/document.json --output outputs/course-notes.md` or `vka render-html --input views/course-notes/document.json --output outputs/course-notes.html` as an iteration surface when prose is weak. Publish, or render a requested PDF, only after the semantic view passes the quality gate.
 
 ## Evidence Rules
 

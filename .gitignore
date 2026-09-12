@@ -50,7 +50,8 @@
 *.toc
 *.xdv
 
-# Public demos contain only PDF, Markdown, HTML, and their referenced images.
+# Public demos contain only the delivered HTML (self-contained, images inlined)
+# and any PDF a run was explicitly asked for.
 /demos/**/*.json
 /demos/**/*.tex
 /demos/**/run-report.md

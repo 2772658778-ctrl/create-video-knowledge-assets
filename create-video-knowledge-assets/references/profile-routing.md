@@ -33,7 +33,8 @@ reviewer can reproduce the route.
 
 Use `vka select-profile --asset <asset> [--profile <registered-id>]
 [--intent <exact-label>] [--format <md|html|tex|pdf>]` before authoring
-`document.json`. Repeat `--format` for a deliberate subset; without it, the
-profile's default formats are selected. The command creates the profile view
+`document.json`. Without `--format`, a view is delivered as HTML; `pdf` is the
+one other format a reader can ask for, and it is selected explicitly. Repeat
+`--format` for a deliberate subset. The command creates the profile view
 manifest but does not complete its `views/<profile_id>` stage. Authoring later
 hashes the view manifest and `document.json` together.

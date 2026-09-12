@@ -270,7 +270,13 @@ def _build_parser() -> argparse.ArgumentParser:
     select_profile.add_argument("--asset", required=True)
     select_profile.add_argument("--profile")
     select_profile.add_argument("--intent")
-    select_profile.add_argument("--format", dest="formats", action="append", choices=("md", "html", "tex", "pdf"))
+    select_profile.add_argument(
+        "--format",
+        dest="formats",
+        action="append",
+        choices=("html", "pdf"),
+        help="delivered format; HTML unless the reader asked for a PDF",
+    )
     select_profile.set_defaults(func=_run_select_profile)
 
     reproject_profile = subparsers.add_parser("reproject-profile")

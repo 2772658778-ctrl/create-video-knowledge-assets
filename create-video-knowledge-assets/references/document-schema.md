@@ -16,7 +16,8 @@ add facts or alter conclusions. Documents use schema version `1.1`.
 
 ## Two Delivered Parts
 
-A view delivers two documents, and the split is part of the contract:
+A view delivers two documents, and the split is part of the contract. Each is
+published as one self-contained HTML file by default:
 
 - `sections` is the reader's document. A reader wants the video's content, so
   every chapter must be about the video. Boundary, uncertainty, and source
@@ -31,10 +32,15 @@ A view delivers two documents, and the split is part of the contract:
 Both parts keep `knowledge_refs` and `evidence_refs` on every block and are
 validated the same way. Render either part with
 `vka render-document --part main|notes`, and publish both with
-`vka package-demo` as `summary.pdf` + `summary.html` and `notes.pdf` +
-`notes.html`. The PDF is the archiving copy; the HTML is the same document
-without page breaks, for continuous reading on screen. A document is rendered
-twice, never rewritten twice.
+`vka package-demo` as `summary.html` and `notes.html`: two separate files, each
+self-contained, with the cover and every figure inlined. The reader copy never
+contains the boundary document, and a reader who moves one file does not lose
+its pictures.
+
+PDF is published only when the view was selected with it (`select-profile
+--format pdf`): then the same two parts are compiled and shipped as
+`summary.pdf` and `notes.pdf` beside the HTML. A document is rendered several
+times, never rewritten several times.
 
 ## P3 Projection Binding
 

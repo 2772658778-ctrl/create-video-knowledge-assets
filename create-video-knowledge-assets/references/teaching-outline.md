@@ -51,9 +51,9 @@ For every non-final teaching section, include:
 The final section must include `synthesis`, `practice`, and `takeaway`.
 
 Each move needs enough prose to guide a reader, not just restate a knowledge
-unit. Every move must cite `evidence_refs`. The generated PDF should render
-compact source-time footnotes from `source_spans`; Markdown/HTML can remain
-clean while preserving provenance in JSON.
+unit. Every move must cite `evidence_refs`. The delivered HTML numbers each
+citation in the body and lists every `source_spans` window under `来源时间` at
+the end; Markdown can stay clean as long as the provenance stays in JSON.
 
 The first section should act as a golden prelude: make the core question,
 stakes, or main thesis easy to grasp before detailed chronology or formulas.

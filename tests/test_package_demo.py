@@ -1,4 +1,5 @@
 import json
+import shutil
 from pathlib import Path
 
 import pytest
@@ -54,8 +55,7 @@ def _renderable_document() -> dict:
     }
 
 
-def test_package_demo_copies_referenced_images_and_rewrites_paths(tmp_path: Path) -> None:
-    asset = _asset(tmp_path)
+def _with_image(asset: Path) -> dict:
     document = json.loads(
         (asset / "views" / "deep-article" / "document.json").read_text(encoding="utf-8")
     )
@@ -78,82 +78,57 @@ def test_package_demo_copies_referenced_images_and_rewrites_paths(tmp_path: Path
     (asset / "views" / "deep-article" / "document.json").write_text(
         json.dumps(document, ensure_ascii=False), encoding="utf-8"
     )
-
-    report = package_demo(asset, "deep-article", demo_root=tmp_path / "demos")
-
-    demo = tmp_path / "demos" / "bili-BVtest"
-    assert report["demo"] == str(demo)
-    assert (demo / "cover.jpg").read_bytes() == b"cover"
-    assert (demo / "figures" / "01-used.jpg").is_file()
-    assert (demo / "summary.pdf").read_bytes() == b"%PDF-fake"
-    assert (demo / "notes.pdf").read_bytes() == b"%PDF-notes"
+    return document
 
 
-def test_package_demo_drops_frames_the_document_never_cites(tmp_path: Path) -> None:
+def _select_formats(asset: Path, formats: list[str]) -> None:
+    (asset / "views" / "deep-article" / "view-manifest.json").write_text(
+        json.dumps({"profile_id": "deep-article", "formats": formats}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+
+def test_package_demo_writes_one_self_contained_file_per_part(tmp_path: Path) -> None:
     asset = _asset(tmp_path)
-    document = json.loads(
-        (asset / "views" / "deep-article" / "document.json").read_text(encoding="utf-8")
-    )
-    document["sections"] = [
-        {
-            "kind": "overview",
-            "title": "总览",
-            "blocks": [
-                {
-                    "kind": "image",
-                    "path": "evidence/frames/inspected/01-used.jpg",
-                    "caption": "用来说明边界的画面。",
-                    "knowledge_refs": ["ku-1"],
-                    "evidence_refs": ["ev-1"],
-                    "source_spans": [{"start_ms": 0, "end_ms": 1000}],
-                }
-            ],
-        }
-    ]
-    (asset / "views" / "deep-article" / "document.json").write_text(
-        json.dumps(document, ensure_ascii=False), encoding="utf-8"
-    )
-
-    package_demo(asset, "deep-article", demo_root=tmp_path / "demos")
-
-    assert not (tmp_path / "demos" / "bili-BVtest" / "figures" / "02-unused.jpg").exists()
-
-
-def test_package_demo_writes_html_that_opens_without_the_asset(tmp_path: Path) -> None:
-    asset = _asset(tmp_path)
-    document = json.loads(
-        (asset / "views" / "deep-article" / "document.json").read_text(encoding="utf-8")
-    )
-    document["sections"][0]["blocks"].append(
-        {
-            "kind": "image",
-            "path": "evidence/frames/inspected/01-used.jpg",
-            "caption": "用来说明边界的画面。",
-            "knowledge_refs": ["ku-1"],
-            "evidence_refs": ["ev-1"],
-            "source_spans": [{"start_ms": 0, "end_ms": 1000}],
-        }
-    )
-    (asset / "views" / "deep-article" / "document.json").write_text(
-        json.dumps(document, ensure_ascii=False), encoding="utf-8"
-    )
+    _with_image(asset)
 
     report = package_demo(asset, "deep-article", demo_root=tmp_path / "demos")
 
     demo = tmp_path / "demos" / "bili-BVtest"
     summary = (demo / "summary.html").read_text(encoding="utf-8")
     notes = (demo / "notes.html").read_text(encoding="utf-8")
-    assert 'src="cover.jpg"' in summary
-    assert 'src="figures/01-used.jpg"' in summary
+    assert report["demo"] == str(demo)
+    assert report["formats"] == ["html"]
+    assert 'src="data:image/jpeg;base64,' in summary
     assert "evidence/frames" not in summary
+    assert "source/cover" not in summary
     assert "<h2>总览</h2>" in summary
-    # The boundary document is not a cover publication and must not cite the
-    # reader document's figures.
-    assert "cover.jpg" not in notes
-    assert "figures/" not in notes
+    # The boundary document ships as its own file, not inside the reader copy.
     assert "<h2>边界</h2>" in notes
+    assert "总览" not in notes
+    assert not (demo / "figures").exists()
     assert str(demo / "summary.html") in report["files"]
     assert str(demo / "notes.html") in report["files"]
+
+
+def test_package_demo_publishes_pdfs_only_when_the_view_asked_for_one(tmp_path: Path) -> None:
+    asset = _asset(tmp_path)
+    _with_image(asset)
+
+    package_demo(asset, "deep-article", demo_root=tmp_path / "demos")
+    demo = tmp_path / "demos" / "bili-BVtest"
+    assert not (demo / "summary.pdf").exists()
+
+    _select_formats(asset, ["html", "pdf"])
+    package_demo(asset, "deep-article", demo_root=tmp_path / "demos")
+    assert (demo / "summary.pdf").read_bytes() == b"%PDF-fake"
+    assert (demo / "notes.pdf").read_bytes() == b"%PDF-notes"
+
+    _select_formats(asset, ["pdf"])
+    shutil.rmtree(demo)
+    package_demo(asset, "deep-article", demo_root=tmp_path / "demos")
+    assert (demo / "summary.pdf").is_file()
+    assert not (demo / "summary.html").exists()
 
 
 def test_package_demo_requires_an_authored_document(tmp_path: Path) -> None:
@@ -166,13 +141,12 @@ def test_package_demo_requires_an_authored_document(tmp_path: Path) -> None:
 
 def test_package_demo_rejects_a_cover_outside_the_asset(tmp_path: Path) -> None:
     asset = _asset(tmp_path)
-    document = asset / "views" / "deep-article" / "document.json"
-    document.write_text(
-        json.dumps({"profile_id": "deep-article", "title": "x", "cover_image": "../../escape.jpg"}),
-        encoding="utf-8",
-    )
+    path = asset / "views" / "deep-article" / "document.json"
+    document = json.loads(path.read_text(encoding="utf-8"))
+    document["cover_image"] = "../../escape.jpg"
+    path.write_text(json.dumps(document, ensure_ascii=False), encoding="utf-8")
 
-    with pytest.raises(ValueError, match="escapes the asset root"):
+    with pytest.raises(ValueError, match="cover_image must preserve a safe local image_path"):
         package_demo(asset, "deep-article", demo_root=tmp_path / "demos")
 
 

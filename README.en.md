@@ -8,11 +8,11 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12%2B-blue)](./pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-414_passed-green)](#engineering-quality)
+[![Tests](https://img.shields.io/badge/tests-415_passed-green)](#engineering-quality)
 
 ---
 
-`create-video-knowledge-assets` is an AI-driven video content reproduction engine. Give it a **Bilibili URL** or a **local knowledge video**, and it handles source identification, subtitle acquisition or speech transcription, key-frame inspection, evidence organization, knowledge modeling, and business-oriented writing — delivering a clean artifact you can use directly (**a PDF for archiving and a standalone HTML file for reading on screen**).
+`create-video-knowledge-assets` is an AI-driven video content reproduction engine. Give it a **Bilibili URL** or a **local knowledge video**, and it handles source identification, subtitle acquisition or speech transcription, key-frame inspection, evidence organization, knowledge modeling, and business-oriented writing — delivering a clean artifact you can use directly (**one self-contained HTML file that opens with a double click**). When you need an archive copy to send around, the same draft can also produce a PDF.
 
 It is not a "video summarizer." A summary compresses information; it turns a one-time viewing into a **traceable, reviewable, reusable** knowledge asset.
 
@@ -42,14 +42,15 @@ One video asset, processed once, serving four production profiles.
 
 `general-deep` and `creator-article` remain as compatibility aliases.
 
-Two delivered formats, one underlying source document:
+One underlying source document, one delivered format by default:
 
-- **PDF** — for archiving and sharing, with fixed pagination;
-- **HTML** — the same document read continuously on screen: one self-contained
-  file with its images copied next to it.
+- **HTML** — one self-contained file per part, with its cover and every figure
+  inlined, so it opens on any machine with nothing installed;
+- **PDF** — on request only, compiled from the same draft; this is the one path
+  that needs an external toolchain (XeLaTeX).
 
-Markdown is the third render of that same document and stays an editing and
-review surface.
+Markdown is a third render of that same document and stays an editing and review
+surface.
 
 ## Core design decisions
 
@@ -63,7 +64,7 @@ Every knowledge claim lands in an evidence layer first — subtitle time windows
 
 ### 2. Content–format separation: knowledge to content, then formats
 
-The system builds a renderer-neutral draft and compiles it to PDF. **Prose, figures, and provenance are written once**, so the deliverable cannot drift.
+The system builds a renderer-neutral draft and renders the deliverable from it — HTML by default, PDF when asked. **Prose, figures, and provenance are written once**, so the formats cannot drift.
 
 ### 3. One asset, many views: reusable content units
 
@@ -81,13 +82,13 @@ Staged contracts, quality gates, and human review points govern the process: mul
 
 | Demo | Scenario | View directly |
 | --- | --- | --- |
-| Why so few countries eat bamboo shoots (11:48 explainer) | Deep summary: three eating thresholds, line-by-line reviewed transcript, 6 inspected frames | [PDF](./demos/bili-BV1tHdoYnEGm/summary.pdf) · [HTML](./demos/bili-BV1tHdoYnEGm/summary.html) · [boundary notes](./demos/bili-BV1tHdoYnEGm/notes.pdf) |
-| Why the national herbal tea stopped selling (10:20 finance short) | Short-video script: ~2-minute cut, with pacing assumptions and a cut list | [PDF](./demos/bili-BV1hwtB6YEzo/summary.pdf) · [HTML](./demos/bili-BV1hwtB6YEzo/summary.html) · [boundary notes](./demos/bili-BV1hwtB6YEzo/notes.pdf) |
-| Harness in practice: turning any text into a polished article (20:37 tutorial) | Long-form article: all nine steps covered, with checkpoints and process evidence | [PDF](./demos/bili-BV1ayLD6uERL/summary.pdf) · [HTML](./demos/bili-BV1ayLD6uERL/summary.html) · [boundary notes](./demos/bili-BV1ayLD6uERL/notes.pdf) |
+| Why so few countries eat bamboo shoots (11:48 explainer) | Deep summary: three eating thresholds, line-by-line reviewed transcript, 6 inspected frames | [article](./demos/bili-BV1tHdoYnEGm/summary.html) · [boundary notes](./demos/bili-BV1tHdoYnEGm/notes.html) |
+| Why the national herbal tea stopped selling (10:20 finance short) | Short-video script: ~2-minute cut, with pacing assumptions and a cut list | [script](./demos/bili-BV1hwtB6YEzo/summary.html) · [boundary notes](./demos/bili-BV1hwtB6YEzo/notes.html) |
+| Harness in practice: turning any text into a polished article (20:37 tutorial) | Long-form article: all nine steps covered, with checkpoints and process evidence | [article](./demos/bili-BV1ayLD6uERL/summary.html) · [boundary notes](./demos/bili-BV1ayLD6uERL/notes.html) |
 
-The three demos cover three different source forms — a dense 12-minute explainer, a 10-minute data commentary, and a 20-minute tutorial — and their length and structure follow the source rather than a template. All of them ran the full pipeline: URL → subtitles/transcription → frame extraction and inspection → knowledge modeling → writing → delivery. Each also ships a separate boundary document, so the reader copy stays about the video while scope, uncertainty, and claim-to-source navigation live in their own document. Every reader part ships twice: a PDF for archiving and sharing, and an HTML file for reading on screen, both rendered from one document.
+The three demos cover three different source forms — a dense 12-minute explainer, a 10-minute data commentary, and a 20-minute tutorial — and their length and structure follow the source rather than a template. All of them ran the full pipeline: URL → subtitles/transcription → frame extraction and inspection → knowledge modeling → writing → delivery. Each also ships a separate boundary document, so the reader copy stays about the video while scope, uncertainty, and claim-to-source navigation live in their own file. Every file carries its own cover and figures; download one and open it, and you need nothing else from this repository.
 
-**Current verification scope**: these demos validate the Codex, single-part Bilibili, CPU ASR, and the PDF + HTML delivery path. GPU, platform subtitles, full multi-part handling, and local videos are not yet covered by demos.
+**Current verification scope**: these demos validate the Codex, single-part Bilibili, CPU ASR, and the HTML delivery path. GPU, platform subtitles, full multi-part handling, and local videos are not yet covered by demos.
 
 ## Architecture at a glance
 
@@ -103,7 +104,7 @@ Input identification & tool preflight ────► Subtitles / audio / video 
         ▼                                                    ▼
         │
         ▼
- Renderer-neutral document ──► content + boundary notes (PDF + HTML each)
+ Renderer-neutral document ──► content HTML + boundary-notes HTML (PDF on request)
         │
         ▼
  Learning · Creation · Archival · Publishing
@@ -119,14 +120,14 @@ Regular users only provide the video and the goal — no hand-built outlines, ev
 
 ```text
 Use $create-video-knowledge-assets to deeply summarize this video: <Bilibili URL>.
-Organize the core question, mechanisms, examples, key frames, limits, and source navigation, and deliver a PDF and an HTML file.
+Organize the core question, mechanisms, examples, key frames, limits, and source navigation, and deliver one self-contained HTML file.
 ```
 
 **Course notes:**
 
 ```text
 Use $create-video-knowledge-assets to turn this video into Chinese course notes suitable for learning and review: <Bilibili URL>.
-Keep key frames, teaching structure, and source-time footnotes, and deliver a PDF and an HTML file.
+Keep key frames, teaching structure, and source times, and deliver one self-contained HTML file.
 ```
 
 **Local video:**
@@ -143,8 +144,8 @@ Installation and full examples: [docs/getting-started/QUICKSTART.md](./docs/gett
 ## Engineering quality
 
 - **Language / environment**: Python 3.12+, `pydantic`, `srt`; external tools yt-dlp / ffmpeg / Whisper / XeLaTeX invoked as needed;
-- **Scale**: ~7.7k lines of Python, 23 modules, 27 test files;
-- **Tests**: `python -m pytest -q` (414 passing, reproducible on Python 3.11 / 3.12 / 3.13);
+- **Scale**: ~7.6k lines of Python, 23 modules, 27 test files;
+- **Tests**: `python -m pytest -q` (415 passing, reproducible on Python 3.11 / 3.12 / 3.13);
 - **CLI**: `vka` exposes 31 stage commands covering acquisition, evidence, knowledge, views, and rendering;
 - **Contracts**: 19 schema / workflow / contract documents in [`references/`](./create-video-knowledge-assets/references/);
 - **CI**: [`.github/workflows/ci.yml`](./.github/workflows/ci.yml), stable (blocking) + experimental (non-blocking);
@@ -155,7 +156,7 @@ Installation and full examples: [docs/getting-started/QUICKSTART.md](./docs/gett
 ```text
 ├── create-video-knowledge-assets/   # The skill itself (SKILL.md, scripts/, references/, assets/)
 ├── docs/                            # Product and engineering docs (architecture, capability map, quick start)
-├── demos/                           # End-to-end demos (content + boundary notes, each in PDF and HTML)
+├── demos/                           # End-to-end demos (one self-contained HTML per part)
 ├── tests/                           # Stable tests + experimental tests
 └── CHANGELOG.md / LICENSE / SECURITY.md / CONTRIBUTING.md
 ```
@@ -166,7 +167,7 @@ This project began with a product requirements document that defined one guiding
 
 | Phase | Goal | Status |
 | --- | --- | --- |
-| Phase 1: Usable | Single video, deep summary / course notes, PDF + HTML delivery, evidence traceability | ✅ shipped in v0.1 |
+| Phase 1: Usable | Single video, deep summary / course notes, self-contained HTML delivery, evidence traceability | ✅ shipped in v0.1 |
 | Phase 2: Reusable | Deep articles, short video scripts, broader content profiles | 🧪 implemented early, awaiting more real-business validation |
 | Phase 3: Productizable | Quality gates, release review, exception recovery, scaled reuse | 🔜 planned |
 

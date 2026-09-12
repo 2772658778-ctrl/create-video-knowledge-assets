@@ -4,12 +4,15 @@
 
 ## [Unreleased]
 
-### 交付形态：PDF + HTML
+### 交付形态：默认单文件 HTML，PDF 按需
 
-- 正文与证据边界仍然分成两份交付，两份都同时出 PDF 与 HTML：PDF 用于归档与分享，HTML 用于屏幕连续阅读。`vka package-demo` 一次产出 `summary.pdf` / `summary.html` 与 `notes.pdf` / `notes.html`，并把封面与引用画面复制到 Demo 目录，让 HTML 不依赖资产目录就能直接打开。Markdown 留作同一份文档的审阅输出。
-- 三篇 Demo 同时发布 PDF 与 HTML，README、快速上手与作品集文档的链接同步更新。
+- 默认交付收敛为 HTML：正文与边界说明各是一个自包含文件（`summary.html`、`notes.html`），封面与引用画面内联在同一份文件里，双击即可阅读，不需要安装任何东西。
+- 两个部分保持独立文件：读者看正文时不会滚过范围说明，`notes.html` 仍单独交付。
+- PDF 改为按需能力：只有用户明确要求时才渲染与编译，也是唯一需要 LaTeX 工具链（XeLaTeX）的路径；交付 HTML 的运行在结束时提示同一份底稿可以出 PDF。
+- 相应收敛：`reader-typography.md`（原 `pdf-typography.md`）改成"默认交付什么 + PDF 何时产出"，固定分页相关规则（目录页码、空白尾巴、两栏来源时间、编译三遍）收进 PDF 小节；`.gitignore` 与 README/QUICKSTART/一页纸/架构文档的口径同步；`package-demo` 不再复制图片目录，改为把图片内联进交付件。
 - 重做两套渲染器的排版：正文宋体 + 黑体标题的字号梯度、封面（标题／主题句／一句话摘要／副标题／封面图／三行元数据）、目录并入正文第一页、图片统一宽度与细边框、来源时间改为文末两栏列表；HTML 排版与之对齐。
 - 来源时间在渲染前统一合并（间隔 2 秒内的窗口视为一段）并去重，正文上标编号与文末列表共用一次编号。
+- 三篇 Demo 发布单文件 HTML；README、快速上手、一页纸与架构文档的链接与口径同步更新。
 
 ### 写作规则从"格式"转向"源形态"
 
@@ -20,7 +23,7 @@
 ### 架构
 
 - 移除 P4 证据约束问答子系统（10 个模块、索引层、CLI 命令与 CI 实验作业）；`content/` 中间层已删除，资产层收敛为 `source/`、`evidence/`、`knowledge/`、`views/`、`outputs/`。
-- 结果：约 7.3 千行 Python、23 个模块、27 个测试文件，`pytest` 414 passed / 2 skipped。
+- 结果：约 7.6 千行 Python、23 个模块、27 个测试文件，`pytest` 415 passed / 2 skipped。
 
 ### 文档与作品集呈现
 

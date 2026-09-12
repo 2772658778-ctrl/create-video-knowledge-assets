@@ -24,9 +24,11 @@ from vka.store import AssetStore, SCHEMA_VERSION
 
 DocumentValidator = Callable[[object], list[str]]
 CANONICAL_DIRECTORIES = ("source", "evidence", "knowledge")
-# A view is delivered twice from one document: a PDF for archiving and a
-# standalone HTML file for continuous reading on screen.
-READER_FORMATS: tuple[str, ...] = ("pdf", "html")
+# The default reader deliverable is one self-contained HTML file per part: it
+# needs no toolchain, no fonts, and no page-breaking decisions. PDF stays
+# available when the user asks for it, and only then does a run need LaTeX.
+READER_FORMATS: tuple[str, ...] = ("html",)
+OPTIONAL_FORMATS: tuple[str, ...] = ("pdf",)
 
 
 @dataclass(frozen=True)
@@ -1631,7 +1633,8 @@ def _resolve_formats(
     requested = tuple(requested_formats)
     if len(set(requested)) != len(requested):
         raise ValueError("requested formats cannot contain duplicates")
-    unsupported = [format_name for format_name in requested if format_name not in spec.formats]
+    supported = spec.formats + OPTIONAL_FORMATS
+    unsupported = [format_name for format_name in requested if format_name not in supported]
     if unsupported:
         raise ValueError(
             f"profile {spec.profile_id!r} does not support requested format {unsupported[0]!r}"

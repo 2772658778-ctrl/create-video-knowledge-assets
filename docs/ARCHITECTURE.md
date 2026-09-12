@@ -24,7 +24,7 @@ Bilibili URL 或本地视频
                               与渲染器无关的文档（document.json）
                                                │
                                                ▼
-              正文与边界说明（同一底稿，各出 PDF + HTML）
+     正文与边界说明（同一底稿，默认各出一个自包含 HTML）
 ```
 
 ## 规范资产布局
@@ -47,7 +47,7 @@ Bilibili URL 或本地视频
 │   ├── view-manifest.json        # 业务视图选择原因与格式范围
 │   ├── projection-plan.json      # P3 业务场景的知识到文档桥梁
 │   └── document.json             # 渲染器无关文档
-├── outputs/<profile>/            # 正文与边界说明的 TeX/PDF 产物
+├── outputs/<profile>/            # 正文与边界说明的渲染产物（HTML；按需时的 TeX/PDF）
 └── logs/                         # 本地运行信息，不得作为公开 Demo 提交
 ```
 
@@ -57,7 +57,7 @@ Bilibili URL 或本地视频
 
 ### P1 · 获取、转录与视觉取证
 
-1. **输入识别与预检**：`vka preflight` 检查 yt-dlp / ffmpeg / ffprobe / whisper / xelatex 是否就绪；`vka normalize-bilibili-url` 规范化 URL；本地视频走 `describe-local-video`。
+1. **输入识别与预检**：`vka preflight` 检查 yt-dlp / ffmpeg / ffprobe / whisper 是否就绪（xelatex 只在要求 PDF 时才检查）；`vka normalize-bilibili-url` 规范化 URL；本地视频走 `describe-local-video`。
 2. **获取**：优先匿名访问公开 Bilibili。字幕优先采用可靠 CC；无可靠字幕时使用 Whisper ASR，再经 `build-repair-prompt` / `apply-reviewed-transcript` 完成人工可复核的修订。
 3. **证据落地**：原始 SRT 归一化为 `timeline.raw.jsonl`，修订后写 `timeline.jsonl`；`plan-frames` 按章节时间窗密集采样候选帧，最终画面必须人工直接检查后才登记为证据。
 
@@ -87,7 +87,7 @@ Bilibili URL 或本地视频
 | yt-dlp | 公开平台的元数据、字幕、封面、音频和视频获取 | 只写入当前资产 `source/` |
 | ffmpeg / ffprobe | 媒体探测、音频转换和候选帧抽取 | 只写入候选区 |
 | Whisper | 仅在可靠字幕缺失时做 ASR | ASR 结果仍需修复和审核 |
-| XeLaTeX | 把通过质量门的 LaTeX 编译为 PDF | 最终交付前人工检查 |
+| XeLaTeX | 只在用户要求 PDF 时，把通过质量门的 LaTeX 编译为 PDF | 最终交付前人工检查 |
 
 ## 质量门与校验
 
@@ -97,7 +97,7 @@ Bilibili URL 或本地视频
 - `validate-projection-plan`：P3 投影契约校验；
 - `verify-asset`：规范资产哈希一致性。
 
-自动校验不能替代人工内容验收；发布前至少抽查关键事实、视觉结论、课程结构，以及 PDF 逐页效果和 HTML 在浏览器里的观感。
+自动校验不能替代人工内容验收；发布前至少抽查关键事实、视觉结论、课程结构，以及交付件在浏览器里的真实观感（要求出 PDF 时再加 PDF 逐页检查）。
 
 ## 明确不做什么（边界）
 

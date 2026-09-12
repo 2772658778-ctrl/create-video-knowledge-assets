@@ -33,14 +33,13 @@ sources, infer new facts, or generate prose from canonical records.
 
 ## Render And Inspect
 
-Render only the formats registered in the profile selection. Validate the
-document before rendering, retain renderer paths in the profile output stage,
-and compile a PDF whenever `pdf` is selected. Inspect every PDF page for
-readability, source navigation, visual fit, overflow, and missing glyphs, then
-open the HTML to confirm the same document reads correctly on screen. Publish a
-shareable copy with
+Render only the formats registered in the profile selection: HTML by default,
+plus a PDF only when the user asked for one. Validate the document before
+rendering, retain renderer paths in the profile output stage, and read the
+rendered page on screen for readability and source navigation. Compile and
+inspect every PDF page when `pdf` is selected. Publish a shareable copy with
 `vka package-demo --asset <asset> --profile <profile> --demo-root demos`; it
-writes the PDF and HTML for both parts and copies the cover and the cited
-inspected frames next to the document so the HTML opens without the asset.
+writes one self-contained HTML file per part, with cover and figures inlined, so
+the reader copy opens on its own.
 Keep the acceptance record free of cookies, raw media, and private transcript
 content.

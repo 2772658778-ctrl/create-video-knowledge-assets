@@ -33,4 +33,4 @@ profile 选择与路由逻辑见 [profile-routing](../create-video-knowledge-ass
 - **获取 / 生命周期**：`acquisition-recipes` · `p1-workflow` · `p2-u1-workflow` · `transcript-repair`
 - **数据模型**：`evidence-schema` · `knowledge-schema` · `document-schema`
 - **业务视图**：`profile-routing` · `profile-general-deep` · `profile-course-notes` · `profile-creator-article` · `profile-short-video-script` · `profile-enterprise-knowledge` · `profile-research-brief` · `teaching-outline` · `p3-profile-workflow` · `p3-profile-authoring` · `projection-plan`
-- **交付与排版**：`pdf-typography`（PDF 与 HTML 共用的字号梯度、唯一强调色、图片与目录规则）
+- **交付与排版**：`reader-typography`（默认交付什么、PDF 何时按需产出、字号梯度、唯一强调色、图片与来源时间规则）

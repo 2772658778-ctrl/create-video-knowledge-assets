@@ -6,7 +6,7 @@
 
 - Python 3.12+
 - 一个可发现本 Skill 的 Agent 环境（默认按 Codex 适配）
-- 按需安装外部工具：yt-dlp（获取）、ffmpeg / ffprobe（媒体）、Whisper（无字幕转录）、XeLaTeX（PDF）
+- 按需安装外部工具：yt-dlp（获取）、ffmpeg / ffprobe（媒体）、Whisper（无字幕转录）。默认交付 HTML，不需要 XeLaTeX；只有你要 PDF 时才装它。
 
 安装 Python 依赖：
 
@@ -22,14 +22,14 @@ python -m pip install "pydantic>=2.7,<3" "srt>=3.5,<4"
 
 ```text
 使用 $create-video-knowledge-assets 深度总结这个视频：<Bilibili URL>。
-整理核心问题、机制、例子和关键画面，生成一份正文和一份边界说明，各出 PDF 和 HTML。
+整理核心问题、机制、例子和关键画面，生成一份正文和一份边界说明，各出一个双击能打开的单文件 HTML。
 ```
 
 ### 课程笔记
 
 ```text
 使用 $create-video-knowledge-assets，把这个视频制作成适合学习和复习的中文课程笔记：<Bilibili URL>。
-保留关键画面和教学结构，生成一份课程笔记，出 PDF 和 HTML。
+保留关键画面和教学结构，生成一份课程笔记，出一个单文件 HTML。
 ```
 
 ### 本地视频
@@ -45,19 +45,19 @@ python -m pip install "pydantic>=2.7,<3" "srt>=3.5,<4"
 
 ## 看真实结果
 
-不用跑代码也能看效果。`demos/` 下是走完完整链路的成果，每篇正文和边界说明都各有一份 PDF 和一份同样内容的 HTML：
+不用跑代码也能看效果。`demos/` 下是走完完整链路的成果，每篇正文和边界说明各是一个自包含 HTML，下载下来双击就能看：
 
 | Demo | 直接查看 |
 | --- | --- |
-| 为什么很少有国家吃笋（11:48 科普 → 深度总结） | [正文 PDF](../../demos/bili-BV1tHdoYnEGm/summary.pdf) · [正文 HTML](../../demos/bili-BV1tHdoYnEGm/summary.html) · [边界与来源 PDF](../../demos/bili-BV1tHdoYnEGm/notes.pdf) |
-| 国民凉茶为什么卖不动了（10:20 财经口播 → 短视频脚本） | [正文 PDF](../../demos/bili-BV1hwtB6YEzo/summary.pdf) · [正文 HTML](../../demos/bili-BV1hwtB6YEzo/summary.html) · [边界与来源 PDF](../../demos/bili-BV1hwtB6YEzo/notes.pdf) |
-| Harness 实践：把文字变成精美文章（20:37 教程 → 公众号长文） | [正文 PDF](../../demos/bili-BV1ayLD6uERL/summary.pdf) · [正文 HTML](../../demos/bili-BV1ayLD6uERL/summary.html) · [边界与来源 PDF](../../demos/bili-BV1ayLD6uERL/notes.pdf) |
+| 为什么很少有国家吃笋（11:48 科普 → 深度总结） | [正文](../../demos/bili-BV1tHdoYnEGm/summary.html) · [边界与来源](../../demos/bili-BV1tHdoYnEGm/notes.html) |
+| 国民凉茶为什么卖不动了（10:20 财经口播 → 短视频脚本） | [正文](../../demos/bili-BV1hwtB6YEzo/summary.html) · [边界与来源](../../demos/bili-BV1hwtB6YEzo/notes.html) |
+| Harness 实践：把文字变成精美文章（20:37 教程 → 公众号长文） | [正文](../../demos/bili-BV1ayLD6uERL/summary.html) · [边界与来源](../../demos/bili-BV1ayLD6uERL/notes.html) |
 
 ## 验证环境
 
 ```powershell
 python create-video-knowledge-assets/scripts/vka_cli.py --help
-python create-video-knowledge-assets/scripts/vka_cli.py preflight --commands yt-dlp ffmpeg ffprobe xelatex
+python create-video-knowledge-assets/scripts/vka_cli.py preflight --commands yt-dlp ffmpeg ffprobe
 ```
 
 ## 下一步

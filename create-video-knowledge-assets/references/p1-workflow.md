@@ -4,7 +4,7 @@ Use these gates to decide whether to continue, degrade the output, or stop and a
 
 ## Preflight Tools
 
-- Continue: every tool required by the selected path is available. Bilibili acquisition requires `yt-dlp`; local-video inspection requires `ffprobe`; frame and audio extraction require `ffmpeg`; ASR requires `whisper` only when reliable CC is unavailable; PDF compilation requires `xelatex`.
+- Continue: every tool required by the selected path is available. Bilibili acquisition requires `yt-dlp`; local-video inspection requires `ffprobe`; frame and audio extraction require `ffmpeg`; ASR requires `whisper` only when reliable CC is unavailable; PDF compilation requires `xelatex`, which is checked only when the user asked for a PDF.
 - Degrade: an optional path can be skipped without breaking the requested deliverable, such as skipping ASR when reliable CC exists.
 - Stop and ask user: a required tool for the requested deliverable is missing and no schema-valid degraded path can produce the deliverable.
 
@@ -40,8 +40,9 @@ Use these gates to decide whether to continue, degrade the output, or stop and a
 - Degrade: nonessential enrichment lacks video evidence; remove it, attach external evidence and mark it `external_enrichment`, or mark it `agent_inference` only when cited evidence supports the inference.
 - Stop and ask user: core claims, chapter boundaries, or examples cannot be tied to evidence.
 
-## PDF Compilation
+## PDF Compilation (Only When A PDF Was Requested)
 
+- Continue: the run delivers HTML, the reader can be given a PDF on request, and a requested PDF compiles successfully with figures and citations intact.
 - Continue: LaTeX compiles successfully, figures render, citations are present, and the PDF opens without missing assets.
 - Degrade: minor typography, line breaking, or noncritical figure placement issues remain; report them and keep the verified source artifacts.
 - Stop and ask user: `xelatex` is missing, compilation fails, required fonts/assets are unavailable, or the PDF cannot be opened or validated.
@@ -50,4 +51,4 @@ Use these gates to decide whether to continue, degrade the output, or stop and a
 
 - Continue: `vka validate-teaching-outline` and `vka validate-document` both pass, headings render as real Chinese text, prose is long enough to teach, visual claims have inspected frame evidence, and each major section has a chapter summary.
 - Degrade: minor typography or figure placement issues remain, but the Markdown/JSON semantic view is complete and readable; report the limitation and keep editable artifacts.
-- Stop and repair: the view contains `???`, one-sentence summaries, timestamp clutter outside controlled PDF source footnotes, one-second timestamp guesses in provenance, missing title-page source metadata, weak first-chapter core framing, missing final synthesis, missing teaching images, unreviewed ASR-derived claims, or a document generated directly from knowledge units without a validated teaching outline.
+- Stop and repair: the view contains `???`, one-sentence summaries, timestamp clutter outside the controlled source-time list, one-second timestamp guesses in provenance, missing title-page source metadata, weak first-chapter core framing, missing final synthesis, missing teaching images, unreviewed ASR-derived claims, or a document generated directly from knowledge units without a validated teaching outline.
