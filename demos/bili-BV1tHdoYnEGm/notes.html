@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>证据边界与来源说明</title>
+<style>
+
+:root {
+  color-scheme: light;
+  --ink: #23211f;
+  --ink-soft: #46423f;
+  --muted: #6f6a65;
+  --line: #e7e3dc;
+  --accent: #2f6b52;
+  --blue: #245b7d;
+  --amber: #8a5a00;
+  --paper: #fffefb;
+  --bg: #f1eee8;
+  --serif: "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif SC", "Songti SC", STSong, SimSun, Georgia, serif;
+  --sans: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Hiragino Sans GB", sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 72px 52px 104px;
+  background: var(--paper);
+  box-shadow: 0 1px 48px rgba(35, 33, 31, 0.06);
+  counter-reset: sec fig;
+}
+h1, h2, h3 { font-family: var(--sans); color: var(--ink); line-height: 1.34; text-wrap: balance; }
+h1 { font-size: 2.05rem; font-weight: 700; letter-spacing: 0.005em; margin: 0 0 0.5em; }
+h2 { font-size: 1.5rem; font-weight: 700; margin: 3.2rem 0 1.1rem; counter-increment: sec; }
+h2::before {
+  content: counter(sec, decimal-leading-zero);
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  margin-bottom: 0.35em;
+}
+h3 { font-size: 1.18rem; font-weight: 600; margin: 2.1rem 0 0.7em; color: var(--ink-soft); }
+p { margin: 0 0 1.15em; }
+.theme { font-family: var(--sans); font-size: 1.02rem; font-weight: 500; color: var(--accent); margin: 0 0 1rem; }
+.summary { font-size: 1rem; color: var(--ink-soft); margin: 0 0 0.7rem; padding-left: 0.9rem; border-left: 2px solid var(--line); }
+.subtitle, .source, figcaption, .metadata { color: var(--muted); font-size: 0.87rem; }
+.subtitle { margin: 0 0 0.8rem; letter-spacing: 0.02em; }
+.metadata { display: block; margin: 0 0 2rem; line-height: 1.95; }
+nav { margin: 2.6rem 0 3.2rem; padding: 1.3rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+nav strong { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.22em; }
+nav ol { list-style: none; margin: 0.9rem 0 0; padding: 0; counter-reset: toc; }
+nav li { counter-increment: toc; margin: 0.55rem 0; font-size: 1rem; line-height: 1.6; }
+nav li a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+nav li a::before {
+  content: counter(toc, decimal-leading-zero);
+  margin-right: 0.75em;
+  font-family: var(--sans);
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+nav li a:hover { border-bottom-color: var(--accent); }
+img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+figure { margin: 2.3rem 0 2.5rem; }
+figure:not(.cover) { counter-increment: fig; }
+figure img { border: 1px solid var(--line); border-radius: 3px; }
+figcaption { text-align: left; margin-top: 0.75rem; line-height: 1.7; }
+figure:not(.cover) figcaption::before {
+  content: "图 " counter(fig) "　";
+  font-family: var(--sans);
+  font-size: 0.9em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+.caption { font-size: 0.87rem; line-height: 1.75; color: var(--muted); margin: -1.6rem 0 2.2rem; }
+.cover { margin: 0 0 2.4rem; }
+/* The cover frame keeps the same fraction of the text measure the PDF uses. */
+.cover img { width: 62%; border-radius: 4px; }
+.cite { font-size: 0.6em; vertical-align: super; line-height: 0; margin-left: 0.12em; }
+.cite a { color: var(--muted); text-decoration: none; }
+.cite a:hover { color: var(--accent); }
+table { width: 100%; border-collapse: collapse; margin: 1.4rem 0; font-size: 0.9rem; }
+th, td { border-bottom: 1px solid var(--line); padding: 0.55rem 0.6rem; text-align: left; vertical-align: top; }
+th { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+blockquote { margin: 1.5rem 0; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 2px solid var(--accent); color: var(--ink-soft); }
+.notes { margin-top: 4.5rem; padding-top: 1.7rem; border-top: 1px solid var(--line); }
+.notes h2 { counter-increment: none; font-family: var(--sans); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.22em; color: var(--accent); margin: 0 0 1.2rem; }
+.notes h2::before { content: none; }
+.notes-intro { font-size: 0.87rem; color: var(--muted); margin: 0 0 1.2rem; }
+.notes-list { list-style: none; margin: 0; padding: 0; counter-reset: note; font-size: 0.83rem; line-height: 1.7; color: var(--muted); columns: 2; column-gap: 2.4em; }
+.notes-list li { counter-increment: note; display: grid; grid-template-columns: 2.6em 1fr; margin: 0 0 0.3rem; break-inside: avoid; }
+.notes-list li::before { content: counter(note) "."; color: var(--muted); }
+.notes-list .time { font-family: var(--mono); font-size: 0.94em; }
+.box { border-left: 4px solid var(--blue); background: #f7fbff; padding: 0.85rem 1.1rem; margin: 1.4rem 0; }
+.knowledgebox { border-left-color: var(--accent); background: #f4faf6; }
+.warningbox { border-left-color: var(--amber); background: #fffaf0; }
+.box strong { font-family: var(--sans); font-size: 0.9rem; letter-spacing: 0.04em; }
+.formula, pre { overflow-x: auto; background: #f7f5f1; padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 3px; }
+code, .formula { font-family: var(--mono); font-size: 0.88em; }
+@media (max-width: 720px) {
+  body { font-size: 16.5px; }
+  main { padding: 32px 20px 64px; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.2rem; margin-top: 2.6rem; }
+  .cover img { width: 100%; }
+  .notes-list { columns: 1; }
+}
+@media print {
+  body { background: #fff; }
+  main { max-width: none; padding: 0; box-shadow: none; }
+}
+
+</style>
+</head>
+<body>
+<main>
+<h1>证据边界与来源说明</h1>
+<p class="metadata">
+《为什么除了中国，很少有国家吃笋呢？》　·　赛博食录　·　2025-04-16　·　11分48秒<br>平台字幕不可用；faster-whisper base（CPU int8）逐行审校：269 段修订、84 段保留、36 段标记不确定<br>https://www.bilibili.com/video/BV1tHdoYnEGm
+</p>
+<section id="section-1">
+<h2>证据边界：哪些是视频说的，哪些是本文归纳</h2>
+<p>本文区分两类内容。第一类是视频明确表达或展示的：资源与消费的反差、竹笋的生长与风味营养、可食用品种与产区门槛、传统预处理和油炒的作用、日本遮光栽培、五小时窗口与现代加工流程。第二类是本文的归纳：把上述环节概括成“一条必须接起来的链路”，这是分析框架，不是视频逐字提出的理论。<sup class="cite"><a href="#src-1">1</a></sup></p>
+<ul>
+<li>视频后段出现产区与一家企业的加工案例，本文只复述视频展示的环境与流程，不据此推断企业实力、产品效果或市场表现。</li>
+<li>平台字幕不可用，正文基于 faster-whisper base 转录；审校后有 36 段无法确认。转录中读不出确切名称的专名与化学物质（笋中苦味物质的学名、日本古籍书名等）没有写进正文。</li>
+<li>视频中的统计、营养与化学机制均按视频口径使用，本文不做外部独立核实，也不把它们表述为学界共识。<sup class="cite"><a href="#src-2">2</a></sup></li>
+</ul>
+</section>
+<section id="section-2">
+<h2>来源导航</h2>
+<p>视频来自 Bilibili 账号赛博食录，2025 年 4 月 16 日发布，时长 11 分 48 秒。平台没有可用的人工字幕，转录由 faster-whisper base 在 CPU 上完成，并经过逐行审校；本文引用画面均来自人工直接检查过的关键帧，每处论断对应的时间范围都保留在资产的规范记录里，可按需回溯。<sup class="cite"><a href="#src-3">3</a></sup></p>
+</section>
+<section class="notes" id="source-times">
+<h2>来源时间</h2>
+<p class="notes-intro">正文中的上标编号对应下面列出的时间范围，标注该段内容在视频中的位置。</p>
+<ol class="notes-list">
+<li id="src-1"><span class="time">00:03:04--00:03:07, 00:04:14--00:04:21, 00:06:32--00:06:35</span></li>
+<li id="src-2"><span class="time">00:04:14--00:04:21, 00:10:27--00:10:29, 00:10:32--00:10:35</span></li>
+<li id="src-3"><span class="time">00:00:14--00:00:16, 00:00:39--00:00:40</span></li>
+</ol>
+</section>
+</main>
+</body>
+</html>

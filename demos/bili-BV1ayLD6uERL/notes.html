@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>证据边界与来源说明</title>
+<style>
+
+:root {
+  color-scheme: light;
+  --ink: #23211f;
+  --ink-soft: #46423f;
+  --muted: #6f6a65;
+  --line: #e7e3dc;
+  --accent: #2f6b52;
+  --blue: #245b7d;
+  --amber: #8a5a00;
+  --paper: #fffefb;
+  --bg: #f1eee8;
+  --serif: "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif SC", "Songti SC", STSong, SimSun, Georgia, serif;
+  --sans: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Hiragino Sans GB", sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 72px 52px 104px;
+  background: var(--paper);
+  box-shadow: 0 1px 48px rgba(35, 33, 31, 0.06);
+  counter-reset: sec fig;
+}
+h1, h2, h3 { font-family: var(--sans); color: var(--ink); line-height: 1.34; text-wrap: balance; }
+h1 { font-size: 2.05rem; font-weight: 700; letter-spacing: 0.005em; margin: 0 0 0.5em; }
+h2 { font-size: 1.5rem; font-weight: 700; margin: 3.2rem 0 1.1rem; counter-increment: sec; }
+h2::before {
+  content: counter(sec, decimal-leading-zero);
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  margin-bottom: 0.35em;
+}
+h3 { font-size: 1.18rem; font-weight: 600; margin: 2.1rem 0 0.7em; color: var(--ink-soft); }
+p { margin: 0 0 1.15em; }
+.theme { font-family: var(--sans); font-size: 1.02rem; font-weight: 500; color: var(--accent); margin: 0 0 1rem; }
+.summary { font-size: 1rem; color: var(--ink-soft); margin: 0 0 0.7rem; padding-left: 0.9rem; border-left: 2px solid var(--line); }
+.subtitle, .source, figcaption, .metadata { color: var(--muted); font-size: 0.87rem; }
+.subtitle { margin: 0 0 0.8rem; letter-spacing: 0.02em; }
+.metadata { display: block; margin: 0 0 2rem; line-height: 1.95; }
+nav { margin: 2.6rem 0 3.2rem; padding: 1.3rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+nav strong { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.22em; }
+nav ol { list-style: none; margin: 0.9rem 0 0; padding: 0; counter-reset: toc; }
+nav li { counter-increment: toc; margin: 0.55rem 0; font-size: 1rem; line-height: 1.6; }
+nav li a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+nav li a::before {
+  content: counter(toc, decimal-leading-zero);
+  margin-right: 0.75em;
+  font-family: var(--sans);
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+nav li a:hover { border-bottom-color: var(--accent); }
+img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+figure { margin: 2.3rem 0 2.5rem; }
+figure:not(.cover) { counter-increment: fig; }
+figure img { border: 1px solid var(--line); border-radius: 3px; }
+figcaption { text-align: left; margin-top: 0.75rem; line-height: 1.7; }
+figure:not(.cover) figcaption::before {
+  content: "图 " counter(fig) "　";
+  font-family: var(--sans);
+  font-size: 0.9em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+.caption { font-size: 0.87rem; line-height: 1.75; color: var(--muted); margin: -1.6rem 0 2.2rem; }
+.cover { margin: 0 0 2.4rem; }
+/* The cover frame keeps the same fraction of the text measure the PDF uses. */
+.cover img { width: 62%; border-radius: 4px; }
+.cite { font-size: 0.6em; vertical-align: super; line-height: 0; margin-left: 0.12em; }
+.cite a { color: var(--muted); text-decoration: none; }
+.cite a:hover { color: var(--accent); }
+table { width: 100%; border-collapse: collapse; margin: 1.4rem 0; font-size: 0.9rem; }
+th, td { border-bottom: 1px solid var(--line); padding: 0.55rem 0.6rem; text-align: left; vertical-align: top; }
+th { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+blockquote { margin: 1.5rem 0; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 2px solid var(--accent); color: var(--ink-soft); }
+.notes { margin-top: 4.5rem; padding-top: 1.7rem; border-top: 1px solid var(--line); }
+.notes h2 { counter-increment: none; font-family: var(--sans); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.22em; color: var(--accent); margin: 0 0 1.2rem; }
+.notes h2::before { content: none; }
+.notes-intro { font-size: 0.87rem; color: var(--muted); margin: 0 0 1.2rem; }
+.notes-list { list-style: none; margin: 0; padding: 0; counter-reset: note; font-size: 0.83rem; line-height: 1.7; color: var(--muted); columns: 2; column-gap: 2.4em; }
+.notes-list li { counter-increment: note; display: grid; grid-template-columns: 2.6em 1fr; margin: 0 0 0.3rem; break-inside: avoid; }
+.notes-list li::before { content: counter(note) "."; color: var(--muted); }
+.notes-list .time { font-family: var(--mono); font-size: 0.94em; }
+.box { border-left: 4px solid var(--blue); background: #f7fbff; padding: 0.85rem 1.1rem; margin: 1.4rem 0; }
+.knowledgebox { border-left-color: var(--accent); background: #f4faf6; }
+.warningbox { border-left-color: var(--amber); background: #fffaf0; }
+.box strong { font-family: var(--sans); font-size: 0.9rem; letter-spacing: 0.04em; }
+.formula, pre { overflow-x: auto; background: #f7f5f1; padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 3px; }
+code, .formula { font-family: var(--mono); font-size: 0.88em; }
+@media (max-width: 720px) {
+  body { font-size: 16.5px; }
+  main { padding: 32px 20px 64px; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.2rem; margin-top: 2.6rem; }
+  .cover img { width: 100%; }
+  .notes-list { columns: 1; }
+}
+@media print {
+  body { background: #fff; }
+  main { max-width: none; padding: 0; box-shadow: none; }
+}
+
+</style>
+</head>
+<body>
+<main>
+<h1>证据边界与来源说明</h1>
+<p class="metadata">
+《Harness 实践：将任何文字编辑成精美的文章》　·　code秘密花园　·　2026-06-17　·　20分37秒<br>平台字幕不可用；faster-whisper base（CPU int8）逐行审校：606 段中 3 段标记为不确定<br>https://www.bilibili.com/video/BV1ayLD6uERL
+</p>
+<section id="section-1">
+<h2>边界：哪些是内容本身，哪些是本文的整理</h2>
+<p>正文只写视频里给出的内容。HTML 与 Markdown 的能力边界、不该让模型裸写 HTML 的理由、Reacticle 的组件与主题设计、九个步骤与三个检查点、三路独立审查、最小切片修复、文件化工作记忆与自进化，都是视频明确表达或演示的。属于本文整理的只有两处：一是把六层骨架压缩成一张自查清单，二是把散落在总结里的原则归到同一组问题下；这两处是综合，不是视频里逐条列出的清单。<sup class="cite"><a href="#src-1">1</a></sup></p>
+<ul>
+<li>组件协议的具体 API、组件清单与主题参数以官方文档为准，正文只按视频口径复述其设计意图。</li>
+<li>平台没有可用的人工字幕，正文基于 faster-whisper base 转录并逐行审校；606 段中有 3 段无法确认，正文不引用这些句子里的人名、仓库名和数值。</li>
+<li>导出 HTML 与 PDF、移动端适配这些效果是视频自身展示的结果，正文不复述为独立复现。</li>
+<li>视频在总结里从第二层直接跳到第四层，没有单独展开第三层“执行编排”，正文没有替它补内容，只是把它列为缺项。<sup class="cite"><a href="#src-2">2</a></sup></li>
+</ul>
+</section>
+<section id="section-2">
+<h2>教程步骤覆盖清单：每一步落在哪里</h2>
+<p>教程里的每一步都落在三种状态之一：在正文完整讲清楚（a）、与其他步骤合并讲述（b）、明确省略并给出理由（c）。下表逐个列出，覆盖范围来自逐行审校后的完整转录。<sup class="cite"><a href="#src-3">3</a></sup></p>
+<table>
+<thead><tr>
+<th>步骤 / 检查点</th>
+<th>状态</th>
+<th>正文位置或省略理由</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>选择执行 Agent（Claude Code，也可用 Cursor、Codex 等）</td>
+<td>b</td>
+<td>并入“环境准备”一段</td>
+</tr>
+<tr>
+<td>安装 Claude Code 并用 claude 命令验证</td>
+<td>b</td>
+<td>并入“环境准备”一段</td>
+</tr>
+<tr>
+<td>换用 MiniMax M3，并说明长上下文与指令遵循的理由</td>
+<td>b</td>
+<td>并入“环境准备”一段，作者观点已归属</td>
+</tr>
+<tr>
+<td>用 cc-switch 配置 provider、key 与模型名</td>
+<td>c</td>
+<td>点击级工具操作，与文章判断无关，只保留“配置好即可用”的结果</td>
+</tr>
+<tr>
+<td>把 Skill 放进 .claude/skills 并用 /beautiful-article 验证</td>
+<td>b</td>
+<td>并入“环境准备”一段</td>
+</tr>
+<tr>
+<td>第一步：整理素材，统一成一份 Markdown，记录不确定项</td>
+<td>a</td>
+<td>“第一步是整理素材”一段</td>
+</tr>
+<tr>
+<td>第二步：产出编辑方案（读者、信息保留比例、章节、主题）</td>
+<td>a</td>
+<td>“第二步是出编辑方案”一段</td>
+</tr>
+<tr>
+<td>第三步：第一个检查点（文章类型、主题、目录、配图、封面）</td>
+<td>a</td>
+<td>“第三步是第一个检查点”一段，并配检查点画面</td>
+</tr>
+<tr>
+<td>文章类型清单（完整长文、研究报告、教学步骤、机制解释、对话访谈等）</td>
+<td>a</td>
+<td>“文章类型这一项直接决定…”一段</td>
+</tr>
+<tr>
+<td>第四步：先做封面、第一节和一个代表性模块来定调</td>
+<td>a</td>
+<td>“方案确认之后不会直接写完”一段</td>
+</tr>
+<tr>
+<td>第五步：第二个检查点，验收首屏并提修改意见</td>
+<td>a</td>
+<td>“第五步是第二个检查点”一段</td>
+</tr>
+<tr>
+<td>第六步：选择单 Agent 顺序模式或多 Agent 并行模式</td>
+<td>a</td>
+<td>“同一个检查点还要选开发模式”一段</td>
+</tr>
+<tr>
+<td>第七步：逐章开发，主 Agent 保障质量并统一合并</td>
+<td>a</td>
+<td>“确认首屏之后才进入逐章开发”一段</td>
+</tr>
+<tr>
+<td>一节一文件、模块独立组件</td>
+<td>a</td>
+<td>同“逐章开发”一段的文件边界说明</td>
+</tr>
+<tr>
+<td>第八步：内容、视觉、技术三路独立终审</td>
+<td>a</td>
+<td>“终审由三个独立的审查者完成”与审查维度两段</td>
+</tr>
+<tr>
+<td>第九步：最小切片修复，并保护已确认部分</td>
+<td>a</td>
+<td>“审查发现的问题不做整体重写”一段</td>
+</tr>
+<tr>
+<td>第三个检查点：决定交付 HTML 还是 HTML 加 PDF</td>
+<td>a</td>
+<td>“最后一个检查点决定交付形态”一段</td>
+</tr>
+<tr>
+<td>演示：用 Claude 博客、给出 URL、指定使用该 Skill</td>
+<td>b</td>
+<td>并入流程叙述，未单列</td>
+</tr>
+<tr>
+<td>演示：识别输入来源、目标语言与任务类型</td>
+<td>b</td>
+<td>并入流程叙述</td>
+</tr>
+<tr>
+<td>演示：产出 sources.md、翻译文件、不确定记录与 plan.md</td>
+<td>a</td>
+<td>文件化工作记忆一段点名 sources.md 与 plan.md</td>
+</tr>
+<tr>
+<td>演示：脚手架搭项目并从 npm 安装 Reacticle</td>
+<td>c</td>
+<td>构建细节，不承载独立判断</td>
+</tr>
+<tr>
+<td>演示：先做一小块 + 独立审查 + 修复 + 人工验收</td>
+<td>b</td>
+<td>并入定调与终审叙述</td>
+</tr>
+<tr>
+<td>演示：导出 HTML 与 PDF，内容一致但排版不同</td>
+<td>b</td>
+<td>并入最后一个检查点一段</td>
+</tr>
+<tr>
+<td>作者在自己的网站上展示由该 Skill 制作的文章模块</td>
+<td>c</td>
+<td>个人推广，与教程内容无关</td>
+</tr>
+<tr>
+<td>总结：把视频流程与文章流程做六层骨架对照</td>
+<td>a</td>
+<td>“真正可复用的，是这套工作方法”里的六层一段</td>
+</tr>
+<tr>
+<td>总结：第一层上下文管理（分阶段加载 + 每节前回顾规范）</td>
+<td>a</td>
+<td>清单第 2、3 项</td>
+</tr>
+<tr>
+<td>总结：第二层工具系统（输入统一、一节一文件）</td>
+<td>a</td>
+<td>清单第 4、5 项</td>
+</tr>
+<tr>
+<td>总结：第三层执行编排</td>
+<td>c</td>
+<td>视频在总结里跳过该层、没有展开，正文不替它补内容</td>
+</tr>
+<tr>
+<td>总结：第四层状态与记忆（文件化工作记忆）</td>
+<td>a</td>
+<td>文件化工作记忆一段与清单第 6 项</td>
+</tr>
+<tr>
+<td>总结：第五层反馈与观测（检查与独立审查）</td>
+<td>a</td>
+<td>三路终审两段与清单第 7 项</td>
+</tr>
+<tr>
+<td>总结：第六层约束与恢复（最小切片修复）</td>
+<td>a</td>
+<td>最小切片修复一段与清单第 8 项</td>
+</tr>
+<tr>
+<td>总结：自进化（中间过程落盘、回看记录、反哺规则）</td>
+<td>a</td>
+<td>自查清单那一节的最后一段</td>
+</tr>
+<tr>
+<td>收尾：值得复用的是工作方法，并给出可迁移场景</td>
+<td>a</td>
+<td>“真正可复用的，是这套工作方法”的结论与边界两段</td>
+</tr>
+<tr>
+<td>收尾：资源放在评论区、求三连与关注</td>
+<td>c</td>
+<td>营销与资源号召，不属于教程内容</td>
+</tr>
+</tbody>
+</table><sup class="cite"><a href="#src-4">4</a></sup>
+</section>
+<section id="section-3">
+<h2>综合清单的证据表</h2>
+<p>正文的清单是一处综合：它把总结部分的原则归到同一组问题下，不是视频里逐条列出的清单。下表给出清单每一项对应的知识单元与时间窗。<sup class="cite"><a href="#src-5">5</a></sup></p>
+<table>
+<thead><tr>
+<th>清单项</th>
+<th>知识单元</th>
+<th>时间窗（毫秒）</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>关键决策停下来让人拍板</td>
+<td>ku-checkpoints</td>
+<td>635530-640450；200510-204430</td>
+</tr>
+<tr>
+<td>上下文分阶段加载</td>
+<td>ku-staged-context</td>
+<td>976340-984700</td>
+</tr>
+<tr>
+<td>每节前回顾协议、Raw 与主题约束</td>
+<td>ku-staged-context</td>
+<td>990620-993140</td>
+</tr>
+<tr>
+<td>所有输入统一成一份事实来源</td>
+<td>ku-unified-source</td>
+<td>1013340-1021680</td>
+</tr>
+<tr>
+<td>一节一文件、互不干扰</td>
+<td>ku-one-section-one-file</td>
+<td>1021680-1037520</td>
+</tr>
+<tr>
+<td>关键状态写进文件</td>
+<td>ku-file-memory</td>
+<td>1037520-1064920</td>
+</tr>
+<tr>
+<td>质检由独立审查者完成</td>
+<td>ku-three-reviews</td>
+<td>1086520-1091680</td>
+</tr>
+<tr>
+<td>修复限制在最小切片</td>
+<td>ku-minimal-slice-repair</td>
+<td>1113920-1126880</td>
+</tr>
+</tbody>
+</table><sup class="cite"><a href="#src-6">6</a></sup>
+</section>
+<section class="notes" id="source-times">
+<h2>来源时间</h2>
+<p class="notes-intro">正文中的上标编号对应下面列出的时间范围，标注该段内容在视频中的位置。</p>
+<ol class="notes-list">
+<li id="src-1"><span class="time">00:15:56--00:15:58, 00:20:06--00:20:14</span></li>
+<li id="src-2"><span class="time">00:05:49--00:05:50, 00:15:22--00:15:24, 00:16:45--00:16:49, 00:17:17--00:17:19, 00:20:29--00:20:32</span></li>
+<li id="src-3"><span class="time">00:02:26--00:02:27, 00:09:09--00:09:11, 00:15:44--00:15:47</span></li>
+<li id="src-4"><span class="time">00:02:26--00:04:07, 00:09:09--00:09:11, 00:15:44--00:20:19</span></li>
+<li id="src-5"><span class="time">00:15:56--00:15:58, 00:20:14--00:20:15</span></li>
+<li id="src-6"><span class="time">00:16:11--00:18:46</span></li>
+</ol>
+</section>
+</main>
+</body>
+</html>

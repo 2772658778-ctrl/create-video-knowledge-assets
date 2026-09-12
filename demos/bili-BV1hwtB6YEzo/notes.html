@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>证据边界与来源说明</title>
+<style>
+
+:root {
+  color-scheme: light;
+  --ink: #23211f;
+  --ink-soft: #46423f;
+  --muted: #6f6a65;
+  --line: #e7e3dc;
+  --accent: #2f6b52;
+  --blue: #245b7d;
+  --amber: #8a5a00;
+  --paper: #fffefb;
+  --bg: #f1eee8;
+  --serif: "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif SC", "Songti SC", STSong, SimSun, Georgia, serif;
+  --sans: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Hiragino Sans GB", sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 72px 52px 104px;
+  background: var(--paper);
+  box-shadow: 0 1px 48px rgba(35, 33, 31, 0.06);
+  counter-reset: sec fig;
+}
+h1, h2, h3 { font-family: var(--sans); color: var(--ink); line-height: 1.34; text-wrap: balance; }
+h1 { font-size: 2.05rem; font-weight: 700; letter-spacing: 0.005em; margin: 0 0 0.5em; }
+h2 { font-size: 1.5rem; font-weight: 700; margin: 3.2rem 0 1.1rem; counter-increment: sec; }
+h2::before {
+  content: counter(sec, decimal-leading-zero);
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  margin-bottom: 0.35em;
+}
+h3 { font-size: 1.18rem; font-weight: 600; margin: 2.1rem 0 0.7em; color: var(--ink-soft); }
+p { margin: 0 0 1.15em; }
+.theme { font-family: var(--sans); font-size: 1.02rem; font-weight: 500; color: var(--accent); margin: 0 0 1rem; }
+.summary { font-size: 1rem; color: var(--ink-soft); margin: 0 0 0.7rem; padding-left: 0.9rem; border-left: 2px solid var(--line); }
+.subtitle, .source, figcaption, .metadata { color: var(--muted); font-size: 0.87rem; }
+.subtitle { margin: 0 0 0.8rem; letter-spacing: 0.02em; }
+.metadata { display: block; margin: 0 0 2rem; line-height: 1.95; }
+nav { margin: 2.6rem 0 3.2rem; padding: 1.3rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+nav strong { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.22em; }
+nav ol { list-style: none; margin: 0.9rem 0 0; padding: 0; counter-reset: toc; }
+nav li { counter-increment: toc; margin: 0.55rem 0; font-size: 1rem; line-height: 1.6; }
+nav li a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+nav li a::before {
+  content: counter(toc, decimal-leading-zero);
+  margin-right: 0.75em;
+  font-family: var(--sans);
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+nav li a:hover { border-bottom-color: var(--accent); }
+img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+figure { margin: 2.3rem 0 2.5rem; }
+figure:not(.cover) { counter-increment: fig; }
+figure img { border: 1px solid var(--line); border-radius: 3px; }
+figcaption { text-align: left; margin-top: 0.75rem; line-height: 1.7; }
+figure:not(.cover) figcaption::before {
+  content: "图 " counter(fig) "　";
+  font-family: var(--sans);
+  font-size: 0.9em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+.caption { font-size: 0.87rem; line-height: 1.75; color: var(--muted); margin: -1.6rem 0 2.2rem; }
+.cover { margin: 0 0 2.4rem; }
+/* The cover frame keeps the same fraction of the text measure the PDF uses. */
+.cover img { width: 62%; border-radius: 4px; }
+.cite { font-size: 0.6em; vertical-align: super; line-height: 0; margin-left: 0.12em; }
+.cite a { color: var(--muted); text-decoration: none; }
+.cite a:hover { color: var(--accent); }
+table { width: 100%; border-collapse: collapse; margin: 1.4rem 0; font-size: 0.9rem; }
+th, td { border-bottom: 1px solid var(--line); padding: 0.55rem 0.6rem; text-align: left; vertical-align: top; }
+th { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+blockquote { margin: 1.5rem 0; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 2px solid var(--accent); color: var(--ink-soft); }
+.notes { margin-top: 4.5rem; padding-top: 1.7rem; border-top: 1px solid var(--line); }
+.notes h2 { counter-increment: none; font-family: var(--sans); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.22em; color: var(--accent); margin: 0 0 1.2rem; }
+.notes h2::before { content: none; }
+.notes-intro { font-size: 0.87rem; color: var(--muted); margin: 0 0 1.2rem; }
+.notes-list { list-style: none; margin: 0; padding: 0; counter-reset: note; font-size: 0.83rem; line-height: 1.7; color: var(--muted); columns: 2; column-gap: 2.4em; }
+.notes-list li { counter-increment: note; display: grid; grid-template-columns: 2.6em 1fr; margin: 0 0 0.3rem; break-inside: avoid; }
+.notes-list li::before { content: counter(note) "."; color: var(--muted); }
+.notes-list .time { font-family: var(--mono); font-size: 0.94em; }
+.box { border-left: 4px solid var(--blue); background: #f7fbff; padding: 0.85rem 1.1rem; margin: 1.4rem 0; }
+.knowledgebox { border-left-color: var(--accent); background: #f4faf6; }
+.warningbox { border-left-color: var(--amber); background: #fffaf0; }
+.box strong { font-family: var(--sans); font-size: 0.9rem; letter-spacing: 0.04em; }
+.formula, pre { overflow-x: auto; background: #f7f5f1; padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 3px; }
+code, .formula { font-family: var(--mono); font-size: 0.88em; }
+@media (max-width: 720px) {
+  body { font-size: 16.5px; }
+  main { padding: 32px 20px 64px; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.2rem; margin-top: 2.6rem; }
+  .cover img { width: 100%; }
+  .notes-list { columns: 1; }
+}
+@media print {
+  body { background: #fff; }
+  main { max-width: none; padding: 0; box-shadow: none; }
+}
+
+</style>
+</head>
+<body>
+<main>
+<h1>证据边界与来源说明</h1>
+<p class="metadata">
+《3年少卖10亿元！曾经的国民凉茶，为什么喝的人越来越少了？》　·　财经不眠姐　·　2026-09-04　·　10分20秒<br>平台字幕不可用；faster-whisper base，CPU int8，经逐行审校（130/333 段保持原文并标记不确定）<br>https://www.bilibili.com/video/BV1hwtB6YEzo
+</p>
+<section id="section-1">
+<h2>节奏假设与这次取舍</h2>
+<p>目标成片 110–130 秒，口播按 5.5–6 字每秒估算，口播稿 711 字（正文段落与三道题），三条图注是屏幕字，不占口播时长。源片 10 分 20 秒，压到约五分之一，取舍标准是留住能被数字和画面证明的判断，留不住过程。</p>
+<ul>
+<li>留下：三年少卖十个亿，接一句「你上一次喝是什么时候」。</li>
+<li>留下：2012 年 200 亿元、57 亿罐、人均 4 罐的巅峰画像。</li>
+<li>留下：「怕上火喝王老吉」把广东地方饮品做成全国功能概念。</li>
+<li>留下：商标在广药、经营在加多宝，十几年官司没有赢家——只给一句背景。</li>
+<li>留下：三条原因各自的数字，10 块方糖、两个场景被分流、冠名综艺后营收只微增 0.23%。</li>
+<li>留下：品类转向，无糖茶五年翻 7 倍多，凉茶增速逐年下滑。</li>
+<li>留下：收尾落回观众自己的问题——我为什么还要喝一罐高糖凉茶。</li>
+</ul>
+<ul>
+<li>丢掉商标战的完整过程：1995 年租下红罐、2007 年 4.2 亿元拿央视标王、2011 年提起仲裁、2017 年红罐包装之争、2019 年最高法院裁定。源片近一半时长在这里，但它是背景不是原因，只留一句「打了十几年，谁也没赢」。</li>
+<li>丢掉和其正的起落：2010 年销售额突破 20 亿元、行业第二，商战之后变成小透明。素材好，但和主线并列会让「凉茶为什么退场」分叉。</li>
+<li>丢掉配料表里的菊花、金银花、甘草，以及「越苦越去火」的品类认知：需要额外解释中医语境，口播里性价比低。</li>
+<li>丢掉功能饮料突破 2000 亿元、电解质水崛起等逐个数字：只留「无糖茶五年翻 7 倍多」做对照。</li>
+<li>丢掉 2015 年之后的完整口味名单与网友吐槽原话：只留「新口味被吐槽，最能打的还是经典红罐」。</li>
+<li>丢掉 18–35 岁人群把凉茶作为首选的比例：原句的年份和数值都不完整，无法安全引用。</li>
+<li>若成片要压到 60 秒：再砍掉品牌那一条和 payoff 的三道题，只留配方与场景两条，主判断不变。</li>
+</ul>
+</section>
+<section id="section-2">
+<h2>核心判断与时间窗</h2>
+<table>
+<thead><tr>
+<th>判断</th>
+<th>源片时间窗</th>
+<th>证据</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>三年少卖十个亿</td>
+<td>00:00–00:01、00:08–00:12、00:48–00:53</td>
+<td>tr-000001、tr-000006–007、tr-000025–027</td>
+</tr>
+<tr>
+<td>曾经的规模：200 亿元、57 亿罐、人均 4 罐</td>
+<td>00:15–00:25</td>
+<td>tr-000010–014</td>
+</tr>
+<tr>
+<td>「怕上火」把地方饮品做成全国功能概念</td>
+<td>02:23–02:31</td>
+<td>tr-000070、tr-000072–073</td>
+</tr>
+<tr>
+<td>商标在广药、经营在鸿道（加多宝）</td>
+<td>03:20–03:23、03:27–03:32</td>
+<td>tr-000098、tr-000101–102</td>
+</tr>
+<tr>
+<td>十几年商战没有赢家</td>
+<td>05:58–06:02</td>
+<td>tr-000188–189</td>
+</tr>
+<tr>
+<td>一瓶 480 毫升约 40 克糖，等于 10 块方糖</td>
+<td>06:24–06:34</td>
+<td>tr-000201–205</td>
+</tr>
+<tr>
+<td>冰柜里的对照是无糖茶与气泡水</td>
+<td>06:34–06:41</td>
+<td>tr-000207、tr-000209–212</td>
+</tr>
+<tr>
+<td>无糖版反馈两极分化</td>
+<td>06:45–07:01</td>
+<td>tr-000215–216、tr-000218、tr-000220、tr-000222–223</td>
+</tr>
+<tr>
+<td>购买场景锁死在怕上火与送礼</td>
+<td>07:35–07:43</td>
+<td>tr-000242–244</td>
+</tr>
+<tr>
+<td>两个场景都在被别的品牌分流</td>
+<td>08:01–08:08、08:11–08:14</td>
+<td>tr-000252–253、tr-000256</td>
+</tr>
+<tr>
+<td>冠名综艺之后营收只微增 0.23%</td>
+<td>08:39–08:47、08:54–09:00</td>
+<td>tr-000270–272、tr-000276–278</td>
+</tr>
+<tr>
+<td>新口味没能替代经典红罐</td>
+<td>09:00–09:02、09:18–09:22</td>
+<td>tr-000279、tr-000291–294</td>
+</tr>
+<tr>
+<td>整个凉茶品类在减速</td>
+<td>09:28–09:31、09:34–09:35、09:40–09:49</td>
+<td>tr-000299–300、tr-000303、tr-000308–311</td>
+</tr>
+<tr>
+<td>消费者已经翻篇</td>
+<td>09:53–10:03</td>
+<td>tr-000315–317、tr-000319</td>
+</tr>
+</tbody>
+</table>
+<p>正文没有超过三个不相邻时间窗的判断：最长的一条是 payoff 的三道题，分别落在配方 06:24–06:34、场景 08:01–08:08、品类 09:28–09:31，正好三个并列窗口。知识层把「真正的对手不是彼此，是被换掉的场景」标为 agent_inference，本稿按归纳处理，不写成视频的原话。</p>
+</section>
+<section id="section-3">
+<h2>画面与拍摄备注</h2>
+<ul>
+<li>开场：直接用原片标题卡「王老吉 没人喝了？」（源片 01:28–01:36），解说不要再重复提问。</li>
+<li>配方段：桌上摆 10 块方糖做实物对照，比动画更省时间。</li>
+<li>场景段：用原片的左右分屏（08:56–09:04），左边火锅桌边的酸梅汤、椰汁、豆奶，右边年货礼盒里的牛奶、坚果、水果。</li>
+<li>品类段：用原片的增速曲线（09:42–09:50），保留「同比仅微增 0.23%」的角标。</li>
+<li>三道题做成三张全屏字幕卡，每张停 1.5 秒，口播同步念出。</li>
+<li>这份脚本不带来源时间角标：成片和交付稿都不出现，时间只留在文档和这份备注里。</li>
+</ul>
+</section>
+<section id="section-4">
+<h2>数据来源与不确定</h2>
+<p>正文数字全部来自视频口播或视频引用的图表：2023 年的营收结构与市场份额来自长江证券，凉茶增速曲线来自前瞻产业研究院；含糖量 40 克、方糖 4 克、冠名费 1.3 亿元都是视频口径，没有做外部复核。</p>
+<ul>
+<li>下降区间的起止年份：转录到那一句时年份不清晰，稿中只说「三年」和从 90 亿降到 80 亿。</li>
+<li>18–35 岁首选比例：原句的年份与数值都不完整，没有进入正文。</li>
+<li>冠名费 1.3 亿元：源片用的是「据传」口径。</li>
+<li>品牌段的营收数字停在 87.86 亿元、同比 0.23%，再往后的年份没有稳定数字。</li>
+<li>知识层把「真正的对手不是彼此，是被换掉的场景」标为 agent_inference，属归纳而非视频结论。</li>
+</ul>
+</section>
+</main>
+</body>
+</html>

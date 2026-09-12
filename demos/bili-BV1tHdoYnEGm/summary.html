@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>为什么除了中国，很少有国家吃笋呢？</title>
+<style>
+
+:root {
+  color-scheme: light;
+  --ink: #23211f;
+  --ink-soft: #46423f;
+  --muted: #6f6a65;
+  --line: #e7e3dc;
+  --accent: #2f6b52;
+  --blue: #245b7d;
+  --amber: #8a5a00;
+  --paper: #fffefb;
+  --bg: #f1eee8;
+  --serif: "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif SC", "Songti SC", STSong, SimSun, Georgia, serif;
+  --sans: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Hiragino Sans GB", sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 72px 52px 104px;
+  background: var(--paper);
+  box-shadow: 0 1px 48px rgba(35, 33, 31, 0.06);
+  counter-reset: sec fig;
+}
+h1, h2, h3 { font-family: var(--sans); color: var(--ink); line-height: 1.34; text-wrap: balance; }
+h1 { font-size: 2.05rem; font-weight: 700; letter-spacing: 0.005em; margin: 0 0 0.5em; }
+h2 { font-size: 1.5rem; font-weight: 700; margin: 3.2rem 0 1.1rem; counter-increment: sec; }
+h2::before {
+  content: counter(sec, decimal-leading-zero);
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  margin-bottom: 0.35em;
+}
+h3 { font-size: 1.18rem; font-weight: 600; margin: 2.1rem 0 0.7em; color: var(--ink-soft); }
+p { margin: 0 0 1.15em; }
+.theme { font-family: var(--sans); font-size: 1.02rem; font-weight: 500; color: var(--accent); margin: 0 0 1rem; }
+.summary { font-size: 1rem; color: var(--ink-soft); margin: 0 0 0.7rem; padding-left: 0.9rem; border-left: 2px solid var(--line); }
+.subtitle, .source, figcaption, .metadata { color: var(--muted); font-size: 0.87rem; }
+.subtitle { margin: 0 0 0.8rem; letter-spacing: 0.02em; }
+.metadata { display: block; margin: 0 0 2rem; line-height: 1.95; }
+nav { margin: 2.6rem 0 3.2rem; padding: 1.3rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+nav strong { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.22em; }
+nav ol { list-style: none; margin: 0.9rem 0 0; padding: 0; counter-reset: toc; }
+nav li { counter-increment: toc; margin: 0.55rem 0; font-size: 1rem; line-height: 1.6; }
+nav li a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+nav li a::before {
+  content: counter(toc, decimal-leading-zero);
+  margin-right: 0.75em;
+  font-family: var(--sans);
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+nav li a:hover { border-bottom-color: var(--accent); }
+img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+figure { margin: 2.3rem 0 2.5rem; }
+figure:not(.cover) { counter-increment: fig; }
+figure img { border: 1px solid var(--line); border-radius: 3px; }
+figcaption { text-align: left; margin-top: 0.75rem; line-height: 1.7; }
+figure:not(.cover) figcaption::before {
+  content: "图 " counter(fig) "　";
+  font-family: var(--sans);
+  font-size: 0.9em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+.caption { font-size: 0.87rem; line-height: 1.75; color: var(--muted); margin: -1.6rem 0 2.2rem; }
+.cover { margin: 0 0 2.4rem; }
+/* The cover frame keeps the same fraction of the text measure the PDF uses. */
+.cover img { width: 62%; border-radius: 4px; }
+.cite { font-size: 0.6em; vertical-align: super; line-height: 0; margin-left: 0.12em; }
+.cite a { color: var(--muted); text-decoration: none; }
+.cite a:hover { color: var(--accent); }
+table { width: 100%; border-collapse: collapse; margin: 1.4rem 0; font-size: 0.9rem; }
+th, td { border-bottom: 1px solid var(--line); padding: 0.55rem 0.6rem; text-align: left; vertical-align: top; }
+th { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+blockquote { margin: 1.5rem 0; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 2px solid var(--accent); color: var(--ink-soft); }
+.notes { margin-top: 4.5rem; padding-top: 1.7rem; border-top: 1px solid var(--line); }
+.notes h2 { counter-increment: none; font-family: var(--sans); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.22em; color: var(--accent); margin: 0 0 1.2rem; }
+.notes h2::before { content: none; }
+.notes-intro { font-size: 0.87rem; color: var(--muted); margin: 0 0 1.2rem; }
+.notes-list { list-style: none; margin: 0; padding: 0; counter-reset: note; font-size: 0.83rem; line-height: 1.7; color: var(--muted); columns: 2; column-gap: 2.4em; }
+.notes-list li { counter-increment: note; display: grid; grid-template-columns: 2.6em 1fr; margin: 0 0 0.3rem; break-inside: avoid; }
+.notes-list li::before { content: counter(note) "."; color: var(--muted); }
+.notes-list .time { font-family: var(--mono); font-size: 0.94em; }
+.box { border-left: 4px solid var(--blue); background: #f7fbff; padding: 0.85rem 1.1rem; margin: 1.4rem 0; }
+.knowledgebox { border-left-color: var(--accent); background: #f4faf6; }
+.warningbox { border-left-color: var(--amber); background: #fffaf0; }
+.box strong { font-family: var(--sans); font-size: 0.9rem; letter-spacing: 0.04em; }
+.formula, pre { overflow-x: auto; background: #f7f5f1; padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 3px; }
+code, .formula { font-family: var(--mono); font-size: 0.88em; }
+@media (max-width: 720px) {
+  body { font-size: 16.5px; }
+  main { padding: 32px 20px 64px; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.2rem; margin-top: 2.6rem; }
+  .cover img { width: 100%; }
+  .notes-list { columns: 1; }
+}
+@media print {
+  body { background: #fff; }
+  main { max-width: none; padding: 0; box-shadow: none; }
+}
+
+</style>
+</head>
+<body>
+<main>
+<h1>为什么除了中国，很少有国家吃笋呢？</h1>
+<p class="theme">有竹子不等于吃笋：从品种、产区、去涩到五小时窗口</p>
+<p class="summary">竹子到处都有，能端上日常餐桌的却集中在中国。差距落在三道门槛上：可食用品种与产区、去涩与烹饪、采后五小时的处理。哪一道没过，竹笋就留在竹林里。</p>
+<p class="subtitle">一份基于视频证据的深度总结</p>
+<figure class="cover"><img src="cover.jpg" alt="视频封面"></figure>
+<p class="metadata">
+《为什么除了中国，很少有国家吃笋呢？》　·　赛博食录　·　2025-04-16　·　11分48秒<br>平台字幕不可用；faster-whisper base（CPU int8）逐行审校：269 段修订、84 段保留、36 段标记不确定<br>https://www.bilibili.com/video/BV1tHdoYnEGm
+</p>
+<nav><strong>目录</strong><ol>
+<li><a href="#section-1">竹子遍布世界，吃笋却集中在中国</a></li>
+<li><a href="#section-2">竹笋本身：十天上桌，靠甜、鲜、脆站住</a></li>
+<li><a href="#section-3">第一道门槛：可食用品种和产区</a></li>
+<li><a href="#section-4">第二道门槛：把苦和涩变成风味</a></li>
+<li><a href="#section-5">第三道门槛：采后五小时和全年供应</a></li>
+<li><a href="#section-6">中国之外：日本怎样成为另一个吃笋国家</a></li>
+</ol></nav>
+<section id="section-1">
+<h2>竹子遍布世界，吃笋却集中在中国</h2>
+<p>地球上超过两千两百万公顷的土地上生长着竹子，中国只占其中不到三分之一的面积。竹笋并不是中国特有的食材。<sup class="cite"><a href="#src-1">1</a></sup></p>
+<p>消费的数据正好相反：中国占据世界竹笋消费的三分之二，而除了中国，只有零星几个国家形成了吃笋的习惯。<sup class="cite"><a href="#src-2">2</a></sup></p>
+<p>问题因此变得具体：竹子到处都有，为什么把它端上日常餐桌的只有中国？<sup class="cite"><a href="#src-3">3</a></sup></p>
+<figure>
+<img src="figures/01-regional-bamboo-shoot-dishes-map.jpg" alt="画面并列腌笋、油焖笋、红糟笋和发酵酸笋四种地域菜式：同一个中国，不同产区各自发展出了处理竹笋的方法。">
+<figcaption>画面并列腌笋、油焖笋、红糟笋和发酵酸笋四种地域菜式：同一个中国，不同产区各自发展出了处理竹笋的方法。<sup class="cite"><a href="#src-4">4</a></sup></figcaption>
+</figure>
+</section>
+<section id="section-2">
+<h2>竹笋本身：十天上桌，靠甜、鲜、脆站住</h2>
+<p>竹笋经过整个冬天的蛰伏，在春雨滋润之后破土；接下来十天里，它每天能向上窜 20 到 30 厘米。<sup class="cite"><a href="#src-5">5</a></sup></p>
+<p>风味来自几类物质：还原糖给出甜口的底味，不同的氨基酸分别承担鲜味、苦味和甜味，单宁、草酸则添上一层青涩。<sup class="cite"><a href="#src-6">6</a></sup></p>
+<p>口感由 1.8% 的膳食纤维搭配 90% 的含水量撑起来，一口咬下去是清脆的响声。<sup class="cite"><a href="#src-7">7</a></sup></p>
+<p>它的蛋白质含量在 1.2% 到 5.8% 之间，氨基酸组成比例均衡，八种人体必需氨基酸含量丰富，是优质的植物蛋白来源。<sup class="cite"><a href="#src-8">8</a></sup></p>
+<figure>
+<img src="figures/02-bamboo-shoot-flavor-and-protein.jpg" alt="画面把竹笋的卖点分列两侧：鲜味与爽脆的口感，以及 1.2% 到 5.8% 的蛋白质含量。">
+<figcaption>画面把竹笋的卖点分列两侧：鲜味与爽脆的口感，以及 1.2% 到 5.8% 的蛋白质含量。<sup class="cite"><a href="#src-9">9</a></sup></figcaption>
+</figure>
+</section>
+<section id="section-3">
+<h2>第一道门槛：可食用品种和产区</h2>
+<p>世界上有一千三百多种竹子，中国境内约有五百种，但长出来的笋有的太小、采集效率太低，有的纤维硬、苦味重。经过数百上千年的挑选，常见的可食用竹笋只剩下二十余种。<sup class="cite"><a href="#src-10">10</a></sup></p>
+<p>产区决定同一品种好不好吃：气候、地形、土壤和水文都会改变竹笋的风味。其中光照的影响很直接——光照增强会加速单宁类物质的合成，落到嘴里就表现为涩味。<sup class="cite"><a href="#src-11">11</a></sup></p>
+<p>反过来，中国江南地区和南方山区的春笋不需要长时间发酵或调味腌制，在鲜笋状态下就能呈现鲜甜脆嫩的味道。<sup class="cite"><a href="#src-12">12</a></sup></p>
+<figure>
+<img src="figures/03-make-unpleasant-shoots-edible.jpg" alt="画面把食用门槛画成一个转化过程：竹笋要经过处理，才能从竹林里的食材变成日常饮食。">
+<figcaption>画面把食用门槛画成一个转化过程：竹笋要经过处理，才能从竹林里的食材变成日常饮食。<sup class="cite"><a href="#src-13">13</a></sup></figcaption>
+</figure>
+</section>
+<section id="section-4">
+<h2>第二道门槛：把苦和涩变成风味</h2>
+<p>早期文献记录了两条去苦路径：《周礼》里的“笋菹”是腌菜，用来掩盖苦涩、方便贮藏；《齐民要术》则写下把竹笋煮熟、晒干去苦的做法。<sup class="cite"><a href="#src-14">14</a></sup></p>
+<p>这套烟熏发酵、煮熟晒干的古老预处理一直用到今天：滇黔一带的酸笋和产笋区的笋干就是它的延续。对付苦涩，别处也各有办法——越南、印尼和马来西亚用椰糖、椰汁的甜去中和，印度则用重口味的马萨拉粉遮盖。<sup class="cite"><a href="#src-15">15</a></sup></p>
+<p>油炒是另一道突破：蒸煮时挥发性物质随水流失，香气淡薄；油炒在高温和油脂的作用下挥发掉部分清苦气味，同时增加美拉德类物质，形成焦糖香。<sup class="cite"><a href="#src-16">16</a></sup></p>
+<p>笋焖肉能把风味再推一层：肉里的肌苷酸、鸟苷酸与竹笋中的鲜味氨基酸相遇，鲜味协同可以让强度提升五到十倍；竹笋内部多孔的纤维结构又善于吸收焖煮时释放的脂溶性香气。<sup class="cite"><a href="#src-17">17</a></sup></p>
+<figure>
+<img src="figures/04-stir-fried-bamboo-shoots.jpg" alt="油炒后的笋片：高温和油脂不只让竹笋“能被吃掉”，还让它带上了一层焦香。">
+<figcaption>油炒后的笋片：高温和油脂不只让竹笋“能被吃掉”，还让它带上了一层焦香。<sup class="cite"><a href="#src-18">18</a></sup></figcaption>
+</figure>
+</section>
+<section id="section-5">
+<h2>第三道门槛：采后五小时和全年供应</h2>
+<p>作者把采后五小时称为“黄金时间”：如果不做特殊处理，竹笋仍在呼吸，总糖、还原糖、蛋白质和维生素的含量下降，甜味随之流失；与此同时细胞壁物质木质化，口感越来越粗糙。<sup class="cite"><a href="#src-19">19</a></sup></p>
+<p>过去保鲜技术受限，中国南方只在冬春吃得上鲜笋，其余季节靠风干、烟熏和发酵保存；复水之后的笋干回不到鲜笋的鲜甜脆嫩。<sup class="cite"><a href="#src-20">20</a></sup></p>
+<p>产地的条件也在起作用：武夷山一带的高山竹林昼夜温差在 10 到 15 摄氏度之间，微酸性的红黄壤让竹笋里的可溶性糖与氨基酸慢慢积累。<sup class="cite"><a href="#src-21">21</a></sup></p>
+<p>采后进厂的流程，目标就是降低苦涩、保住鲜甜：先用过热蒸汽杀青，去掉笋体中的草酸和单宁；出锅后经三次冰水浸泡瞬间冷却，锁住鲜味，pH 值保持在 5.5 以上；随后进入零下 45 到 65 摄氏度的超低温冷冻，几分钟内完成，用细小冰晶保住弹脆的口感。<sup class="cite"><a href="#src-22">22</a></sup></p>
+<figure>
+<img src="figures/05-wuyi-mountain-bamboo-forest.jpg" alt="高山竹林与产地环境：竹笋的甜和鲜，有一部分是当地气候与土壤慢慢积累出来的。">
+<figcaption>高山竹林与产地环境：竹笋的甜和鲜，有一部分是当地气候与土壤慢慢积累出来的。<sup class="cite"><a href="#src-23">23</a></sup></figcaption>
+</figure>
+<figure>
+<img src="figures/06-overheated-steam-blanching-line.jpg" alt="工厂里的杀青、冷却与冷冻设备：这三道工序接住的，正是采后五小时这个窗口。">
+<figcaption>工厂里的杀青、冷却与冷冻设备：这三道工序接住的，正是采后五小时这个窗口。<sup class="cite"><a href="#src-24">24</a></sup></figcaption>
+</figure>
+</section>
+<section id="section-6">
+<h2>中国之外：日本怎样成为另一个吃笋国家</h2>
+<p>中国之外，日本是另一个吃笋大户，也是中国竹笋的最大出口国。<sup class="cite"><a href="#src-25">25</a></sup></p>
+<p>这和产地的条件有关：温和湿润的海洋性气候，加上 75% 的国土是山地，让日本出产的竹笋相对鲜甜。<sup class="cite"><a href="#src-26">26</a></sup></p>
+<p>日本的吃笋历史也可以追溯到千年以前。<sup class="cite"><a href="#src-27">27</a></sup></p>
+<p>为了追求极致的鲜甜脆嫩，高级日本料理会在竹笋尚未破土时，用稻草和黑色遮光布覆盖土壤、阻断阳光，得到通体雪白的白竹笋。<sup class="cite"><a href="#src-28">28</a></sup></p>
+</section>
+<section class="notes" id="source-times">
+<h2>来源时间</h2>
+<p class="notes-intro">正文中的上标编号对应下面列出的时间范围，标注该段内容在视频中的位置。</p>
+<ol class="notes-list">
+<li id="src-1"><span class="time">00:00:21--00:00:30</span></li>
+<li id="src-2"><span class="time">00:00:30--00:00:39</span></li>
+<li id="src-3"><span class="time">00:00:39--00:00:42</span></li>
+<li id="src-4"><span class="time">00:00:00--00:00:10</span></li>
+<li id="src-5"><span class="time">00:01:03--00:01:12</span></li>
+<li id="src-6"><span class="time">00:01:49--00:02:07</span></li>
+<li id="src-7"><span class="time">00:02:09--00:02:16</span></li>
+<li id="src-8"><span class="time">00:02:18--00:02:26</span></li>
+<li id="src-9"><span class="time">00:01:49--00:02:26</span></li>
+<li id="src-10"><span class="time">00:02:46--00:03:09</span></li>
+<li id="src-11"><span class="time">00:03:09--00:03:46</span></li>
+<li id="src-12"><span class="time">00:04:41--00:05:02</span></li>
+<li id="src-13"><span class="time">00:02:46--00:05:06</span></li>
+<li id="src-14"><span class="time">00:03:56--00:04:14</span></li>
+<li id="src-15"><span class="time">00:04:14--00:04:41</span></li>
+<li id="src-16"><span class="time">00:05:40--00:05:56</span></li>
+<li id="src-17"><span class="time">00:06:24--00:06:38</span></li>
+<li id="src-18"><span class="time">00:05:33--00:07:52</span></li>
+<li id="src-19"><span class="time">00:08:50--00:09:07</span></li>
+<li id="src-20"><span class="time">00:09:07--00:09:24</span></li>
+<li id="src-21"><span class="time">00:09:39--00:09:43, 00:09:56--00:10:05</span></li>
+<li id="src-22"><span class="time">00:10:27--00:10:52</span></li>
+<li id="src-23"><span class="time">00:09:30--00:10:06</span></li>
+<li id="src-24"><span class="time">00:10:14--00:10:41</span></li>
+<li id="src-25"><span class="time">00:08:01--00:08:06</span></li>
+<li id="src-26"><span class="time">00:08:06--00:08:14</span></li>
+<li id="src-27"><span class="time">00:08:14--00:08:16</span></li>
+<li id="src-28"><span class="time">00:08:22--00:08:32</span></li>
+</ol>
+</section>
+</main>
+</body>
+</html>

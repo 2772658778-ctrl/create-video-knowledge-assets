@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>把任何文字变成一篇精美文章：一套能被复用的生产流程</title>
+<style>
+
+:root {
+  color-scheme: light;
+  --ink: #23211f;
+  --ink-soft: #46423f;
+  --muted: #6f6a65;
+  --line: #e7e3dc;
+  --accent: #2f6b52;
+  --blue: #245b7d;
+  --amber: #8a5a00;
+  --paper: #fffefb;
+  --bg: #f1eee8;
+  --serif: "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif SC", "Songti SC", STSong, SimSun, Georgia, serif;
+  --sans: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Hiragino Sans GB", sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 72px 52px 104px;
+  background: var(--paper);
+  box-shadow: 0 1px 48px rgba(35, 33, 31, 0.06);
+  counter-reset: sec fig;
+}
+h1, h2, h3 { font-family: var(--sans); color: var(--ink); line-height: 1.34; text-wrap: balance; }
+h1 { font-size: 2.05rem; font-weight: 700; letter-spacing: 0.005em; margin: 0 0 0.5em; }
+h2 { font-size: 1.5rem; font-weight: 700; margin: 3.2rem 0 1.1rem; counter-increment: sec; }
+h2::before {
+  content: counter(sec, decimal-leading-zero);
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  margin-bottom: 0.35em;
+}
+h3 { font-size: 1.18rem; font-weight: 600; margin: 2.1rem 0 0.7em; color: var(--ink-soft); }
+p { margin: 0 0 1.15em; }
+.theme { font-family: var(--sans); font-size: 1.02rem; font-weight: 500; color: var(--accent); margin: 0 0 1rem; }
+.summary { font-size: 1rem; color: var(--ink-soft); margin: 0 0 0.7rem; padding-left: 0.9rem; border-left: 2px solid var(--line); }
+.subtitle, .source, figcaption, .metadata { color: var(--muted); font-size: 0.87rem; }
+.subtitle { margin: 0 0 0.8rem; letter-spacing: 0.02em; }
+.metadata { display: block; margin: 0 0 2rem; line-height: 1.95; }
+nav { margin: 2.6rem 0 3.2rem; padding: 1.3rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+nav strong { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.22em; }
+nav ol { list-style: none; margin: 0.9rem 0 0; padding: 0; counter-reset: toc; }
+nav li { counter-increment: toc; margin: 0.55rem 0; font-size: 1rem; line-height: 1.6; }
+nav li a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+nav li a::before {
+  content: counter(toc, decimal-leading-zero);
+  margin-right: 0.75em;
+  font-family: var(--sans);
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+nav li a:hover { border-bottom-color: var(--accent); }
+img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+figure { margin: 2.3rem 0 2.5rem; }
+figure:not(.cover) { counter-increment: fig; }
+figure img { border: 1px solid var(--line); border-radius: 3px; }
+figcaption { text-align: left; margin-top: 0.75rem; line-height: 1.7; }
+figure:not(.cover) figcaption::before {
+  content: "图 " counter(fig) "　";
+  font-family: var(--sans);
+  font-size: 0.9em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+.caption { font-size: 0.87rem; line-height: 1.75; color: var(--muted); margin: -1.6rem 0 2.2rem; }
+.cover { margin: 0 0 2.4rem; }
+/* The cover frame keeps the same fraction of the text measure the PDF uses. */
+.cover img { width: 62%; border-radius: 4px; }
+.cite { font-size: 0.6em; vertical-align: super; line-height: 0; margin-left: 0.12em; }
+.cite a { color: var(--muted); text-decoration: none; }
+.cite a:hover { color: var(--accent); }
+table { width: 100%; border-collapse: collapse; margin: 1.4rem 0; font-size: 0.9rem; }
+th, td { border-bottom: 1px solid var(--line); padding: 0.55rem 0.6rem; text-align: left; vertical-align: top; }
+th { font-family: var(--sans); font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+blockquote { margin: 1.5rem 0; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 2px solid var(--accent); color: var(--ink-soft); }
+.notes { margin-top: 4.5rem; padding-top: 1.7rem; border-top: 1px solid var(--line); }
+.notes h2 { counter-increment: none; font-family: var(--sans); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.22em; color: var(--accent); margin: 0 0 1.2rem; }
+.notes h2::before { content: none; }
+.notes-intro { font-size: 0.87rem; color: var(--muted); margin: 0 0 1.2rem; }
+.notes-list { list-style: none; margin: 0; padding: 0; counter-reset: note; font-size: 0.83rem; line-height: 1.7; color: var(--muted); columns: 2; column-gap: 2.4em; }
+.notes-list li { counter-increment: note; display: grid; grid-template-columns: 2.6em 1fr; margin: 0 0 0.3rem; break-inside: avoid; }
+.notes-list li::before { content: counter(note) "."; color: var(--muted); }
+.notes-list .time { font-family: var(--mono); font-size: 0.94em; }
+.box { border-left: 4px solid var(--blue); background: #f7fbff; padding: 0.85rem 1.1rem; margin: 1.4rem 0; }
+.knowledgebox { border-left-color: var(--accent); background: #f4faf6; }
+.warningbox { border-left-color: var(--amber); background: #fffaf0; }
+.box strong { font-family: var(--sans); font-size: 0.9rem; letter-spacing: 0.04em; }
+.formula, pre { overflow-x: auto; background: #f7f5f1; padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 3px; }
+code, .formula { font-family: var(--mono); font-size: 0.88em; }
+@media (max-width: 720px) {
+  body { font-size: 16.5px; }
+  main { padding: 32px 20px 64px; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.2rem; margin-top: 2.6rem; }
+  .cover img { width: 100%; }
+  .notes-list { columns: 1; }
+}
+@media print {
+  body { background: #fff; }
+  main { max-width: none; padding: 0; box-shadow: none; }
+}
+
+</style>
+</head>
+<body>
+<main>
+<h1>把任何文字变成一篇精美文章：<br>一套能被复用的生产流程</h1>
+<p class="theme">让结果稳定，而不是偶尔出彩</p>
+<p class="summary">把长文生产从“模型碰巧写得好”变成一条可复现的流程：输入先统一成一份事实来源，写作交给受主题约束的组件协议，关键决策停在检查点由人拍板，状态写进文件，质量交给三路独立审核，修复限制在最小切片。</p>
+<p class="subtitle">一次基于视频证据的工程拆解</p>
+<figure class="cover"><img src="cover.jpg" alt="视频封面"></figure>
+<p class="metadata">
+《Harness 实践：将任何文字编辑成精美的文章》　·　code秘密花园　·　2026-06-17　·　20分37秒<br>平台字幕不可用；faster-whisper base（CPU int8）逐行审校：606 段中 3 段标记为不确定<br>https://www.bilibili.com/video/BV1ayLD6uERL
+</p>
+<nav><strong>目录</strong><ol>
+<li><a href="#section-1">长文交给 Agent，卡住的往往不是模型写得不够好</a></li>
+<li><a href="#section-2">真正可复用的，是这套工作方法</a></li>
+<li><a href="#section-3">把“让模型写 HTML”换成“让模型组合组件”</a></li>
+<li><a href="#section-4">整套流程实际跑起来，是九个步骤和三个检查点</a></li>
+<li><a href="#section-5">把它压成一张可以逐条自查的清单</a></li>
+</ol></nav>
+<section id="section-1">
+<h2>长文交给 Agent，卡住的往往不是模型写得不够好</h2>
+<p>你手上有一份长材料，想让它变成一篇能直接发出去的文章：有排版、有配色、有节奏感，不用再找一位设计师。第一反应通常是走 Markdown，因为写起来足够简单。可材料一旦包含复杂的报告、图表和交互结构，Markdown 就不够用了。<sup class="cite"><a href="#src-1">1</a></sup></p>
+<p>HTML 看起来是更合适的载体。它的信息密度高，表格、SVG、看板、片段和公式可以随意组合；标题层级、颜色和间距能比较精准地控制；折叠、Tab 这类可交互控件也做得出来；分享出去只要一个链接，对方不需要额外安装任何东西。<sup class="cite"><a href="#src-2">2</a></sup></p>
+<figure>
+<img src="figures/01-markdown-boundary.jpg" alt="画面把两种载体并排放在一起：左侧是 Markdown 的极简语法——标题、小节、列表、引用、行内代码；右侧是 HTML 的四种能力——复杂报告、图表、交互、视觉结构。这张图就是“简单，但会撞到边界”的对照。">
+<figcaption>画面把两种载体并排放在一起：左侧是 Markdown 的极简语法——标题、小节、列表、引用、行内代码；右侧是 HTML 的四种能力——复杂报告、图表、交互、视觉结构。这张图就是“简单，但会撞到边界”的对照。<sup class="cite"><a href="#src-3">3</a></sup></figcaption>
+</figure>
+<p>换到 HTML 也有代价，代价出现在让模型直接手写 HTML 和 CSS 的时候：内容一长、视觉元素一多，单文件会变得很大，后续难改难维护，效果不可控，也很难稳定地按要求产出；更麻烦的是，原本的文字容易失去文章感，看起来像一个网页应用。<sup class="cite"><a href="#src-4">4</a></sup></p>
+<p>这篇文章要把这套流程讲清楚：输入先收成一份事实来源，写作在受约束的组件里进行，关键位置停下来由你拍板，最后再验收和交付。看懂之后，你能判断哪些环节可以让 Agent 自己跑，哪些决定必须自己下，以及出了问题该修哪一块。<sup class="cite"><a href="#src-5">5</a></sup></p>
+</section>
+<section id="section-2">
+<h2>真正可复用的，是这套工作方法</h2>
+<p>这套流程要验证的判断是：好的 Harness 可以迁移。上一期用一套框架让 Agent 全自动地制作视频，这一次把几乎同一套框架放到一件完全不同的事情上——把任何文字编辑成精美的文章。<sup class="cite"><a href="#src-6">6</a></sup></p>
+<p>框架本身由六个部分组成：上下文管理、工具系统、执行编排、状态与记忆、反馈与观测、约束与恢复。把做视频的流程和写文章的流程并排对照，会发现两者的骨架几乎一样。<sup class="cite"><a href="#src-7">7</a></sup></p>
+<p>结论落在方法上：真正值得复用的，可能不是某一段提示词，也不是某一个组件，而是这套工作方法——把复杂任务拆成阶段，把关键决策变成检查点，把上下文写进文件，把输出收进协议，把质量问题交给独立审核，把修复限制在最小切片，再把审核与修复的细节沉淀回流程。<sup class="cite"><a href="#src-8">8</a></sup></p>
+<p>它解决的是一个稳定性问题：确保 Agent 从能做出一次效果，变成能稳定生产一类效果。<sup class="cite"><a href="#src-9">9</a></sup></p>
+<p>作者对这套方法的边界给得很宽：做 Harness 不一定要从头打造 Agent，把某一个垂直任务用 Skill 做稳，本身就是在做 Harness。适用范围也一样——换到周报、播客、课程讲义、技术文档、产品发布这些场景，只要任务足够复杂、需要状态、流程、检查点和验收标准，这套骨架就有价值。<sup class="cite"><a href="#src-10">10</a></sup></p>
+</section>
+<section id="section-3">
+<h2>把“让模型写 HTML”换成“让模型组合组件”</h2>
+<p>核心的动作是换掉模型要写的东西。Agent 编写的并不是原始 HTML，而是一套专门为文章定义的底层组件协议：协议给出一组受约束的语义化组件，基本平替 Markdown 的全部语法；AI 只负责组合这些组件，结构和排版由库保证，不需要自己去想版式结构、样式一致性和前后一致性。<sup class="cite"><a href="#src-11">11</a></sup></p>
+<p>作者给这套协议取名 Reacticle，是 React 加 article 的合成词。它的定位可以压成一句话：Markdown 让人能轻松地写文章，Reacticle 让 AI 能可控地生成长文 HTML。<sup class="cite"><a href="#src-12">12</a></sup></p>
+<figure>
+<img src="figures/03-protocol-not-ai-html.jpg" alt="画面把组件库挡掉的问题列成一张清单：顶部写着 LIBRARY GUARANTEE 和“不需要 AI 去想这些”，中间是 AI 不用再纠结的四件事——div 还是 section、h2 还是 h3、间距设多少、前后一致性，右侧盖着“库已保证”的章。版式与样式的一致性因此由库兜住，而不是每次留给模型重新决定。">
+<figcaption>画面把组件库挡掉的问题列成一张清单：顶部写着 LIBRARY GUARANTEE 和“不需要 AI 去想这些”，中间是 AI 不用再纠结的四件事——div 还是 section、h2 还是 h3、间距设多少、前后一致性，右侧盖着“库已保证”的章。版式与样式的一致性因此由库兜住，而不是每次留给模型重新决定。<sup class="cite"><a href="#src-13">13</a></sup></figcaption>
+</figure>
+<p>只有固定组件会显得死板，所以协议留了一个叫 Raw 的逃生舱组件：任意 HTML 语法都能塞进去，时序图、交互式画块都能做。它带一条硬约束——Raw 里的所有样式必须遵循当前主题的风格。这样既给模型留了自由，又把各个主题的效果稳定性约束住。<sup class="cite"><a href="#src-14">14</a></sup></p>
+<p>这样的主题目前有 11 套。<sup class="cite"><a href="#src-15">15</a></sup></p>
+<p>每套主题都由两份东西组成：一份样式约束，定义颜色、字体、间距、阴影这些视觉变量；一份写给 AI 的说明，规定这套主题该配什么图、能不能用渐变和阴影、图表是不是要极简、能不能撞色描边。<sup class="cite"><a href="#src-16">16</a></sup></p>
+<p>两层的关系可以用乐高讲清楚：Reacticle 是积木，规定有哪些零件、每种长什么样、颜色怎么搭配，管的是拼出来稳不稳、好不好看；beautiful-article 这个 Skill 是拼装说明书，规定先拼哪块、拼完检查什么、最后怎么交付，管的是生产过程可不可控。一个管输出质量，一个管生产流程，两层配合才能稳定出货。<sup class="cite"><a href="#src-17">17</a></sup></p>
+</section>
+<section id="section-4">
+<h2>整套流程实际跑起来，是九个步骤和三个检查点</h2>
+<p>流程从整理素材开始，一共九个步骤；第三步、第五步会停下来等你确认，第九步之后还有最后一个检查点决定交付形态。<sup class="cite"><a href="#src-18">18</a></sup></p>
+<p>开始之前有一段环境准备：选一个支持 Skill 的执行 Agent，示例用的是 Claude Code，Cursor、Codex 这类同样可以；在终端装好后用 claude 命令验证能正常启动；再配一个能力和上下文都够强的模型，作者这次换用的是 MiniMax M3；最后把 Skill 目录放进 .claude/skills，输入 /beautiful-article 能调起来，就说明装好了。<sup class="cite"><a href="#src-19">19</a></sup></p>
+<p>第一步是整理素材。输入无论是网页链接、PDF 还是纯文本，都先被统一成一份 Markdown，也就是流程里的 sources.md，作为后面所有写作的事实来源；整理过程中拿不准的地方——图片缺失、表格不完整、链接可能失效——单独记录下来，交给后面的人工判断。<sup class="cite"><a href="#src-20">20</a></sup></p>
+<p>第二步是出编辑方案。整理好的素材会变成一份完整的编辑计划（plan.md），写清楚面向谁、保留多少原文信息、章节怎么分、选什么视觉主题；这些都给建议，但不替你做决定。<sup class="cite"><a href="#src-21">21</a></sup></p>
+<p>第三步是第一个检查点，流程停下来问你几件事：文章类型、主题风格、要不要目录、配图方式、封面方向。<sup class="cite"><a href="#src-22">22</a></sup></p>
+<figure>
+<img src="figures/02-checkpoint-decisions.jpg" alt="第一个检查点停在动手写正文之前：画面把要确认的五项排成一张表——文章类型（longform、report、tutorial）、主题风格、要不要目录、配图方式、封面方向，左上角标着 checkpoint 1 · must confirm，页脚写着“询问刚刚帮你推荐好的这些关键事项”。">
+<figcaption>第一个检查点停在动手写正文之前：画面把要确认的五项排成一张表——文章类型（longform、report、tutorial）、主题风格、要不要目录、配图方式、封面方向，左上角标着 checkpoint 1 · must confirm，页脚写着“询问刚刚帮你推荐好的这些关键事项”。<sup class="cite"><a href="#src-23">23</a></sup></figcaption>
+</figure>
+<p>检查点的分寸被说得很清楚：Agent 会根据原文类型推荐最合适的选项，但不会替你决定。<sup class="cite"><a href="#src-24">24</a></sup></p>
+<p>文章类型这一项直接决定文章以什么形态呈现。内置类型涵盖完整长文、研究报告、教学步骤、机制解释、对话访谈、工程审阅、观点评论、角色摘要和交互式学习等，这次示范选的是 100% 保留原文内容的完整长文。<sup class="cite"><a href="#src-25">25</a></sup></p>
+<p>第四步不是一口气写完，而是先出一小块：只做封面、第一节和一个有代表性的内容模块，用来验证正文密度合不合适、主题对不对；验证过了再继续往下写。<sup class="cite"><a href="#src-26">26</a></sup></p>
+<p>第五步是第二个检查点，这次请你对首屏提意见：标题是不是太正经、配色喜不喜欢、信息是不是太密，都可以在这一步调整。这里改写的成本最低；如果拖到后面，写得越多，返工的成本就越高。<sup class="cite"><a href="#src-27">27</a></sup></p>
+<p>第六步是定开发模式：一次性顺序写，还是多 Agent 并行写。顺序模式风格最统一，并行模式速度最快；作者更推荐并行——更快，也在一定程度上更省 token，而且 Skill 的文件约束保证了并行不会导致冲突。<sup class="cite"><a href="#src-28">28</a></sup></p>
+<p>第七步是逐章开发，确认首屏之后才进入这一步。每一节写成独立文件，每个模块也是独立组件，多个 Agent 并行时各写各的，最后主 Agent 统一合并；这条文件边界既是能并行的前提，也是后面能做最小切片修复的前提。<sup class="cite"><a href="#src-29">29</a></sup></p>
+<p>第八步是终审：所有章节写完，流程还不会结束，三个独立的审查者各审一路，维度各不相同。<sup class="cite"><a href="#src-30">30</a></sup></p>
+<p>内容审查看完整性、信息取舍和结构；视觉审查看主题、Raw、配图和移动端适配是否合理；技术审查看构件和空态有没有报错、代码块与公式渲染是否正常。<sup class="cite"><a href="#src-31">31</a></sup></p>
+<p>关键的质检节点必须交给独立的审查者，不能由写作的那一路自己点头。<sup class="cite"><a href="#src-32">32</a></sup></p>
+<p>第九步是最小切片修复：审查发现的问题不做整体重写，某一节有问题就改哪一节，某个 Raw 有问题就改哪个 Raw；同时对已经确认过的部分加以保护，避免一次局部返工把整篇文章重新搞坏。<sup class="cite"><a href="#src-33">33</a></sup></p>
+<p>最后一个检查点决定交付形态：只导出一个 HTML，还是同时导出 HTML 加 PDF，又或者先把还没处理的问题修掉。演示里选的是同时导出 HTML 和 PDF，网页和 PDF 的内容完全一致，但排版会按各自的格式做适配。<sup class="cite"><a href="#src-34">34</a></sup></p>
+<p>整套流程里，关键状态都被写进文件：sources.md 记录抽取结果和风险，plan.md 记录所有编辑决策与大纲，质检和修复也各有记录。这些文件合起来构成 Agent 的工作记忆，写到后面章节时不用凭记忆回忆，直接回去读文件即可。<sup class="cite"><a href="#src-35">35</a></sup></p>
+<figure>
+<img src="figures/04-traces-to-local-files.jpg" alt="画面标题是「所有关键点的痕迹都落到本地」：一个 review/ 目录把质检和审查两类记录沉淀下来，底部字幕写着「就是所有的关键质检过程」。">
+<figcaption>画面标题是「所有关键点的痕迹都落到本地」：一个 review/ 目录把质检和审查两类记录沉淀下来，底部字幕写着「就是所有的关键质检过程」。<sup class="cite"><a href="#src-36">36</a></sup></figcaption>
+</figure>
+</section>
+<section id="section-5">
+<h2>把它压成一张可以逐条自查的清单</h2>
+<p>这套方法的价值不在于你用了哪个模型或哪个组件，而在于几个固定动作。下面这张清单综合了整条流程里散落的几条原则，把它压成问题，就可以直接拿来审自己的流程。<sup class="cite"><a href="#src-37">37</a></sup></p>
+<ul>
+<li>关键决策有没有停下来让你拍板？检查点只给建议，不替你决定，而且停在改写成本最低的位置。</li>
+<li>上下文有没有分阶段加载？初始就把所有规范、主题和组件文档塞进去会稀释注意力，不同阶段只该看到这个阶段需要的文档。</li>
+<li>每写一节之前，有没有回看当前任务的协议、Raw 规范和主题约束？这是把流程持续拉回正轨的做法。</li>
+<li>输入有没有统一成一份事实来源？链接、PDF、纯文本都先整理成同一份文件，后面所有写作都从它出发。</li>
+<li>每一节是不是独立的文件？并行开发需要各写各的，最小切片修复也需要文件边界。</li>
+<li>状态有没有写进文件？计划、抽取结果、风险和质检记录落到本地，写到后面章节时直接回去读文件。</li>
+<li>质检有没有独立视角？内容、视觉、技术三路各审各的，关键节点必须由独立审查者完成。</li>
+<li>修复有没有限制在最小切片？只改出问题的那一节或那一个组件，并保护已经确认过的部分。<sup class="cite"><a href="#src-38">38</a></sup></li>
+</ul>
+<p>还有一件可以立刻做的事：把关键的中间过程落到本地文件——首屏审查、终审和修复记录都算。这些文件不只给人看，也给 Agent 看；同类任务跑多之后，Agent 回看这些记录，能找出最容易出问题的环节，比如目录写错、Raw 过度设计、某类文章的信息保留比例不合适，再反过来优化 Skill 的规则、检查清单和默认策略。<sup class="cite"><a href="#src-39">39</a></sup></p>
+<p>把这些动作固定下来，最后留下来的除了一个 HTML 文件，还有一条被验证过的生产流程。<sup class="cite"><a href="#src-40">40</a></sup></p>
+</section>
+<section class="notes" id="source-times">
+<h2>来源时间</h2>
+<p class="notes-intro">正文中的上标编号对应下面列出的时间范围，标注该段内容在视频中的位置。</p>
+<ol class="notes-list">
+<li id="src-1"><span class="time">00:00:00--00:00:10, 00:01:00--00:01:06</span></li>
+<li id="src-2"><span class="time">00:01:12--00:01:31</span></li>
+<li id="src-3"><span class="time">00:00:58--00:01:02</span></li>
+<li id="src-4"><span class="time">00:01:34--00:01:57</span></li>
+<li id="src-5"><span class="time">00:18:09--00:18:11, 00:19:37--00:19:49</span></li>
+<li id="src-6"><span class="time">00:00:12--00:00:16, 00:00:37--00:00:50</span></li>
+<li id="src-7"><span class="time">00:15:47--00:15:52, 00:15:56--00:16:08</span></li>
+<li id="src-8"><span class="time">00:19:29--00:19:49</span></li>
+<li id="src-9"><span class="time">00:19:49--00:19:56</span></li>
+<li id="src-10"><span class="time">00:19:56--00:20:15</span></li>
+<li id="src-11"><span class="time">00:04:09--00:04:18, 00:04:44--00:04:56</span></li>
+<li id="src-12"><span class="time">00:04:18--00:04:31</span></li>
+<li id="src-13"><span class="time">00:04:58--00:05:02</span></li>
+<li id="src-14"><span class="time">00:04:57--00:05:19</span></li>
+<li id="src-15"><span class="time">00:05:19--00:05:22</span></li>
+<li id="src-16"><span class="time">00:05:22--00:05:47</span></li>
+<li id="src-17"><span class="time">00:05:58--00:06:26</span></li>
+<li id="src-18"><span class="time">00:02:26--00:04:07</span></li>
+<li id="src-19"><span class="time">00:06:36--00:07:02, 00:07:33--00:07:36, 00:08:40--00:09:09</span></li>
+<li id="src-20"><span class="time">00:02:26--00:02:40, 00:16:53--00:17:01</span></li>
+<li id="src-21"><span class="time">00:02:40--00:02:52</span></li>
+<li id="src-22"><span class="time">00:02:52--00:03:01</span></li>
+<li id="src-23"><span class="time">00:02:58--00:03:02</span></li>
+<li id="src-24"><span class="time">00:10:35--00:10:40</span></li>
+<li id="src-25"><span class="time">00:10:40--00:11:36, 00:11:48--00:11:49</span></li>
+<li id="src-26"><span class="time">00:03:03--00:03:16</span></li>
+<li id="src-27"><span class="time">00:03:16--00:03:24</span></li>
+<li id="src-28"><span class="time">00:03:24--00:03:37, 00:13:23--00:13:36</span></li>
+<li id="src-29"><span class="time">00:13:48--00:14:10, 00:17:01--00:17:17</span></li>
+<li id="src-30"><span class="time">00:03:40--00:03:45, 00:14:15--00:14:18</span></li>
+<li id="src-31"><span class="time">00:03:45--00:03:56, 00:14:21--00:14:39</span></li>
+<li id="src-32"><span class="time">00:18:06--00:18:11</span></li>
+<li id="src-33"><span class="time">00:03:56--00:03:58, 00:14:39--00:14:50, 00:18:33--00:18:46</span></li>
+<li id="src-34"><span class="time">00:03:58--00:04:07, 00:14:50--00:15:05, 00:15:19--00:15:24</span></li>
+<li id="src-35"><span class="time">00:10:04--00:10:28, 00:17:17--00:17:44</span></li>
+<li id="src-36"><span class="time">00:18:58--00:19:02</span></li>
+<li id="src-37"><span class="time">00:15:56--00:15:58, 00:19:29--00:19:35</span></li>
+<li id="src-38"><span class="time">00:16:11--00:20:15</span></li>
+<li id="src-39"><span class="time">00:18:55--00:19:27</span></li>
+<li id="src-40"><span class="time">00:20:17--00:20:19</span></li>
+</ol>
+</section>
+</main>
+</body>
+</html>
