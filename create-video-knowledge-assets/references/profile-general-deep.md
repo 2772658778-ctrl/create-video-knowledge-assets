@@ -22,7 +22,7 @@ be able to reconstruct the video's argument from the table of contents alone.
 Write "第一道门槛：不是所有竹笋都能吃", not "背景介绍" or "第三部分".
 
 Boundary and source material is **not** a chapter here. It belongs in the
-document's `notes` part, which ships as its own PDF and is described in
+document's `notes` part, which ships as its own document and is described in
 `document-schema.md`.
 
 Each section has a natural reader-facing title. The internal `kind` remains in

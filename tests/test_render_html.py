@@ -44,6 +44,50 @@ def test_general_document_html_preserves_local_image_path_without_audit_text() -
     assert 'src="evidence/frames/chart.jpg"' in html
     assert '<li id="src-1"><span class="time">00:00:20--00:00:28</span></li>' in html
     assert "source_spans" not in html
+
+
+def test_notes_part_renders_without_a_parent_provenance_catalog() -> None:
+    """A document without `evidence_origins` still has a renderable notes part."""
+    notes = render_document_html(
+        {
+            "profile_id": "general-deep",
+            "title": "访谈",
+            "sections": [
+                {
+                    "title": "概览",
+                    "blocks": [
+                        {
+                            "kind": "paragraph",
+                            "text": "正文只复述视频里的判断。",
+                            "knowledge_refs": ["ku-1"],
+                            "evidence_refs": ["tr-1"],
+                            "source_spans": [{"start_ms": 0, "end_ms": 1000}],
+                        }
+                    ],
+                }
+            ],
+            "notes": {
+                "title": "边界",
+                "sections": [
+                    {
+                        "title": "转录",
+                        "blocks": [
+                            {
+                                "kind": "paragraph",
+                                "text": "有 3 段无法确认。",
+                                "knowledge_refs": ["ku-1"],
+                                "evidence_refs": ["tr-1"],
+                                "source_spans": [{"start_ms": 0, "end_ms": 1000}],
+                            }
+                        ],
+                    }
+                ],
+            },
+        },
+        part="notes",
+    )
+
+    assert "<h1>边界</h1>" in notes
 from vka_cli import main
 
 

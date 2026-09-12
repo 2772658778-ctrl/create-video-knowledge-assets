@@ -28,7 +28,7 @@ The article must contain these semantic sections in order:
 5. `actionable_takeaway`: actions faithfully derived from the source.
 
 Scope, uncertainty, and source navigation do **not** belong in the article.
-They go in the document's `notes` part and ship as a separate PDF, so the
+They go in the document's `notes` part and ship as a separate document, so the
 article's table of contents stays a description of the video rather than a
 description of the pipeline. See `document-schema.md`.
 

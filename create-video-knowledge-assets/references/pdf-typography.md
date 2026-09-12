@@ -1,15 +1,18 @@
-# Reader PDF Contract
+# Reader Delivery Contract
 
-Why the delivered PDF looks the way it does, and the traps that already cost
-us iterations. Read this before changing either renderer, and before judging a
-rendered document. It applies to every reader-facing profile.
+Why the delivered document looks the way it does, and the traps that already
+cost us iterations. Read this before changing any renderer, and before judging
+a rendered document. It applies to every reader-facing profile, in both
+delivered formats.
 
 ## What A Reader Should Feel
 
 One column, serif body, sans headings, generous leading — the reading
-experience of a long-form article, not of a report. Two PDFs per view: the
+experience of a long-form article, not of a report. Two documents per view: the
 reader document carries only the video's content; scope, uncertainty, and
-source navigation live in the boundary document.
+source navigation live in the boundary document. Each ships as a PDF and as a
+standalone HTML file; the HTML is the same document without page breaks, so it
+shows what the prose really looks like and the PDF is the paginated counterpart.
 
 ## Type Scale
 
@@ -90,4 +93,7 @@ letting figures drift away from the paragraph they illustrate.
 
 When a reader wants continuous reading rather than pagination, the HTML render
 of the same document is the right answer — it shows what the text looks like
-without page breaks. It is a review and reading view, not a second product.
+without page breaks. It is a delivered format, not a review view: `package-demo`
+copies the cover and every cited frame next to it, so the file opens on its own.
+The two formats must not drift, and a rule that changes one renderer changes the
+other in the same commit.

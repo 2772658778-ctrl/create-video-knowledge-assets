@@ -24,6 +24,9 @@ from vka.store import AssetStore, SCHEMA_VERSION
 
 DocumentValidator = Callable[[object], list[str]]
 CANONICAL_DIRECTORIES = ("source", "evidence", "knowledge")
+# A view is delivered twice from one document: a PDF for archiving and a
+# standalone HTML file for continuous reading on screen.
+READER_FORMATS: tuple[str, ...] = ("pdf", "html")
 
 
 @dataclass(frozen=True)
@@ -85,7 +88,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
         "general-deep": ProfileSpec(
             profile_id="general-deep",
             required_sections=("overview", "logical_body"),
-            formats=("pdf",),
+            formats=READER_FORMATS,
             validator=_validate_general_deep,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-general-deep.md",
@@ -93,7 +96,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
         "deep-summary": ProfileSpec(
             profile_id="deep-summary",
             required_sections=("overview", "logical_body"),
-            formats=("pdf",),
+            formats=READER_FORMATS,
             validator=_validate_general_deep,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-general-deep.md",
@@ -109,7 +112,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "examples",
                 "final_synthesis",
             ),
-            formats=("pdf",),
+            formats=READER_FORMATS,
             validator=_validate_course_notes,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-course-notes.md",
@@ -123,7 +126,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "video_evidence",
                 "actionable_takeaway",
             ),
-            formats=("pdf",),
+            formats=READER_FORMATS,
             validator=_validate_creator_article,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-creator-article.md",
@@ -137,7 +140,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "video_evidence",
                 "actionable_takeaway",
             ),
-            formats=("pdf",),
+            formats=READER_FORMATS,
             validator=_validate_creator_article,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-creator-article.md",
@@ -152,7 +155,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "risks",
                 "limitations_sources",
             ),
-            formats=("pdf",),
+            formats=READER_FORMATS,
             validator=_validate_enterprise_knowledge,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-enterprise-knowledge.md",
@@ -166,7 +169,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "limitations_questions",
                 "source_navigation",
             ),
-            formats=("pdf",),
+            formats=READER_FORMATS,
             validator=_validate_research_brief,
             renderer_options=_options(source_navigation=True),
             reference_path="references/profile-research-brief.md",
@@ -181,7 +184,7 @@ PROFILES: Mapping[str, ProfileSpec] = MappingProxyType(
                 "payoff",
                 "closing",
             ),
-            formats=("pdf",),
+            formats=READER_FORMATS,
             validator=_validate_short_video_script,
             renderer_options=_options(source_navigation=False),
             reference_path="references/profile-short-video-script.md",

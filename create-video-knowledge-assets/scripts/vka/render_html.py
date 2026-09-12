@@ -7,28 +7,10 @@ from pathlib import Path
 from typing import Any
 
 from vka.quality import (
+    SOURCED_BLOCK_KINDS,
     assign_source_notes,
     document_sections_for_part,
-    format_source_note,
     rebase_document_image_paths,
-)
-
-# Block kinds that make a claim about the source, so they carry a numbered
-# pointer into the 来源时间 list at the end of the document.
-SOURCED_BLOCK_KINDS = frozenset(
-    {
-        "paragraph",
-        "quote",
-        "bullet_list",
-        "numbered_list",
-        "table",
-        "image",
-        "caption",
-        "summary",
-        "importantbox",
-        "knowledgebox",
-        "warningbox",
-    }
 )
 
 
@@ -115,6 +97,9 @@ def render_course_html(
             [
                 '<section class="notes" id="source-times">',
                 "<h2>来源时间</h2>",
+                '<p class="notes-intro">'
+                "正文中的上标编号对应下面列出的时间范围，标注该段内容在视频中的位置。"
+                "</p>",
                 '<ol class="notes-list">',
                 *(
                     f'<li id="src-{number}"><span class="time">{_escape(text)}</span></li>'
@@ -512,7 +497,8 @@ figure:not(.cover) figcaption::before {
 }
 .caption { font-size: 0.87rem; line-height: 1.75; color: var(--muted); margin: -1.6rem 0 2.2rem; }
 .cover { margin: 0 0 2.4rem; }
-.cover img { width: 100%; border-radius: 4px; }
+/* The cover frame keeps the same fraction of the text measure the PDF uses. */
+.cover img { width: 62%; border-radius: 4px; }
 .cite { font-size: 0.6em; vertical-align: super; line-height: 0; margin-left: 0.12em; }
 .cite a { color: var(--muted); text-decoration: none; }
 .cite a:hover { color: var(--accent); }
@@ -523,6 +509,7 @@ blockquote { margin: 1.5rem 0; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 2px
 .notes { margin-top: 4.5rem; padding-top: 1.7rem; border-top: 1px solid var(--line); }
 .notes h2 { counter-increment: none; font-family: var(--sans); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.22em; color: var(--accent); margin: 0 0 1.2rem; }
 .notes h2::before { content: none; }
+.notes-intro { font-size: 0.87rem; color: var(--muted); margin: 0 0 1.2rem; }
 .notes-list { list-style: none; margin: 0; padding: 0; counter-reset: note; font-size: 0.83rem; line-height: 1.7; color: var(--muted); columns: 2; column-gap: 2.4em; }
 .notes-list li { counter-increment: note; display: grid; grid-template-columns: 2.6em 1fr; margin: 0 0 0.3rem; break-inside: avoid; }
 .notes-list li::before { content: counter(note) "."; color: var(--muted); }
@@ -538,6 +525,7 @@ code, .formula { font-family: var(--mono); font-size: 0.88em; }
   main { padding: 32px 20px 64px; }
   h1 { font-size: 1.6rem; }
   h2 { font-size: 1.2rem; margin-top: 2.6rem; }
+  .cover img { width: 100%; }
   .notes-list { columns: 1; }
 }
 @media print {

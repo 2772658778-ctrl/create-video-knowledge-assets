@@ -15,15 +15,7 @@ def _asset(tmp_path: Path) -> Path:
     (asset / "evidence" / "frames" / "inspected").mkdir(parents=True)
 
     (asset / "views" / "deep-article" / "document.json").write_text(
-        json.dumps(
-            {
-                "profile_id": "deep-article",
-                "title": "文章",
-                "cover_image": "source/cover/BVtest.jpg",
-                "sections": [],
-            },
-            ensure_ascii=False,
-        ),
+        json.dumps(_renderable_document(), ensure_ascii=False),
         encoding="utf-8",
     )
     (asset / "outputs" / "deep-article" / "document.pdf").write_bytes(b"%PDF-fake")
@@ -32,6 +24,34 @@ def _asset(tmp_path: Path) -> Path:
     (asset / "evidence" / "frames" / "inspected" / "01-used.jpg").write_bytes(b"used")
     (asset / "evidence" / "frames" / "inspected" / "02-unused.jpg").write_bytes(b"unused")
     return asset
+
+
+def _paragraph(text: str) -> dict:
+    return {
+        "kind": "paragraph",
+        "text": text,
+        "knowledge_refs": ["ku-1"],
+        "evidence_refs": ["ev-1"],
+        "source_spans": [{"start_ms": 0, "end_ms": 1000}],
+    }
+
+
+def _renderable_document() -> dict:
+    """A minimal document both renderers accept, with a cover and two parts."""
+    return {
+        "profile_id": "deep-article",
+        "title": "文章",
+        "cover_image": "source/cover/BVtest.jpg",
+        "sections": [
+            {"kind": "overview", "title": "总览", "blocks": [_paragraph("正文只复述视频给的判断。")]}
+        ],
+        "notes": {
+            "title": "边界与来源",
+            "sections": [
+                {"kind": "limits", "title": "边界", "blocks": [_paragraph("转录有 3 段无法确认。")]}
+            ],
+        },
+    }
 
 
 def test_package_demo_copies_referenced_images_and_rewrites_paths(tmp_path: Path) -> None:
@@ -97,6 +117,43 @@ def test_package_demo_drops_frames_the_document_never_cites(tmp_path: Path) -> N
     package_demo(asset, "deep-article", demo_root=tmp_path / "demos")
 
     assert not (tmp_path / "demos" / "bili-BVtest" / "figures" / "02-unused.jpg").exists()
+
+
+def test_package_demo_writes_html_that_opens_without_the_asset(tmp_path: Path) -> None:
+    asset = _asset(tmp_path)
+    document = json.loads(
+        (asset / "views" / "deep-article" / "document.json").read_text(encoding="utf-8")
+    )
+    document["sections"][0]["blocks"].append(
+        {
+            "kind": "image",
+            "path": "evidence/frames/inspected/01-used.jpg",
+            "caption": "用来说明边界的画面。",
+            "knowledge_refs": ["ku-1"],
+            "evidence_refs": ["ev-1"],
+            "source_spans": [{"start_ms": 0, "end_ms": 1000}],
+        }
+    )
+    (asset / "views" / "deep-article" / "document.json").write_text(
+        json.dumps(document, ensure_ascii=False), encoding="utf-8"
+    )
+
+    report = package_demo(asset, "deep-article", demo_root=tmp_path / "demos")
+
+    demo = tmp_path / "demos" / "bili-BVtest"
+    summary = (demo / "summary.html").read_text(encoding="utf-8")
+    notes = (demo / "notes.html").read_text(encoding="utf-8")
+    assert 'src="cover.jpg"' in summary
+    assert 'src="figures/01-used.jpg"' in summary
+    assert "evidence/frames" not in summary
+    assert "<h2>总览</h2>" in summary
+    # The boundary document is not a cover publication and must not cite the
+    # reader document's figures.
+    assert "cover.jpg" not in notes
+    assert "figures/" not in notes
+    assert "<h2>边界</h2>" in notes
+    assert str(demo / "summary.html") in report["files"]
+    assert str(demo / "notes.html") in report["files"]
 
 
 def test_package_demo_requires_an_authored_document(tmp_path: Path) -> None:

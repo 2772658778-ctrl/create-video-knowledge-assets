@@ -36,9 +36,11 @@ sources, infer new facts, or generate prose from canonical records.
 Render only the formats registered in the profile selection. Validate the
 document before rendering, retain renderer paths in the profile output stage,
 and compile a PDF whenever `pdf` is selected. Inspect every PDF page for
-readability, source navigation, visual fit, overflow, and missing glyphs.
-Publish a shareable copy with `vka package-demo --asset <asset> --profile <profile>`
---demo-root demos`; it copies the cover and the cited inspected frames next to the
-document and rewrites the rebased image paths.
+readability, source navigation, visual fit, overflow, and missing glyphs, then
+open the HTML to confirm the same document reads correctly on screen. Publish a
+shareable copy with
+`vka package-demo --asset <asset> --profile <profile> --demo-root demos`; it
+writes the PDF and HTML for both parts and copies the cover and the cited
+inspected frames next to the document so the HTML opens without the asset.
 Keep the acceptance record free of cookies, raw media, and private transcript
 content.

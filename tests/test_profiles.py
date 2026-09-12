@@ -383,7 +383,7 @@ def test_no_profile_or_intent_defaults_to_general_deep() -> None:
     assert selection.profile_id == "general-deep"
     assert selection.selection_source == "default"
     assert selection.requested_formats == ()
-    assert selection.formats == ("pdf",)
+    assert selection.formats == ("pdf", "html")
 
 
 def test_new_profile_specs_are_registered_with_approved_contracts() -> None:
@@ -413,7 +413,7 @@ def test_new_profile_specs_are_registered_with_approved_contracts() -> None:
         "payoff",
         "closing",
     )
-    assert short_script.formats == ("pdf",)
+    assert short_script.formats == ("pdf", "html")
     assert short_script.reference_path == "references/profile-short-video-script.md"
     assert short_script.renderer_options == {"source_navigation": False}
     errors = short_script.validator({"sections": []})
@@ -499,7 +499,7 @@ def test_profile_selection_writes_view_and_asset_manifests(tmp_path) -> None:
 def test_profile_specs_keep_formats_immutable() -> None:
     profile = get_profile("general-deep")
 
-    assert profile.formats == ("pdf",)
+    assert profile.formats == ("pdf", "html")
     with pytest.raises(FrozenInstanceError):
         profile.formats = ()  # type: ignore[misc]
 

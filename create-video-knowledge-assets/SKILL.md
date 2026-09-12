@@ -1,11 +1,11 @@
 ---
 name: create-video-knowledge-assets
-description: Create evidence-backed Chinese video summaries, notes, articles, and scripts from Bilibili URLs or local knowledge videos. Use when Codex needs to produce a deep video summary, course notes, creator article, enterprise knowledge record, research brief, or short-video script with PDF as the primary deliverable and optional HTML or Markdown from the same document view.
+description: Create evidence-backed Chinese video summaries, notes, articles, and scripts from Bilibili URLs or local knowledge videos. Use when Codex needs to produce a deep video summary, course notes, creator article, enterprise knowledge record, research brief, or short-video script, delivered as a PDF and a standalone HTML file rendered from the same document view.
 ---
 
 # Create Video Knowledge Assets
 
-Use this workflow for a Bilibili URL or a local video containing knowledge content. Keep the work evidence-first: every knowledge claim must trace back to transcript windows or checked visual frames. The main product boundary is the four production profiles (`deep-summary`, `deep-article`, `short-video-script`, `course-notes`), with PDF as the primary reader deliverable. HTML and Markdown must come from the same renderer-neutral document rather than separate rewrites.
+Use this workflow for a Bilibili URL or a local video containing knowledge content. Keep the work evidence-first: every knowledge claim must trace back to transcript windows or checked visual frames. The main product boundary is the four production profiles (`deep-summary`, `deep-article`, `short-video-script`, `course-notes`). Each view is delivered twice from one renderer-neutral document: a PDF for archiving and sharing, and a standalone HTML file for reading on screen. Markdown is the third render of that same document and stays a review surface, not a delivered format.
 
 ## Profile And Input Selection
 
@@ -25,7 +25,7 @@ Use this workflow for a Bilibili URL or a local video containing knowledge conte
 5. Build chapters around transcript time windows, then sample frames densely inside each chapter window. Inspect final images directly for relevance and clarity; do not use OCR text or subtitles as a substitute for visual judgment.
 6. Build a rich knowledge layer, not a thin summary: include concepts, mechanisms, examples, formulas, visual states, misconceptions, transitions, and takeaways with `evidence_refs` and a schema-valid `epistemic_status`.
 7. Build the reader-facing plan from the evidence and knowledge layers. Run `vka validate-knowledge --asset <asset>` before any profile projection: it fails when a `video_explicit` unit cites nothing but uncertain transcript rows or provenance-only records. For the default `general-deep` profile, create the outline required by `references/profile-general-deep.md`. For an explicit `course-notes` request, generate `knowledge/teaching_outline.json` and validate it with `vka validate-teaching-outline`. Do not project `knowledge/units.jsonl` directly into any reader-facing format.
-8. For `general-deep` and `course-notes`, generate and validate one renderer-neutral document, then render it. PDF is the delivered format; Markdown and HTML come from the same document and exist for review and continuous reading, not as separate products. Compile and inspect the PDF before handing it over, against the contract in `references/pdf-typography.md`. Publish a shareable copy with `vka package-demo --asset <asset> --profile <profile>`: it copies the cover and the cited inspected frames next to the document and rewrites their paths. Keep structured provenance in JSON for all formats. Do not render or deliver one-sentence chapter summaries, unresolved `???` placeholders, unreviewed ASR, uninspected visual claims, or notes that fail to teach the video's main idea.
+8. For `general-deep` and `course-notes`, generate and validate one renderer-neutral document, then render it. PDF and HTML are both delivered formats and must come from that one document; neither may be rewritten separately. Compile and inspect the PDF before handing it over, against the contract in `references/pdf-typography.md`, and open the HTML to confirm it reads correctly on screen. Publish a shareable copy with `vka package-demo --asset <asset> --profile <profile>`: it writes `summary.pdf`/`notes.pdf` and `summary.html`/`notes.html`, copying the cover and the cited inspected frames next to the document so the HTML opens without the asset directory. Keep structured provenance in JSON for all formats. Do not render or deliver one-sentence chapter summaries, unresolved `???` placeholders, unreviewed ASR, uninspected visual claims, or notes that fail to teach the video's main idea.
 9. Before R3 profile projection, run `vka verify-asset --asset <asset>`. Build, validate, and persist the selected profile's `projection-plan.json` before drafting its supplied authored document. When a directly inspected usable frame exists, include it as a grounded `image` block; do not replace it with a textual description. R3 may write `views/<profile_id>` and `outputs/<profile_id>` only; it must not change `source/`, `evidence/`, or `knowledge/`. Verify canonical hashes before and after projection, then close the view with `vka complete-stage --stage views/<profile_id>` and the render with `vka complete-stage --stage outputs/<profile_id>`. When a stage artifact changes after it was recorded, re-run `complete-stage` for that stage instead of leaving `verify-asset` failing.
 
 ## References
@@ -34,10 +34,14 @@ Use this workflow for a Bilibili URL or a local video containing knowledge conte
 - Read `references/p2-u1-workflow.md` before accepting a local video, normalizing a Bilibili URL, retaining source material, recovering an interrupted run, or issuing an L2 cleanup decision.
 - Read `references/evidence-schema.md` before generating evidence artifacts, timeline records, frame observations, or source-span references.
 - Read `references/knowledge-schema.md` before generating knowledge artifacts or assigning `epistemic_status`.
-- Read `references/profile-general-deep.md` before drafting the default `general-deep` view or its authoring plan.
+- Read the selected profile reference before planning or writing that view:
+  `references/profile-general-deep.md`, `references/profile-course-notes.md`,
+  `references/profile-creator-article.md`,
+  `references/profile-short-video-script.md`,
+  `references/profile-enterprise-knowledge.md`, or
+  `references/profile-research-brief.md`. `references/profile-routing.md` maps
+  a request to the right one and records why it was chosen.
 - Read `references/teaching-outline.md` before converting knowledge units into course-note prose.
-- Read `references/profile-course-notes.md` before drafting the course-notes view, creating renderer input, or deciding whether the notes are pedagogically complete.
-- Read `references/profile-routing.md` before selecting an explicit profile, choosing formats, or recording a selection reason.
 - Read `references/p3-profile-workflow.md` before reprojecting a completed asset into creator, enterprise, or research profile views.
 - Read `references/p3-profile-authoring.md` before drafting a creator article, enterprise knowledge document, or research brief. It defines the distinct reader purpose, figure plan, and zero-value-output stop conditions for those profiles.
 - Read `references/projection-plan.md` before writing, validating, or binding a P3 projection plan. It is the versioned transfer contract and defines the future declarative profile-pack boundary.

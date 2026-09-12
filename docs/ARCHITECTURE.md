@@ -24,7 +24,7 @@ Bilibili URL 或本地视频
                               与渲染器无关的文档（document.json）
                                                │
                                                ▼
-                        正文 PDF + 边界说明 PDF（同一底稿）
+              正文与边界说明（同一底稿，各出 PDF + HTML）
 ```
 
 ## 规范资产布局
@@ -47,7 +47,7 @@ Bilibili URL 或本地视频
 │   ├── view-manifest.json        # 业务视图选择原因与格式范围
 │   ├── projection-plan.json      # P3 业务场景的知识到文档桥梁
 │   └── document.json             # 渲染器无关文档
-├── outputs/<profile>/            # 正文 PDF 与边界说明 PDF 的 TeX/PDF 产物
+├── outputs/<profile>/            # 正文与边界说明的 TeX/PDF 产物
 └── logs/                         # 本地运行信息，不得作为公开 Demo 提交
 ```
 
@@ -58,7 +58,7 @@ Bilibili URL 或本地视频
 ### P1 · 获取、转录与视觉取证
 
 1. **输入识别与预检**：`vka preflight` 检查 yt-dlp / ffmpeg / ffprobe / whisper / xelatex 是否就绪；`vka normalize-bilibili-url` 规范化 URL；本地视频走 `describe-local-video`。
-2. **获取**：优先匿名访问公开 Bilibili。字幕优先采用可靠 CC；无可靠字幕时 `acquire-subs` 之外使用 Whisper ASR，再经 `build-repair-prompt` / `suggest-repairs` / `apply-transcript-repairs` 完成人工可复核的修订。
+2. **获取**：优先匿名访问公开 Bilibili。字幕优先采用可靠 CC；无可靠字幕时使用 Whisper ASR，再经 `build-repair-prompt` / `apply-reviewed-transcript` 完成人工可复核的修订。
 3. **证据落地**：原始 SRT 归一化为 `timeline.raw.jsonl`，修订后写 `timeline.jsonl`；`plan-frames` 按章节时间窗密集采样候选帧，最终画面必须人工直接检查后才登记为证据。
 
 ### P2 · 知识建模
@@ -73,7 +73,7 @@ Bilibili URL 或本地视频
 
 ### P3 · 业务视图（多场景投影）
 
-主成品视图（deep-summary、deep-article、short-video-script、course-notes）通过**投影计划**（projection-plan）把知识层和内容层映射为读者文档；enterprise-knowledge、research-brief 属于按需启用的扩展业务视图：
+主成品视图（deep-summary、deep-article、short-video-script、course-notes）通过**投影计划**（projection-plan）把知识层映射为读者文档；enterprise-knowledge、research-brief 属于按需启用的扩展业务视图：
 
 - `select-profile` / `route-profile` 记录选择原因；
 - `write-projection-plan` + `validate-projection-plan` 生成并校验知识到内容再到文档的桥梁；
@@ -93,11 +93,11 @@ Bilibili URL 或本地视频
 
 - `preflight`：阶段前工具检查；
 - `validate-teaching-outline`：教学大纲结构校验；
-- `validate-document` / `validate-document-quality`：渲染器无关文档与质量门（P1 quality floor）；
+- `validate-document`：渲染器无关文档与 profile 质量门；
 - `validate-projection-plan`：P3 投影契约校验；
 - `verify-asset`：规范资产哈希一致性。
 
-自动校验不能替代人工内容验收；发布前至少抽查关键事实、视觉结论、课程结构和 PDF 页面效果。
+自动校验不能替代人工内容验收；发布前至少抽查关键事实、视觉结论、课程结构，以及 PDF 逐页效果和 HTML 在浏览器里的观感。
 
 ## 明确不做什么（边界）
 

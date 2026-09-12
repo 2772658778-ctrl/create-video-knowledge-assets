@@ -26,10 +26,11 @@ profile 选择与路由逻辑见 [profile-routing](../create-video-knowledge-ass
 | P2 知识建模 | 知识单元、关系、综合结论、限制 | `knowledge/` | [evidence-schema](../create-video-knowledge-assets/references/evidence-schema.md) · [knowledge-schema](../create-video-knowledge-assets/references/knowledge-schema.md) |
 | P3 业务视图 | 投影计划、业务写作、视图质量门 | `views/<profile>/` · `outputs/<profile>/` | [p3-profile-workflow](../create-video-knowledge-assets/references/p3-profile-workflow.md) · [p3-profile-authoring](../create-video-knowledge-assets/references/p3-profile-authoring.md) · [projection-plan](../create-video-knowledge-assets/references/projection-plan.md) · [document-schema](../create-video-knowledge-assets/references/document-schema.md) |
 
-## 完整契约清单（18 份）
+## 完整契约清单（19 份）
 
 见 [`references/`](../create-video-knowledge-assets/references/)，按前缀分组：
 
 - **获取 / 生命周期**：`acquisition-recipes` · `p1-workflow` · `p2-u1-workflow` · `transcript-repair`
 - **数据模型**：`evidence-schema` · `knowledge-schema` · `document-schema`
 - **业务视图**：`profile-routing` · `profile-general-deep` · `profile-course-notes` · `profile-creator-article` · `profile-short-video-script` · `profile-enterprise-knowledge` · `profile-research-brief` · `teaching-outline` · `p3-profile-workflow` · `p3-profile-authoring` · `projection-plan`
+- **交付与排版**：`pdf-typography`（PDF 与 HTML 共用的字号梯度、唯一强调色、图片与目录规则）

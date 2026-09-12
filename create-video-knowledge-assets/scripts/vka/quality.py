@@ -417,6 +417,27 @@ def validate_document_image_files(document: object, asset_root: str | Path) -> l
     return _unique_errors(errors)
 
 
+# Block kinds whose text makes a claim about the source, so they carry a
+# numbered pointer into the end-of-document source list. Both renderers number
+# their citations from this one set: a kind listed in only one of them would
+# silently cite nothing in the other.
+SOURCED_BLOCK_KINDS = frozenset(
+    {
+        "paragraph",
+        "quote",
+        "bullet_list",
+        "numbered_list",
+        "table",
+        "image",
+        "caption",
+        "summary",
+        "importantbox",
+        "knowledgebox",
+        "warningbox",
+    }
+)
+
+
 def rebase_document_image_paths(
     document: object, asset_root: str | Path, output_directory: str | Path
 ) -> object:
@@ -555,7 +576,9 @@ def document_sections_for_part(
             "title": title,
             "sections": notes.get("sections"),
             "profile_id": document.get("profile_id"),
-            "evidence_origins": document.get("evidence_origins"),
+            # A document without a provenance catalog is legal, so the notes
+            # part must not inherit a None catalog from its parent.
+            "evidence_origins": document.get("evidence_origins") or {},
         },
         allow_rebased_image_paths=allow_rebased_image_paths,
         source_navigation=source_navigation,
