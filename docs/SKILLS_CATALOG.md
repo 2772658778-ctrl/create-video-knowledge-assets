@@ -12,9 +12,9 @@
 | 能力 | 入口 Profile | 成熟度 | 契约 |
 | --- | --- | --- | --- |
 | 深度总结 | `deep-summary`（兼容 `general-deep`） | 主要能力 ✅ | [profile-general-deep](../create-video-knowledge-assets/references/profile-general-deep.md) |
-| 深度文章 | `deep-article`（兼容 `creator-article`） | 主要能力 ✅ | [profile-creator-article](../create-video-knowledge-assets/references/profile-creator-article.md) |
-| 短视频脚本 | `short-video-script` | 主要能力 ✅ | [profile-short-video-script](../create-video-knowledge-assets/references/profile-short-video-script.md) |
 | 课程笔记 | `course-notes` | 主要能力 ✅ | [profile-course-notes](../create-video-knowledge-assets/references/profile-course-notes.md) · [teaching-outline](../create-video-knowledge-assets/references/teaching-outline.md) |
+| 深度文章 | `deep-article`（兼容 `creator-article`） | 已实现 🧪（待更多真实验收） | [profile-creator-article](../create-video-knowledge-assets/references/profile-creator-article.md) |
+| 短视频脚本 | `short-video-script` | 已实现 🧪（待更多真实验收） | [profile-short-video-script](../create-video-knowledge-assets/references/profile-short-video-script.md) |
 
 profile 选择与路由逻辑见 [profile-routing](../create-video-knowledge-assets/references/profile-routing.md)。
 

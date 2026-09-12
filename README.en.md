@@ -1,191 +1,151 @@
 # create-video-knowledge-assets
 
-> **Turn a knowledge video into a shippable, reusable, and traceable video content artifact.**
+> **A Skill for AI agents: turn one video into an evidence-backed reader document you can ship as it is.**
 
-[简体中文](./README.md) · [Quick start](./docs/getting-started/QUICKSTART.md)
+[简体中文](./README.md) · [Quick start](./docs/getting-started/QUICKSTART.md) · [Capability map](./docs/SKILLS_CATALOG.md) · [Architecture](./docs/ARCHITECTURE.md)
 
 ![create-video-knowledge-assets](assets/banner.svg)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![Python](https://img.shields.io/badge/python-3.12%2B-blue)](./pyproject.toml)
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue)](./pyproject.toml)
 [![Tests](https://img.shields.io/badge/tests-415_passed-green)](#engineering-quality)
 
 ---
 
-`create-video-knowledge-assets` is an AI-driven video content reproduction engine. Give it a **Bilibili URL** or a **local knowledge video**, and it handles source identification, subtitle acquisition or speech transcription, key-frame inspection, evidence organization, knowledge modeling, and business-oriented writing — delivering a clean artifact you can use directly (**one self-contained HTML file that opens with a double click**). When you need an archive copy to send around, the same draft can also produce a PDF.
+## What it is
 
-It is not a "video summarizer." A summary compresses information; it turns a one-time viewing into a **traceable, reviewable, reusable** knowledge asset.
+A Skill you can install into Codex / Claude Code and other agents. Hand it a **Bilibili URL** or a **local video** plus one sentence about what you want, and it walks the whole chain: identify the source → fetch subtitles or transcribe → extract frames and **inspect the picture with real eyes** → build the evidence and knowledge layers → write the reader document → deliver **one self-contained HTML file that opens with a double click** (figures, cover, and source times all inside it).
 
-## Why this exists
+The difference from a "video summarizer" is one sentence: **every conclusion traces back to a sentence or a frame in the video** — and the agent actually looked at that frame rather than guessing.
 
-A lot of high-value knowledge lives in videos, but videos are naturally bad for quick review, remixing, and team sharing. Viewers re-watch, hand-write notes, and reorganize them into documents — expensive, and easy to miss the key logic, examples, and boundary conditions.
-
-| Pain point | What it looks like |
+| | |
 | --- | --- |
-| Understood but hard to reuse | After watching, you still need to rebuild notes, structure, and citations |
-| Key information scattered | Conclusions are spread across subtitles, frames, and context; manual assembly is costly |
-| Ordinary summaries are too thin | Only conclusions remain — no structure, evidence, examples, or limits |
-| Scenarios demand different outputs | Learning, creation, archival, and research each need a different depth and format |
+| Type | An Agent Skill. `SKILL.md` is the entry point for the agent; this file is the entry point for people |
+| Input | One Bilibili URL (single part) or a local video file, plus one sentence about what you want |
+| Output | `summary.html` (the reader copy) + `notes.html` (boundaries and sources), each self-contained; a PDF only when you explicitly ask for one |
+| Dependencies | Python 3.11+, `pydantic`, `srt`; yt-dlp / ffmpeg / faster-whisper depending on the path |
 
-The goal is not "compress a video into a short summary" but **"turn one viewing into a sustainable knowledge result."**
+**Who it is for**
 
-## What it produces
+- Creators who want their video content turned into reusable documents;
+- Teams that need long videos split into learning material / narration scripts / long-form articles;
+- Developers who want a "video → trustworthy document" capability inside their own agent workflow.
 
-One video asset, processed once, serving four production profiles.
+## When to use it
 
-| Scenario | Audience | Status | What it does |
-| --- | --- | --- | --- |
-| Deep summary | Learners | Core ✅ | `deep-summary`, rebuilds the video's logic from claims, mechanisms, examples, key frames, and limits |
-| Deep article | Creators / analysts | Core ✅ | `deep-article`, turns video material into a clean long-form article |
-| Short video script | Content creators | Core ✅ | `short-video-script`, extracts reusable hooks, turns, and closes |
-| Course notes | Learners / teachers | Core ✅ | `course-notes`, keeps learning objectives, prerequisites, concepts, mechanisms, examples, summaries, and source navigation |
-
-`general-deep` and `creator-article` remain as compatibility aliases.
-
-One underlying source document, one delivered format by default:
-
-- **HTML** — one self-contained file per part, with its cover and every figure
-  inlined, so it opens on any machine with nothing installed;
-- **PDF** — on request only, compiled from the same draft; this is the one path
-  that needs an external toolchain (XeLaTeX).
-
-Markdown is a third render of that same document and stays an editing and review
-surface.
-
-## Core design decisions
-
-This project is worth explaining not just for what it does, but for **why it is designed this way**.
-
-### 1. Evidence-first: evidence before conclusions
-
-Every knowledge claim lands in an evidence layer first — subtitle time windows, key frames, visual observations — before entering the knowledge and document layers. **The agent cannot treat unchecked candidate frames as evidence, and cannot disguise inference as something the video explicitly said.** Epistemic status explicitly distinguishes: explicitly stated in video / agent inference / external supplement / insufficient evidence.
-
-> Effect: a reader can follow source-time footnotes back to the video to verify any key claim.
-
-### 2. Content–format separation: knowledge to content, then formats
-
-The system builds a renderer-neutral draft and renders the deliverable from it — HTML by default, PDF when asked. **Prose, figures, and provenance are written once**, so the formats cannot drift.
-
-### 3. One asset, many views: reusable content units
-
-`source/`, `evidence/`, and `knowledge/` form the canonical fact base. Course notes, deep articles, short video scripts, and other product views are **different finished outputs from the same asset**. Views may read the lower layers and write only to their own `views/` and `outputs/` — they cannot pollute the underlying facts.
-
-> Effect: a video is not re-understood once per scenario; it is processed once and reused many times.
-
-### 4. Quality gates and human checkpoints: not a black box
-
-Staged contracts, quality gates, and human review points govern the process: multi-part videos must explicitly select a range; when subtitles are missing, it degrades to Whisper transcription while preserving a repair trail; when evidence is insufficient, it downgrades and annotates rather than fabricating; **a human review point remains before publication.**
-
-## Real results
-
-### End-to-end demos (Bilibili URL → deliverables)
-
-| Demo | Scenario | View directly |
+| You say | Profile | You get |
 | --- | --- | --- |
-| Why so few countries eat bamboo shoots (11:48 explainer) | Deep summary: three eating thresholds, line-by-line reviewed transcript, 6 inspected frames | [article](./demos/bili-BV1tHdoYnEGm/summary.html) · [boundary notes](./demos/bili-BV1tHdoYnEGm/notes.html) |
-| Why the national herbal tea stopped selling (10:20 finance short) | Short-video script: ~2-minute cut, with pacing assumptions and a cut list | [script](./demos/bili-BV1hwtB6YEzo/summary.html) · [boundary notes](./demos/bili-BV1hwtB6YEzo/notes.html) |
-| Harness in practice: turning any text into a polished article (20:37 tutorial) | Long-form article: all nine steps covered, with checkpoints and process evidence | [article](./demos/bili-BV1ayLD6uERL/summary.html) · [boundary notes](./demos/bili-BV1ayLD6uERL/notes.html) |
+| "Deeply summarize this video: `<URL>`" | `deep-summary` | The video's logic rebuilt from claims / mechanisms / examples / key frames |
+| "Turn this video into course notes" | `course-notes` | Learning objectives / prerequisites / concepts / mechanisms / worked examples / summary / source navigation |
+| "Rewrite it as a long-form article" | `deep-article` | A publish-ready WeChat / Zhihu style article with an actionable checklist |
+| "Make it a script I can shoot straight away" | `short-video-script` | Target duration + pacing assumptions + a cut list |
 
-The three demos cover three different source forms — a dense 12-minute explainer, a 10-minute data commentary, and a 20-minute tutorial — and their length and structure follow the source rather than a template. All of them ran the full pipeline: URL → subtitles/transcription → frame extraction and inspection → knowledge modeling → writing → delivery. Each also ships a separate boundary document, so the reader copy stays about the video while scope, uncertainty, and claim-to-source navigation live in their own file. Every file carries its own cover and figures; download one and open it, and you need nothing else from this repository.
+On request: `enterprise-knowledge` (team knowledge archival), `research-brief` (research briefs). `general-deep` and `creator-article` are compatibility aliases.
 
-**Current verification scope**: these demos validate the Codex, single-part Bilibili, CPU ASR, and the HTML delivery path. GPU, platform subtitles, full multi-part handling, and local videos are not yet covered by demos.
+**Not for**: compressing a video into three lines; Q&A or retrieval over existing assets (that would be a different Skill); processing material you have no right to use.
 
-## Architecture at a glance
+## 30-second start
 
-```text
-Bilibili URL or local video
-        │
-        ▼
-Input identification & tool preflight ────► Subtitles / audio / video / candidate frames
-        │                                        │
-        ▼                                        ▼
-  Evidence layer (repaired timeline + inspected frames) ──► Knowledge layer (units / relations / synthesis / limits)
-        │                                                    │
-        ▼                                                    ▼
-        │
-        ▼
- Renderer-neutral document ──► content HTML + boundary-notes HTML (PDF on request)
-        │
-        ▼
- Learning · Creation · Archival · Publishing
+**1. Install it into your agent**
+
+Drop the whole `create-video-knowledge-assets/` directory into a directory your agent discovers Skills in — Codex's `~/.codex/skills/`, for example, or a Claude Code project's `.claude/skills/`. You can also reference the directory directly in the conversation.
+
+```powershell
+# Install the Python dependencies (default HTML delivery needs only these two)
+python -m pip install "pydantic>=2.7,<3" "srt>=3.5,<4"
 ```
 
-Full architecture, asset layout, and data contracts: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
-
-## Quick start
-
-Regular users only provide the video and the goal — no hand-built outlines, evidence JSON, or render commands.
-
-**Default deep summary:**
+**2. Ask in one sentence**
 
 ```text
 Use $create-video-knowledge-assets to deeply summarize this video: <Bilibili URL>.
-Organize the core question, mechanisms, examples, key frames, limits, and source navigation, and deliver one self-contained HTML file.
 ```
-
-**Course notes:**
 
 ```text
-Use $create-video-knowledge-assets to turn this video into Chinese course notes suitable for learning and review: <Bilibili URL>.
-Keep key frames, teaching structure, and source times, and deliver one self-contained HTML file.
+Turn this video into course notes: <local video path>.
+Keep the key frames and the teaching structure, and deliver one self-contained HTML file.
 ```
-
-**Local video:**
 
 ```text
-Use $create-video-knowledge-assets to deeply summarize this local knowledge video: <local video path>.
-Check video identity and tool conditions first, then build evidence, knowledge, and the final documents.
+Use $create-video-knowledge-assets to summarize this video: <Bilibili URL>, and give me a PDF as well.
 ```
 
-**Bilibili videos require an explicit cookie.** Bilibili's public endpoints generally need a login session for reliable subtitle and metadata acquisition. Sign in to Bilibili in your browser, then use the **Cookie-Editor** browser extension to export `bilibili.com` cookies (Netscape format), and pass them explicitly via `--cookie-file <path>` or `yt-dlp --cookies <file>`. Cookies are account credentials: export only Bilibili-related domains and never commit them to the repository or paste them into public content.
+**3. Take the result**
 
-Installation and full examples: [docs/getting-started/QUICKSTART.md](./docs/getting-started/QUICKSTART.md).
+You get two files — `summary.html` (the reader copy) and `notes.html` (evidence boundaries and sources) — each self-contained and dependent on nothing else in the repository. When you need an archive copy to forward, the same draft can render a PDF as well.
+
+> Bilibili subtitles and metadata usually need a login session: export `bilibili.com` cookies with a browser extension such as Cookie-Editor, then pass them explicitly with `--cookie-file`. Cookies are account credentials — do not commit them to the repository or paste them into public content.
+
+## What you get
+
+Three demos ran the full chain (URL → transcription → frame extraction and inspection → knowledge modeling → writing → delivery); open them directly to see the result:
+
+| Demo | Source form | Deliverable |
+| --- | --- | --- |
+| Why so few countries outside China eat bamboo shoots | 11:48 explainer | [article](./demos/bili-BV1tHdoYnEGm/summary.html) · [boundary notes](./demos/bili-BV1tHdoYnEGm/notes.html) |
+| Three years, a billion fewer: who pushed the national herbal tea off the shelf | 10:20 finance narration | [script](./demos/bili-BV1hwtB6YEzo/summary.html) · [boundary notes](./demos/bili-BV1hwtB6YEzo/notes.html) |
+| Turning any text into a polished article: a reusable production pipeline | 20:37 tutorial | [article](./demos/bili-BV1ayLD6uERL/summary.html) · [boundary notes](./demos/bili-BV1ayLD6uERL/notes.html) |
+
+The **reader copy** talks only about the video; readers never need to know what pipeline sits behind it. The **boundary notes** are a file of their own, spelling out what the video explicitly states, what this document inferred, what was not independently verified, and the time window behind each conclusion.
+
+## Why it is trustworthy
+
+1. **Evidence first.** Conclusions land in the evidence layer first (subtitle time windows, frames the agent inspected directly) and only then enter the knowledge and document layers. Epistemic status has four levels — explicitly stated in the video / agent inference / external supplement / insufficient evidence — and an inference is never written as the video's own words.
+2. **The picture has really been looked at.** Candidate frames are not evidence; only frames the agent inspected directly, and described honestly in the figure and its caption, enter the document.
+3. **Written once, rendered in several formats.** The reader copy is written once; HTML and PDF render from the same draft, so "the content no longer matches after a format change" cannot happen.
+4. **One asset, many finished outputs.** The same video projects into a summary, an article, a script, or course notes; views may only read the fact layers and cannot rewrite the original facts.
+5. **Quality gates + human checkpoints.** Multi-part videos must select an explicit range; when subtitles are missing it degrades to Whisper transcription while keeping a line-by-line review trail; a human acceptance step remains before publication.
+
+Full mechanism: [architecture and data flow](./docs/ARCHITECTURE.md); technical contracts live in [`references/`](./create-video-knowledge-assets/references/).
+
+## Environment and dependencies
+
+| Requirement | When you need it |
+| --- | --- |
+| Python 3.11+, `pydantic`, `srt` | Always (default HTML delivery needs only these) |
+| `yt-dlp` | Metadata / subtitles / media from Bilibili |
+| `ffmpeg`, `ffprobe` | Frame and audio extraction |
+| faster-whisper | Transcription when no usable subtitles exist (`base` / CPU / int8) |
+| XeLaTeX | **Only when you want a PDF** |
+
+When the system drive is tight, keep the caches in the workspace: dot-source `scripts/setup-runtime.ps1` from the repository root (`. .\scripts\setup-runtime.ps1`) and it points Whisper / HF / torch / yt-dlp caches and temporary files at `.cache/` and `.tmp/`.
 
 ## Engineering quality
 
-- **Language / environment**: Python 3.12+, `pydantic`, `srt`; external tools yt-dlp / ffmpeg / Whisper / XeLaTeX invoked as needed;
-- **Scale**: ~7.6k lines of Python, 23 modules, 27 test files;
-- **Tests**: `python -m pytest -q` (415 passing, reproducible on Python 3.11 / 3.12 / 3.13);
-- **CLI**: `vka` exposes 31 stage commands covering acquisition, evidence, knowledge, views, and rendering;
-- **Contracts**: 19 schema / workflow / contract documents in [`references/`](./create-video-knowledge-assets/references/);
-- **CI**: [`.github/workflows/ci.yml`](./.github/workflows/ci.yml), stable (blocking) + experimental (non-blocking);
-- **Security**: Bilibili content requires an explicit cookie (exported via Cookie-Editor); credentials, private media, and logs never enter the repo. See [SECURITY.md](./SECURITY.md).
+- **Scale**: ~7.6k lines of Python, 23 modules, 31 CLI subcommands, 19 contract documents;
+- **Tests**: `python -m pytest -q` → 415 passed / 2 skipped (green on local Python 3.11 and on CI Python 3.12);
+- **CI**: [`.github/workflows/ci.yml`](./.github/workflows/ci.yml), an offline blocking gate;
+- **Reproducibility**: every asset records stage outputs and SHA-256 in `manifest.json`, and `verify-asset` checks that the canonical layers (`source/`, `evidence/`, `knowledge/`) were not rewritten downstream;
+- **Security**: credentials, private media, and raw transcripts never enter the repo; cookies travel only as explicit arguments. See [SECURITY.md](./SECURITY.md).
+
+**Current verification scope**: Codex + single-part Bilibili + CPU ASR + HTML delivery. GPU, platform subtitles, multi-part collections, and local videos are not yet covered by demos.
 
 ## Repository structure
 
 ```text
-├── create-video-knowledge-assets/   # The skill itself (SKILL.md, scripts/, references/, assets/)
-├── docs/                            # Product and engineering docs (architecture, capability map, quick start)
-├── demos/                           # End-to-end demos (one self-contained HTML per part)
-├── tests/                           # Stable tests + experimental tests
-└── CHANGELOG.md / LICENSE / SECURITY.md / CONTRIBUTING.md
+├── create-video-knowledge-assets/   # The Skill itself
+│   ├── SKILL.md                     # The agent's entry point: which contract to read when, in what order
+│   ├── references/                  # 19 data contracts / workflows / profile specs
+│   ├── scripts/                     # The vka CLI: acquisition, evidence, knowledge, views, rendering, packaging
+│   └── agents/openai.yaml           # Default prompt
+├── demos/                           # Three end-to-end deliverables (self-contained HTML)
+├── docs/                            # Architecture, capability map, quick start, portfolio one-pager
+├── scripts/                         # Local runtime setup (caches / temp files kept in the workspace)
+└── tests/                           # Offline tests
 ```
 
-## Evolution & roadmap
-
-This project began with a product requirements document that defined one guiding thread: **evidence before conclusions; structure before rhetoric; traceability before publication; go deep on one scenario before expanding.** v0.1 delivers the core engineering chain of that thread.
+## Roadmap
 
 | Phase | Goal | Status |
 | --- | --- | --- |
-| Phase 1: Usable | Single video, deep summary / course notes, self-contained HTML delivery, evidence traceability | ✅ shipped in v0.1 |
-| Phase 2: Reusable | Deep articles, short video scripts, broader content profiles | 🧪 implemented early, awaiting more real-business validation |
-| Phase 3: Productizable | Quality gates, release review, exception recovery, scaled reuse | 🔜 planned |
+| One: usable | Single video, deep summary / course notes, self-contained HTML delivery, evidence traceability | ✅ shipped |
+| Two: reusable | Deep articles, short-video scripts, more finished forms | 🧪 implemented early, awaiting more real-world acceptance |
+| Three: productizable | Release review, exception recovery, reuse at scale | 🔜 planned |
 
 Changes: [CHANGELOG.md](./CHANGELOG.md).
 
-## Documentation map
-
-| Document | Content | For |
-| --- | --- | --- |
-| [Quick start](./docs/getting-started/QUICKSTART.md) | Start in 30 seconds + scenario examples | Regular users |
-| [Architecture](./docs/ARCHITECTURE.md) | Asset layout, pipeline, data contracts, product views | Engineers |
-| [Capability map](./docs/SKILLS_CATALOG.md) | 4 production profiles + the P1–P3 pipeline + contract index | Anyone exploring boundaries |
-
 ## Privacy, copyright & license
 
-- Only processes videos, subtitles, covers, and screenshots the user has the right to access.
-- Cookies are account credentials — export only Bilibili-related domains and never commit them to the repo.
-- Video covers and screenshots remain the property of their rights holders and are not covered by this project's MIT License.
-- Project code is under the [MIT License](./LICENSE).
-
-See [SECURITY.md](./SECURITY.md) for security. Contributions are welcome — please read [CONTRIBUTING.md](./CONTRIBUTING.md) before changing workflows, data contracts, or security boundaries.
+- Only processes videos, subtitles, covers, and screenshots you have the right to access and use;
+- Video covers and screenshots remain the property of their rights holders and are outside the scope of the MIT License;
+- Project code is under the [MIT License](./LICENSE). For security see [SECURITY.md](./SECURITY.md); for contribution guidance see [CONTRIBUTING.md](./CONTRIBUTING.md).

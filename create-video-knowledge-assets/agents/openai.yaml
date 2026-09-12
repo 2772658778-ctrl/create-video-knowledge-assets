@@ -1,4 +1,4 @@
 interface:
   display_name: "create-video-knowledge-assets"
-  short_description: "Create grounded video summaries, notes, and PDFs."
-  default_prompt: "Use $create-video-knowledge-assets to turn this Bilibili URL or local video into an evidence-backed Chinese general-deep summary with PDF as the deliverable; use a secondary deep-article, short-video-script, course-notes, enterprise, or research profile only when I explicitly request it."
+  short_description: "Turn a video into an evidence-backed document as one self-contained HTML file."
+  default_prompt: "Use $create-video-knowledge-assets to turn this Bilibili URL or local video into an evidence-backed Chinese general-deep summary, delivered as one self-contained HTML file; use a secondary deep-article, short-video-script, course-notes, enterprise, or research profile only when I explicitly request it, and add a PDF only if I ask for one."

@@ -27,7 +27,9 @@
 
 ### 文档与作品集呈现
 
-- 重写 README，转为产品叙事：以"把视频变成可学习、可追问、可复用、可归档的知识资产"为定位主线。
+- README（中英）改为 AI 产品导向：开头就回答"这是什么 / 什么时候用它 / 怎么装 / 怎么调用 / 会拿到什么"，新增"你说什么 → 它做什么"的 profile 触发映射与"不适用于"，工程规模与测试数字后置；英文版与中文版逐节对齐，能力地图的成熟度标注与 Roadmap 统一。
+- 校对文档事实与链接：`setup-runtime.ps1` 实际位于仓库根 `scripts/`（且需点源才作用于当前会话）、一页纸的 README 锚点、`CONTRIBUTING.md` 中残留的 Q&A 子系统说明，以及文档中的 Python 版本下限，全部改为与 `pyproject.toml` 和当前代码一致。
+- 删除孤儿文件 `create-video-knowledge-assets/assets/notes-template.tex`：自基线提交起没有任何引用，LaTeX 渲染器自带 preamble。
 - 新增 `docs/` 文档体系：作品集一页纸、快速上手、架构与数据流、能力地图、开发指南、质量与基准。
 - 新增英文版 README（`README.en.md`）与仓库 banner。
 

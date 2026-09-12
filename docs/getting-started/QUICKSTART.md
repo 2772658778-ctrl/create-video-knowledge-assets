@@ -4,7 +4,7 @@
 
 ## 前置条件
 
-- Python 3.12+
+- Python 3.11+
 - 一个可发现本 Skill 的 Agent 环境（默认按 Codex 适配）
 - 按需安装外部工具：yt-dlp（获取）、ffmpeg / ffprobe（媒体）、Whisper（无字幕转录）。默认交付 HTML，不需要 XeLaTeX；只有你要 PDF 时才装它。
 
@@ -41,7 +41,7 @@ python -m pip install "pydantic>=2.7,<3" "srt>=3.5,<4"
 
 **输入 Bilibili URL 时需要显式提供 Cookie。** Bilibili 的公开接口普遍需要登录态才能稳定获取字幕与元数据。先在浏览器中登录 Bilibili，再用浏览器插件 **Cookie-Editor** 导出 `bilibili.com` 相关域的 Cookie（Netscape 格式），通过 `--cookie-file <path>` 或 `yt-dlp --cookies <file>` 显式传入。Cookie 等同于账户登录凭据：只导出 Bilibili 相关域，不要上传仓库或粘贴到公开内容中。
 
-本地跑视频时，建议先执行仓库里的 `create-video-knowledge-assets/scripts/setup-runtime.ps1`。它会把 Whisper、`yt-dlp`、HF/torch 缓存和临时文件都留在工作区的 `.cache/` 和 `.tmp/`，避免默认落到 C 盘。
+本地跑视频时，建议先在仓库根目录点源 `scripts/setup-runtime.ps1`（`. .\scripts\setup-runtime.ps1`）。它会把 Whisper、`yt-dlp`、HF/torch 缓存和临时文件都留在工作区的 `.cache/` 和 `.tmp/`，避免默认落到 C 盘。
 
 ## 看真实结果
 
