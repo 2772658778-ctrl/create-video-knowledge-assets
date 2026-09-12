@@ -218,13 +218,6 @@ def _markdown_table_row(row: Sequence[str]) -> str:
     return "| " + " | ".join(cell.replace("|", r"\|") for cell in row) + " |"
 
 
-def _time(milliseconds: int) -> str:
-    total_seconds = milliseconds // 1000
-    hours, remainder = divmod(total_seconds, 3600)
-    minutes, seconds = divmod(remainder, 60)
-    return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-
-
 def _metadata_lines(metadata: Mapping[str, Any] | None) -> list[str]:
     if not isinstance(metadata, Mapping):
         return []

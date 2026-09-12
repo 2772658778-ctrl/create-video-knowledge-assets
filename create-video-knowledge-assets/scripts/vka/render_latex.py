@@ -5,28 +5,11 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from vka.quality import (
+    SOURCED_BLOCK_KINDS,
     assign_source_notes,
     document_sections_for_part,
-    format_source_note,
     rebase_document_image_paths,
 )
-
-# Block kinds whose text is a claim about the source, and therefore carry a
-# numbered pointer to the source-time list at the end of the document.
-SOURCED_BLOCK_KINDS = frozenset(
-    {
-        "paragraph",
-        "quote",
-        "bullet_list",
-        "numbered_list",
-        "table",
-        "image",
-        "caption",
-        "summary",
-        "importantbox",
-    }
-)
-
 
 URL_RE = re.compile(
     r"https?://[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;=%-]+"
@@ -190,8 +173,7 @@ def render_course_tex(
             ]
         )
 
-    metadata_lines = _metadata_lines(metadata)
-    if metadata_lines:
+    if _compact_metadata(metadata):
         lines.extend(
             [
                 r"\vspace{0.5cm}",
@@ -342,7 +324,7 @@ def _render_block(block: Any) -> list[str]:
     kind = block.get("kind")
     if kind == "paragraph":
         paragraph = _escape_prose_latex(_paragraph_text(block))
-        return [f"{paragraph}{_source_footnote(block)}"]
+        return [_bind_source_marker(paragraph, block)]
 
     if kind == "subsection":
         title = block.get("title")
@@ -367,7 +349,7 @@ def _render_block(block: Any) -> list[str]:
         if not isinstance(quote_text, str) or not quote_text:
             raise ValueError("quote text must be a non-empty string")
         text = _escape_prose_latex(quote_text)
-        return [r"\begin{quote}", f"{text}{_source_footnote(block)}", r"\end{quote}"]
+        return [r"\begin{quote}", _bind_source_marker(text, block), r"\end{quote}"]
 
     if kind == "table":
         return _render_table_block(block)
@@ -397,7 +379,10 @@ def _render_image_block(block: Mapping[str, Any]) -> list[str]:
     latex_path = _latex_path(path)
     return [
         r"\begin{center}",
-        rf"\sbox{{\vkapic}}{{\fcolorbox{{vkaRule}}{{white}}{{\includegraphics[width=0.9\linewidth,height=0.27\textheight,keepaspectratio]{{{latex_path}}}}}}}",
+        # A 16:9 frame at the full text measure is the widest the figure can be
+        # without breaking the column, and it is the same size the HTML render
+        # shows, so the two deliverables do not drift.
+        rf"\sbox{{\vkapic}}{{\fcolorbox{{vkaRule}}{{white}}{{\includegraphics[width=0.9\linewidth,height=0.30\textheight,keepaspectratio]{{{latex_path}}}}}}}",
         r"\begin{minipage}{\wd\vkapic}",
         r"\centering",
         r"\usebox{\vkapic}\par",
@@ -421,8 +406,11 @@ def _render_list_block(block: Mapping[str, Any], *, ordered: bool) -> list[str]:
     for index, item in enumerate(items):
         if not isinstance(item, str) or not item.strip():
             raise ValueError("list item must be a non-empty string")
-        suffix = _source_footnote(block) if index == len(items) - 1 else ""
-        lines.append(rf"\item {_escape_latex(item)}{suffix}")
+        escaped = _escape_latex(item)
+        lines.append(
+            rf"\item "
+            + (_bind_source_marker(escaped, block) if index == len(items) - 1 else escaped)
+        )
     lines.append(rf"\end{{{env}}}")
     return lines
 
@@ -523,7 +511,26 @@ def _source_footnote(block: Mapping[str, Any]) -> str:
     number = block.get("_note_number")
     if not isinstance(number, int):
         return ""
-    return rf"\textsuperscript{{{number}}}"
+    # `\nobreak` keeps the marker on the line its sentence ends on; without it
+    # a citation that lands at the right margin drops to a line of its own and
+    # reads as a stray page number.
+    return rf"\nobreak\textsuperscript{{{number}}}"
+
+
+def _bind_source_marker(text: str, block: Mapping[str, Any]) -> str:
+    """End a prose block with its citation marker on the same line.
+
+    A marker that breaks away from the sentence it belongs to lands alone at
+    the start of the next line and reads as a stray page number, so the last
+    character and the marker share one unbreakable box.
+    """
+    marker = _source_footnote(block)
+    if not marker or not text:
+        return f"{text}{marker}"
+    if ord(text[-1]) < 0x2000:
+        # The escaped tail may be part of a command such as `\&`; leave it alone.
+        return f"{text}{marker}"
+    return text[:-1] + r"\mbox{" + text[-1] + marker + "}"
 
 
 def _assign_source_notes(sections: Sequence[Any]) -> list[tuple[int, str]]:
@@ -533,11 +540,6 @@ def _assign_source_notes(sections: Sequence[Any]) -> list[tuple[int, str]]:
         sourced_kinds=SOURCED_BLOCK_KINDS,
         spans_of=_source_spans,
     )
-
-
-def _source_note_text(block: Mapping[str, Any]) -> str:
-    """Compact the source times, without repeating a prefix on every line."""
-    return _escape_latex(format_source_note(_source_spans(block)))
 
 
 def _paragraph_text(block: Any) -> str:
@@ -659,35 +661,6 @@ def _cover_title_latex(title: str) -> str:
     return escaped
 
 
-def _metadata_lines(metadata: Mapping[str, Any] | None) -> list[str]:
-    if not isinstance(metadata, Mapping):
-        return []
-    fields = [
-        ("source_title", "视频名称"),
-        ("author", "作者/UP主"),
-        ("uploader", "作者/UP主"),
-        ("publish_date", "发布时间"),
-        ("duration", "视频时长"),
-        ("subtitle_source", "字幕来源"),
-        ("transcript_source", "转录来源"),
-        ("data_sources", "数据来源"),
-        ("source_url", "视频链接"),
-    ]
-    seen_labels: set[str] = set()
-    lines: list[str] = []
-    for key, label in fields:
-        if label in seen_labels:
-            continue
-        value = metadata.get(key)
-        if isinstance(value, list):
-            value = "；".join(str(item) for item in value if str(item).strip())
-        if not isinstance(value, str) or not value.strip():
-            continue
-        seen_labels.add(label)
-        lines.append(rf"{_escape_latex(label)} & {_metadata_value_tex(key, value.strip())}\\")
-    return lines
-
-
 def _optional_string(document: Mapping[str, Any], key: str) -> str | None:
     value = document.get(key)
     if value is None:
@@ -704,12 +677,6 @@ def _optional_mapping(document: Mapping[str, Any], key: str) -> Mapping[str, Any
     if not isinstance(value, Mapping):
         raise ValueError(f"document {key} must be an object")
     return value
-
-
-def _metadata_value_tex(key: str, value: str) -> str:
-    if key == "source_url":
-        return rf"\url{{{_escape_url(value)}}}"
-    return _escape_latex(value)
 
 
 def _is_sequence(value: Any) -> bool:

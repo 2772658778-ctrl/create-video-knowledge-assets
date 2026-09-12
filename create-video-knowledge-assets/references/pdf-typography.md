@@ -51,6 +51,9 @@ dropped by a renderer.
 
 - One size for every figure in a document, with a hairline border and a caption
   whose measure equals the image width.
+- A figure fills the text measure, capped so its height stays near a third of
+  the page. That keeps a 16:9 frame about the same size in the PDF and in the
+  HTML, where the same frame spans the column.
 - A figure and its caption form one unbreakable box. As two paragraphs they can
   be split, and the caption then sits alone at the top of the next page.
 - Every figure is a directly inspected frame. The renderer never crops,
@@ -78,6 +81,7 @@ dropped by a renderer.
 | A long citation runs into the next column | No breakpoint inside a monospace run | A breakable space after each separator |
 | Near-empty contents page | Contents rendered on a page of its own | Contents opens the content page |
 | Boundary PDF looks like a book | It reused the cover template | Compact heading, hairline rule, metadata, body |
+| Citation number alone on a line | A breakable CJK boundary between the last character and the superscript box | Bind the last character and the marker in one unbreakable box |
 | Near-empty last page | `\vfill` plus a footer line pushed the footer onto a fresh page | End the document with the endnote block; no trailing footer |
 | The web view shows source times nothing points at | Citations numbered after the body was written | Number every citation before rendering the body |
 | Emphasis invisible in the PDF | Colour applied in one renderer only | Apply the same four accent slots in both |

@@ -388,10 +388,12 @@ def test_renderer_writes_image_block_with_caption_and_source() -> None:
     assert r"\usepackage{graphicx}" in tex
     assert r"\begin{center}" in tex
     assert (
-        r"\includegraphics[width=0.9\linewidth,height=0.27\textheight,keepaspectratio]"
+        r"\includegraphics[width=0.9\linewidth,height=0.30\textheight,keepaspectratio]"
         r"{evidence/frames/frame-001.jpg}"
     ) in tex
-    assert r"\captionof{figure}{A directly inspected frame.\textsuperscript{1}}" in tex
+    assert (
+        r"\captionof{figure}{A directly inspected frame.\nobreak\textsuperscript{1}}" in tex
+    )
     assert r"\item 00:00:12--00:00:16" in tex
     assert "00:00:12--00:00:16" in tex
 
