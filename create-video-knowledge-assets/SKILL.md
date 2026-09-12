@@ -14,7 +14,7 @@ One renderer-neutral document becomes the delivered HTML: one self-contained fil
 - Accept a Bilibili URL or a local video as input. Before acquiring or retaining any source, read `references/p2-u1-workflow.md` for input identity, recovery, retention, and L2 cleanup rules.
 - Read `references/acquisition-recipes.md` before downloading subtitles, cover images, audio, video, or candidate frames. Use its direct commands only inside the current asset and evidence boundaries.
 - Default to the `general-deep` profile for a deep summary. Read `references/profile-general-deep.md` before planning or writing that reader-facing explanation.
-- Select the `course-notes` profile only when the user explicitly requests course notes, a teaching handout, or a course-notes PDF. Read `references/profile-course-notes.md` before producing it; the P1 teaching and visual quality gates remain mandatory for that route.
+- Select the `course-notes` profile only when the user explicitly requests course notes or a teaching handout. Read `references/profile-course-notes.md` before producing it; the P1 teaching and visual quality gates remain mandatory for that route.
 - Do not silently convert a local video or a Bilibili tutorial into course notes just because it is educational. Ask for clarification when the requested profile is ambiguous.
 - Use `creator-article`, `enterprise-knowledge`, `research-brief`, and `short-video-script` only when the user explicitly requests that business view. Read `references/profile-routing.md`, `references/p3-profile-workflow.md`, `references/p3-profile-authoring.md`, `references/projection-plan.md`, the selected profile reference, and `references/document-schema.md` before authoring it.
 
