@@ -63,3 +63,10 @@ cookies.txt
 cookie-*.txt
 .env
 .env.*
+
+# PRD documents and PRD tooling. Kept local, not part of the public package.
+/LectureMind_*_PRD.md
+/LectureMind_*_PRD.pdf
+/PRD.pdf
+/prd-assets/
+/tools/
